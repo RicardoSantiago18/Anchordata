@@ -1,0 +1,102 @@
+/* Fundo geral */
+.login-page {
+  min-height: 100vh;
+  background-color: #2f2f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* Área cinza grande */
+.login-container {
+  width: min(1200px, 95vw);
+  height: min(700px, 85vh);
+  background-color: #d9d9d9;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 48px;
+}
+
+/* Texto "Login" no canto */
+.login-title {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Lado esquerdo (logo) */
+.login-logo-box {
+  width: 420px;
+  height: 240px;
+  background-color: #cfcfcf;
+  border: 1px solid #8a8a8a;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-logo-text {
+  font-size: 48px;
+  letter-spacing: 2px;
+  color: #111;
+}
+
+/* Card do login */
+.login-card {
+  width: 460px;
+  height: 100%;
+  background-color: #ffffff;
+  border: 3px solid #1e88e5;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+/* Conteúdo interno do card */
+.login-card-content {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Ícone fake */
+.login-icon {
+  margin: 0 auto 32px auto;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* Inputs */
+.login-input {
+  margin-bottom: 24px;
+}
+
+/* Botão */
+.login-button {
+  height: 52px;
+  border-radius: 8px;
+  background-color: #666;
+  color: #fff;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.login-button:hover {
+  background-color: #5a5a5a;
+}
