@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, Paper, TextField, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   return (
     <Box className="login-page">
       {/* Área cinza grande de fundo (onde ficam logo + card) */}
@@ -12,7 +15,7 @@ export default function Login() {
 
         {/* LADO ESQUERDO (LOGO) */}
         <Paper elevation={0} className="login-logo-box">
-          <Typography className="login-logo-text">LOGO</Typography>
+          <Typography className="login-logo-text">AnchorData</Typography>
         </Paper>
 
         {/* LADO DIREITO (CARD LOGIN COM BORDA AZUL) */}
@@ -53,6 +56,7 @@ export default function Login() {
               variant="contained"
               disableElevation
               className="login-button"
+              onClick={() => navigate("/chat")}
             >
               Entrar
             </Button>
