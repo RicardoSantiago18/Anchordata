@@ -1,102 +1,183 @@
-/* Fundo geral */
-.login-page {
-  min-height: 100vh;
-  background-color: #2f2f2f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Área cinza grande */
-.login-container {
-  width: min(1200px, 95vw);
-  height: min(700px, 85vh);
-  background-color: #d9d9d9;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 48px;
-  padding: 48px;
-}
-
-/* Texto "Login" no canto */
-.login-title {
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 14px;
-  color: #444;
-}
-
-/* Lado esquerdo (logo) */
-.login-logo-box {
-  width: 420px;
-  height: 240px;
-  background-color: #cfcfcf;
-  border: 1px solid #8a8a8a;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-logo-text {
-  font-size: 48px;
-  letter-spacing: 2px;
-  color: #111;
-}
-
-/* Card do login */
-.login-card {
-  width: 460px;
+html, body, #root {
   height: 100%;
-  background-color: #ffffff;
-  border: 3px solid #1e88e5;
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-}
-
-/* Conteúdo interno do card */
-.login-card-content {
   width: 100%;
-  max-width: 360px;
+  overflow: hidden;
 }
 
-/* Ícone fake */
-.login-icon {
-  margin: 0 auto 32px auto;
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  border: 1px solid #999;
+.login-wrapper {
+  width: 100vw;
+  height: 100vh;
   display: flex;
+  background-color: #d3d3d3;
+}
+
+.login-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.login-left {
+  flex: 1.2; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.logo-placeholder {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid #999;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.logo-placeholder span {
+  font-size: clamp(24px, 5vw, 48px);
+  font-style: italic;
+  color: #333;
+  letter-spacing: 4px;
+}
+
+/* Lado Direito - Card de Login */
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  height: 94%; 
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #222;
-  font-size: 14px;
-  letter-spacing: 1px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Inputs */
-.login-input {
-  margin-bottom: 24px;
+.icon-placeholder {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
 }
 
-/* Botão */
+.icon-placeholder span {
+  font-size: 12px;
+  font-style: italic;
+  color: #888;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-group input::placeholder {
+  color: #ccc;
+}
+
+.form-group input:focus {
+  border-color: #999;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+}
+
 .login-button {
-  height: 52px;
-  border-radius: 8px;
-  background-color: #666;
-  color: #fff;
-  font-weight: 700;
-  text-transform: none;
+  width: 100%;
+  padding: 16px;
+  background-color: #666666;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 .login-button:hover {
-  background-color: #5a5a5a;
+  background-color: #555555;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .login-left {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-wrapper {
+    overflow-y: auto;
+  }
+  
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .login-left {
+    padding: 60px 20px;
+  }
+  
+  .login-right {
+    padding: 0 20px 40px 20px;
+  }
+  
+  .login-card {
+    height: auto;
+    padding: 40px 30px;
+  }
 }

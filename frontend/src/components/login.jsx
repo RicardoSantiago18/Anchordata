@@ -1,68 +1,56 @@
 import React from "react";
-import { Box, Paper, TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 export default function Login() {
   const navigate = useNavigate();
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    navigate("/chat");
+  }
+
   return (
-    <Box className="login-page">
-      {/* Área cinza grande de fundo (onde ficam logo + card) */}
-      <Box className="login-container">
-        {/* "Login" no canto superior esquerdo */}
-        <Typography className="login-title">Login</Typography>
+    <div className="login-wrapper">
+      <div className="login-container">
+        <div className="login-left">
+          <div className="logo-placeholder">
+            <span>LOGO</span>
+          </div>
+        </div>
 
-        {/* LADO ESQUERDO (LOGO) */}
-        <Paper elevation={0} className="login-logo-box">
-          <Typography className="login-logo-text">AnchorData</Typography>
-        </Paper>
+        <div className="login-right">
+          <div className="login-card">
+            <div className="icon-placeholder">
+              <span>ICONE</span>
+            </div>
 
-        {/* LADO DIREITO (CARD LOGIN COM BORDA AZUL) */}
-        <Paper elevation={0} className="login-card">
-          <Box className="login-card-content">
-            {/* Ícone placeholder */}
-            <Box className="login-icon">
-              <Typography sx={{ fontSize: 14, letterSpacing: 1 }}>
-                ICONE
-              </Typography>
-            </Box>
+            <form className="login-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="Insira seu email"
+                  required
+                />
+              </div>
 
-            {/* Campos */}
-            <TextField
-              fullWidth
-              placeholder="Usuário"
-              variant="outlined"
-              className="login-input"
-              InputProps={{
-                sx: { borderRadius: 3 },
-              }}
-            />
+              <div className="form-group">
+                <label>Senha</label>
+                <input
+                  type="password"
+                  placeholder="Insira sua senha"
+                  required
+                />
+              </div>
 
-            <TextField
-              fullWidth
-              placeholder="Senha"
-              type="password"
-              variant="outlined"
-              className="login-input"
-              InputProps={{
-                sx: { borderRadius: 3 },
-              }}
-            />
-
-            {/* Botão */}
-            <Button
-              fullWidth
-              variant="contained"
-              disableElevation
-              className="login-button"
-              onClick={() => navigate("/chat")}
-            >
-              Entrar
-            </Button>
-          </Box>
-        </Paper>
-      </Box>
-    </Box>
+              <button type="submit" className="login-button">
+                Entrar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
