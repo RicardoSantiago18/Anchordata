@@ -42,6 +42,7 @@ html, body, #root {
   justify-content: center;
   align-items: center;
   background-color: transparent;
+  border: none;
 }
 
 .logo-placeholder span {
@@ -180,4 +181,14 @@ html, body, #root {
     height: auto;
     padding: 40px 30px;
   }
+}
+
+.logo-image {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+.login-wrapper {
+  background-color: #404248; /* exemplo: azul escuro */
 }

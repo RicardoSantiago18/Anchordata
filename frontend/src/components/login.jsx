@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
+import logo from "../assets/logo2.png";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function Login() {
       <div className="login-container">
         <div className="login-left">
           <div className="logo-placeholder">
-            <span>LOGO</span>
+            <img src={logo} alt="Logo da empresa" className="logo-image" />
           </div>
         </div>
 
