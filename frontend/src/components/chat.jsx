@@ -1,6 +1,18 @@
 import React from 'react';
 import './chat.css';
 
+// MUI Icons
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
 const Chat = () => {
   return (
     <div className="chat-wrapper">
@@ -9,22 +21,22 @@ const Chat = () => {
         <div className="sidebar-top">
           <div className="logo-box">Logo</div>
           <button className="sidebar-toggle">
-            <span className="arrow">›</span>
+            <ChevronLeftIcon fontSize="small" />
           </button>
         </div>
         
         <nav className="sidebar-nav">
           <button className="nav-item active">
-            <i className="icon-home">🏠</i>
+            <HomeOutlinedIcon />
           </button>
           <button className="nav-item">
-            <i className="icon-folder">📁</i>
+            <FolderOutlinedIcon />
           </button>
         </nav>
 
         <div className="sidebar-bottom">
           <button className="nav-item logout">
-            <i className="icon-logout">↪️</i>
+            <LogoutOutlinedIcon />
           </button>
         </div>
       </aside>
@@ -34,17 +46,17 @@ const Chat = () => {
         <header className="chat-header">
           <div className="user-info">
             <div className="user-avatar">
-              <i className="icon-user">👤</i>
+              <PersonOutlineIcon />
             </div>
             <span className="user-name">nome sobrenome</span>
           </div>
           
           <div className="header-actions">
             <button className="btn-new-chat">
-              <span className="plus">+</span> Novo Chat
+              <AddIcon fontSize="small" /> Novo Chat
             </button>
             <button className="btn-notification">
-              <i className="icon-bell">🔔</i>
+              <NotificationsNoneIcon />
             </button>
           </div>
         </header>
@@ -53,12 +65,14 @@ const Chat = () => {
         <main className="chat-content">
           <div className="chat-inner">
             <div className="chat-title-container">
-              <h2 className="chat-title">Nome chat <span className="chevron-down"></span></h2>
+              <h2 className="chat-title">
+                Nome chat <ExpandMoreIcon fontSize="small" />
+              </h2>
             </div>
 
             <div className="welcome-section">
               <div className="welcome-icon">
-                <span className="emoji">😊</span>
+                <PersonOutlineIcon fontSize="large" />
               </div>
               <p className="welcome-text">Olá, Tudo bem?</p>
               <h1 className="main-question">Como podemos te ajudar?</h1>
@@ -66,15 +80,19 @@ const Chat = () => {
 
             <div className="input-container">
               <div className="input-box">
-                <button className="btn-add">+</button>
+                <button className="btn-add">
+                  <AddIcon />
+                </button>
                 <input type="text" placeholder="Pergunte alguma coisa..." />
-                <button className="btn-send">↑</button>
+                <button className="btn-send">
+                  <ArrowUpwardIcon />
+                </button>
               </div>
             </div>
 
             <div className="faq-section">
               <div className="faq-header">
-                <i className="icon-lightbulb">💡</i>
+                <InfoOutlinedIcon />
                 <span>Dúvidas Frequentes</span>
               </div>
               <div className="faq-grid">
