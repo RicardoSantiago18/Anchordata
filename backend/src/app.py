@@ -11,10 +11,12 @@ def create_app():
     Migrate(app, db)
 
     from routes.chat_routes import chat_bp
+    from routes.message_routes import message_bp
     from routes.login_routes import login_bp
     from routes.home_routes import home_bp
 
     app.register_blueprint(chat_bp)
+    app.register_blueprint(message_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(home_bp)
 
