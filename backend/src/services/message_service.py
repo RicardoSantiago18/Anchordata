@@ -1,6 +1,6 @@
-from services.ai.ai_service import ai_service
-from models.chat_model import Chat
-from models.message_model import Message
+from src.services.ai.ai_service import ai_service
+from src.models.chat_model import Chat
+from src.models.message_model import Message
 from database.db import db
 
 class MessageService:
@@ -26,14 +26,16 @@ class MessageService:
 
         # Histórico
         history = []
-        last_user_message = None
+        MAX_TURNS = 5
 
-        for msg in previous_messages:
-            if msg.role == "user":
-                last_user_message = msg.content
-            elif msg.role == "assistant" and last_user_message:
-                history.append((last_user_message, msg.content))
-                last_user_message = None
+        for i in range(len(previous_messages) - 1):
+            current = previous_messages[i]
+            next_msg = previous_messages[i + 1]
+
+            if current.role == "user" and next_msg.role == "assistant":
+                history.append((current.content, next_msg.content))
+
+        history = history[-MAX_TURNS:]
 
         # salva mensagem do usuário
         user_message = Message(
@@ -44,11 +46,15 @@ class MessageService:
         db.session.add(user_message)
 
         # chamar IA aqui
-        ai_response = ai_service.send_message(
-            question = content,
-            maintenance_mode="Manutenção Corretiva",
-            history=history
-        )
+        try:
+            ai_response = ai_service.send_message(
+                    question=content,
+                    maintenance_mode=chat.maintenance_mode,
+                    history=history
+                )
+        except Exception:
+            ai_response = "Desculpe, ocorreu um erro ao processar sua solicitação."
+
 
         assistant_message = Message(
             chat_id=chat.id,

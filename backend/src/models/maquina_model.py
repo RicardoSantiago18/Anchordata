@@ -14,7 +14,7 @@ class Machine(db.Model):
     # numero de série
     num_serie: so.Mapped[str] = so.mapped_column(sa.String(128), unique=True, index=True)
     # Status da máquina
-    status: so.Mapped[str] = so.mappedd_column(sa.String(64), default=" Regime Saudável", nullable=False)
+    status: so.Mapped[str] = so.mapped_column(sa.String(64), default=" Regime Saudável", nullable=False)
     # Data de criação
     created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     # Última atualização
@@ -22,7 +22,7 @@ class Machine(db.Model):
     # Descrição
     description: so.Mapped[str] = so.mapped_column(sa.String(512), index=True, nullable=False)
     # Ativo ou inativo
-    is_active: so.Mapped[bool] = sp.mapped_column(default=True)
+    is_active: so.Mapped[bool] = so.mapped_column(default=True)
 
 
     def __repr__(self):

@@ -1,8 +1,19 @@
-from models.chat_model import Chat
+from src.models.chat_model import Chat
 from database.db import db
 from datetime import datetime, timezone
+import uuid
 
 class ChatService:
+
+    # Função obter chat ativo
+    @staticmethod
+    def _get_active_chat(chat_id, user_id):
+        return Chat.query.filter_by(
+            id=chat_id,
+            user_id=user_id,
+            is_active=True
+        ).first()
+
 
     # Função criar chat
     @staticmethod
@@ -10,7 +21,8 @@ class ChatService:
         chat = Chat(
             user_id = user_id,
             title = title or "Novo chat",
-            provider = "mistral"
+            provider = "mistral",
+            mistral_chat_id=str(uuid.uuid4())
         )
 
         db.session.add(chat)
@@ -42,12 +54,7 @@ class ChatService:
     # Função encerrar um chat
     @staticmethod
     def close_chat(chat_id: int, user_id: int):
-        chat = Chat.query.filter_by(
-            id = chat_id,
-            user_id = user_id,
-            is_active = True
-        ).first()
-
+        chat = ChatService._get_active_chat(chat_id, user_id)
         if not chat:
             raise ValueError("Chat não encontrado")
         
@@ -61,11 +68,7 @@ class ChatService:
     # Atualizar título do chat
     @staticmethod
     def update_title(chat_id: int, user_id: int, title: str):
-        chat = Chat.query.filter_by(
-            id = chat_id,
-            user_id = user_id,
-            is_active = True
-        ).first()
+        chat = ChatService._get_active_chat(chat_id, user_id)
 
         if not chat:
             raise ValueError("Chat não encontrado")
@@ -74,3 +77,9 @@ class ChatService:
         chat.updated_at = datetime.now(timezone.utc)
 
         db.session.commit()
+
+        return {
+            "id": chat.id,
+            "title": chat.title,
+            "updated_at": chat.updated_at.isoformat()
+        }

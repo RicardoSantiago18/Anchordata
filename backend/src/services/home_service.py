@@ -1,5 +1,5 @@
-from services.chat_service import ChatService
-from services.maquina_service import MaquinaService
+from src.services.chat_service import ChatService
+from src.services.maquina_service import MaquinaService
 # from services.notification_service import NotificationService
 
 class HomeService:

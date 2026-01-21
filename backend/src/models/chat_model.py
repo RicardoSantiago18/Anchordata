@@ -3,7 +3,7 @@ from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from database.db import db
-from models.user_model import User
+from src.models.user_model import User
 
 class Chat(db.Model):
     __tablename__ = "chats"

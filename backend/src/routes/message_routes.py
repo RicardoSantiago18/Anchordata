@@ -1,5 +1,5 @@
 from flask import Blueprint
-from controllers.message_controller import send_message, list_messages
+from src.controllers.message_controller import send_message, list_messages
 
 message_bp = Blueprint(
     "messages",

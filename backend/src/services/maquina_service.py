@@ -1,4 +1,4 @@
-from models.maquina_model import Machine
+from src.models.maquina_model import Machine
 from database.db import db
 from datetime import datetime, timezone
 

@@ -17,7 +17,7 @@ class User(db.Model):
 
     __mapper_args__ = {
         "polymorphic_on": function,
-        "polymorphic_identidity": "user",
+        "polymorphic_identity": "user",
     }
 
     def __repr__(self):
