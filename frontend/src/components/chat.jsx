@@ -66,7 +66,7 @@ const Chat = () => {
           <div className="chat-inner">
             <div className="chat-title-container">
               <h2 className="chat-title">
-                Nome chat <ExpandMoreIcon fontSize="small" />
+                Impressora 3D <ExpandMoreIcon fontSize="small" />
               </h2>
             </div>
 
@@ -96,10 +96,10 @@ const Chat = () => {
                 <span>Dúvidas Frequentes</span>
               </div>
               <div className="faq-grid">
-                <button className="faq-item">Lorem Ipsum is simply dummy text of</button>
-                <button className="faq-item">Lorem Ipsum is simply dummy text of</button>
-                <button className="faq-item">Lorem Ipsum is simply dummy text of</button>
-                <button className="faq-item">Lorem Ipsum is simply dummy text of</button>
+                <button className="faq-item">a vida é como uma</button>
+                <button className="faq-item">caixa de chocolates</button>
+                <button className="faq-item">voce nunca sabe </button>
+                <button className="faq-item">oque pode vir</button>
               </div>
             </div>
           </div>
@@ -109,4 +109,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default Chat; //as vezes eu sinto que desistir de algo que não vai dar certo é melhoor do que continuar insistindo

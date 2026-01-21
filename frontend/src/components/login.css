@@ -1,30 +1,30 @@
-* {
+* { /* Reset global de estilos */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html, body, #root {
+html, body, #root { /* Estrutura base da aplicação React */
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
 
-.login-wrapper {
+.login-wrapper { /* Wrapper geral da tela de login */
   width: 100vw;
   height: 100vh;
   display: flex;
   background-color: #d3d3d3;
 }
 
-.login-container {
+.login-container { /* Container principal (divide esquerda e direita) */
   display: flex;
   width: 100%;
   height: 100%;
 }
 
-.login-left {
+.login-left { /* Lado esquerdo (logo / branding) */
   flex: 1.2; 
   display: flex;
   justify-content: center;
@@ -32,7 +32,7 @@ html, body, #root {
   padding: 40px;
 }
 
-.logo-placeholder {
+.logo-placeholder { /* Área reservada para o logo */
   width: 100%;
   max-width: 400px;
   aspect-ratio: 16 / 9;
@@ -45,27 +45,27 @@ html, body, #root {
   border: none;
 }
 
-.logo-placeholder span {
+.logo-placeholder span { /* Texto temporário do logo */
   font-size: clamp(24px, 5vw, 48px);
   font-style: italic;
   color: #333;
-  letter-spacing: 4px;
+  letter-spacing: 8px;
 }
 
 /* Lado Direito - Card de Login */
-.login-right {
+.login-right { /* Lado direito (formulário de login) */
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
 }
 
-.login-card {
+.login-card { /* Card branco do login */
   width: 100%;
-  max-width: 420px;
+  max-width: 680px;
   height: 94%; 
-  background-color: #ffffff;
+  background-color: #f7f7f7;
   border-radius: 20px;
   padding: 40px;
   display: flex;
@@ -75,7 +75,7 @@ html, body, #root {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.icon-placeholder {
+.icon-placeholder { /* Ícone ilustrativo acima do formulário */
   width: 60px;
   height: 60px;
   border: 1px solid #ddd;
@@ -86,22 +86,22 @@ html, body, #root {
   margin-bottom: 50px;
 }
 
-.icon-placeholder span {
+.icon-placeholder span { /* Texto do ícone placeholder */
   font-size: 12px;
   font-style: italic;
   color: #888;
 }
 
-.login-form {
+.login-form { /* Formulário de login */
   width: 100%;
 }
 
-.form-group {
+.form-group { /* Grupo de campo (label + input) */
   width: 100%;
   margin-bottom: 25px;
 }
 
-.form-group label {
+.form-group label { /* Label do input */
   display: block;
   font-size: 15px;
   font-weight: 600;
@@ -109,7 +109,7 @@ html, body, #root {
   margin-bottom: 10px;
 }
 
-.form-group input {
+.form-group input { /* Campo de entrada */
   width: 100%;
   padding: 14px 18px;
   border: 1px solid #e0e0e0;
@@ -120,16 +120,16 @@ html, body, #root {
   transition: all 0.3s ease;
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder { /* Placeholder do input */
   color: #ccc;
 }
 
-.form-group input:focus {
+.form-group input:focus { /* Input em foco */
   border-color: #999;
   box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
 }
 
-.login-button {
+.login-button { /* Botão de entrar */
   width: 100%;
   padding: 16px;
   background-color: #666666;
@@ -143,52 +143,52 @@ html, body, #root {
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-.login-button:hover {
+.login-button:hover { /* Hover do botão de login */
   background-color: #555555;
 }
 
-.login-button:active {
+.login-button:active { /* Clique do botão */
   transform: scale(0.98);
 }
 
 /* Responsividade */
 @media (max-width: 1024px) {
-  .login-left {
+  .login-left { /* Ajuste do lado esquerdo em telas médias */
     flex: 1;
   }
 }
 
 @media (max-width: 768px) {
-  .login-wrapper {
+  .login-wrapper { /* Wrapper com rolagem no mobile */
     overflow-y: auto;
   }
   
-  .login-container {
+  .login-container { /* Layout em coluna no mobile */
     flex-direction: column;
     height: auto;
     min-height: 100vh;
   }
   
-  .login-left {
+  .login-left { /* Padding do logo no mobile */
     padding: 60px 20px;
   }
   
-  .login-right {
+  .login-right { /* Espaçamento do card no mobile */
     padding: 0 20px 40px 20px;
   }
   
-  .login-card {
+  .login-card { /* Card adaptado ao mobile */
     height: auto;
     padding: 40px 30px;
   }
 }
 
-.logo-image {
+.logo-image { /* Imagem real do logo */
   max-width: 400px;
   width: 100%;
   height: auto;
 }
 
-.login-wrapper {
-  background-color: #404248; /* exemplo: azul escuro */
+.login-wrapper { /* Cor final do fundo da tela */
+  background-color: #404248; /* fundo escuro */
 }
