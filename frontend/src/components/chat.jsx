@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './chat.css';
 
 // MUI Icons
@@ -14,9 +14,32 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const Chat = () => {
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState([]);
+
+  const isTyping = input.length > 0;
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+
+    setMessages(prev => [...prev, { sender: 'user', text: input }]);
+    setInput('');
+
+    setTimeout(() => {
+      setMessages(prev => [...prev, { sender: 'bot', text: 'Resposta simulada da IA.' }]);
+    }, 700);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
     <div className="chat-wrapper">
-      {/* Sidebar Esquerda */}
+      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-top">
           <div className="logo-box">Logo</div>
@@ -24,33 +47,25 @@ const Chat = () => {
             <ChevronLeftIcon fontSize="small" />
           </button>
         </div>
-        
+
         <nav className="sidebar-nav">
-          <button className="nav-item active">
-            <HomeOutlinedIcon />
-          </button>
-          <button className="nav-item">
-            <FolderOutlinedIcon />
-          </button>
+          <button className="nav-item active"><HomeOutlinedIcon /></button>
+          <button className="nav-item"><FolderOutlinedIcon /></button>
         </nav>
 
         <div className="sidebar-bottom">
-          <button className="nav-item logout">
-            <LogoutOutlinedIcon />
-          </button>
+          <button className="nav-item logout"><LogoutOutlinedIcon /></button>
         </div>
       </aside>
 
       <div className="main-container">
-        {/* Header Superior */}
+        {/* Header */}
         <header className="chat-header">
           <div className="user-info">
-            <div className="user-avatar">
-              <PersonOutlineIcon />
-            </div>
+            <div className="user-avatar"><PersonOutlineIcon /></div>
             <span className="user-name">nome sobrenome</span>
           </div>
-          
+
           <div className="header-actions">
             <button className="btn-new-chat">
               <AddIcon fontSize="small" /> Novo Chat
@@ -61,15 +76,17 @@ const Chat = () => {
           </div>
         </header>
 
-        {/* Área Principal do Chat */}
+        {/* Chat */}
         <main className="chat-content">
           <div className="chat-inner">
+            {/* Título */}
             <div className="chat-title-container">
               <h2 className="chat-title">
-                Impressora 3D <ExpandMoreIcon fontSize="small" />
+                Nome chat <ExpandMoreIcon fontSize="small" />
               </h2>
             </div>
 
+            {/* Conteúdo superior (permanece sempre) */}
             <div className="welcome-section">
               <div className="welcome-icon">
                 <PersonOutlineIcon fontSize="large" />
@@ -78,30 +95,38 @@ const Chat = () => {
               <h1 className="main-question">Como podemos te ajudar?</h1>
             </div>
 
+            {/* Input (não se move) */}
             <div className="input-container">
               <div className="input-box">
-                <button className="btn-add">
-                  <AddIcon />
-                </button>
-                <input type="text" placeholder="Pergunte alguma coisa..." />
-                <button className="btn-send">
+                <button className="btn-add"><AddIcon /></button>
+                <input
+                  type="text"
+                  placeholder="Pergunte alguma coisa..."
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <button className="btn-send" onClick={sendMessage}>
                   <ArrowUpwardIcon />
                 </button>
               </div>
             </div>
 
-            <div className="faq-section">
-              <div className="faq-header">
-                <InfoOutlinedIcon />
-                <span>Dúvidas Frequentes</span>
+            {/* FAQ — SOME AO DIGITAR */}
+            {!isTyping && (
+              <div className="faq-section">
+                <div className="faq-header">
+                  <InfoOutlinedIcon />
+                  <span>Dúvidas Frequentes</span>
+                </div>
+                <div className="faq-grid">
+                  <button className="faq-item">a vida é como uma</button>
+                  <button className="faq-item">caixa de chocolates</button>
+                  <button className="faq-item">você nunca sabe</button>
+                  <button className="faq-item">o que pode vir</button>
+                </div>
               </div>
-              <div className="faq-grid">
-                <button className="faq-item">a vida é como uma</button>
-                <button className="faq-item">caixa de chocolates</button>
-                <button className="faq-item">voce nunca sabe </button>
-                <button className="faq-item">oque pode vir</button>
-              </div>
-            </div>
+            )}
           </div>
         </main>
       </div>
@@ -109,4 +134,4 @@ const Chat = () => {
   );
 };
 
-export default Chat; //as vezes eu sinto que desistir de algo que não vai dar certo é melhoor do que continuar insistindo
+export default Chat;

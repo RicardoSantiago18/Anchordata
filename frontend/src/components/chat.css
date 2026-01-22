@@ -364,3 +364,14 @@ body { /* Corpo geral da página */
     display: none;
   }
 }
+
+/* === MENSAGENS === */
+.messages-area {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
