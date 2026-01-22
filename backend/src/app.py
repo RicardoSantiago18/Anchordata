@@ -9,12 +9,16 @@ def create_app():
     app.config.from_object(Config)
 
     # Ativar CORS para comunicação com o frontend
-    CORS(app, resources={
-        r"/login": {"origins": "http://localhost:5173"},
-        r"/chat/*": {"origins": "http://localhost:5173"},
-        r"/message/*": {"origins": "http://localhost:5173"},
-        r"/home/*": {"origins": "http://localhost:5173"}
-    }, supports_credentials=True)
+    CORS(    app,
+    resources={r"/*": {"origins": "http://localhost:5173"}},
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    )
+
+    @app.route("/chat", methods=["OPTIONS"])
+    def chat_options():
+        return "", 200
 
     db.init_app(app)
     Migrate(app, db)

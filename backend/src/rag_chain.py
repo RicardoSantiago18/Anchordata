@@ -43,12 +43,7 @@ def create_chain():
     prompt = ChatPromptTemplate.from_template(
         """
         Você é um assistente especialista em manutenção industrial.
-        
-        MODO DE OPERAÇÃO: {maintenance_mode}
-        
-        Se o modo for "Corretiva": Foque em diagnosticar a falha, identificar a causa raiz e sugerir reparos imediatos.
-        Se o modo for "Preventiva": Foque em checklists, inspeção de desgaste e procedimentos de rotina.
-
+    
         HISTÓRICO DA CONVERSA:
         {history}
 
@@ -76,9 +71,6 @@ def create_chain():
                 | RunnableLambda(format_docs)
             ),
             "question": RunnableLambda(itemgetter("question")),
-            "maintenance_mode": RunnableLambda(
-                lambda x: safe_mode(x["maintenance_mode"])
-            ),
             "history": RunnableLambda(
                 lambda x: format_history(x["history"])
             ),

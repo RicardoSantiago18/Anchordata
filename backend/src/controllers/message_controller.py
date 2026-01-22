@@ -5,7 +5,7 @@ from src.utils.mock_user import get_mock_user
 
 def send_message(chat_id, current_user=None):
     """
-    POST /chats/<chat_id>/messages
+    POST /chat/<chat_id>/messages
     """
 
     try:
@@ -20,7 +20,7 @@ def send_message(chat_id, current_user=None):
         response = MessageService.send_message(
             chat_id=chat_id,
             user_id=current_user.id,
-            content=content
+            content=data.get("content")
         )
 
         return jsonify(response), 201

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./chat.css";
 
 // Service
-import { sendChatMessage } from "../services/chat.service";
+import { sendChatMessage, createChat} from "../services/chat.service";
 
 // MUI Icons
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -17,6 +17,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 const Chat = () => {
+  const [chatId, setChatId] = useState(null);
+
+  useEffect(() => {
+    async function initChat() {
+      const chat = await createChat();
+      setChatId(chat.id);
+    }
+    initChat();
+  }, []);
+
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [hasSentMessage, setHasSentMessage] = useState(false);
@@ -31,7 +41,10 @@ const Chat = () => {
   useEffect(scrollToBottom, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!chatId) {
+      return <p style={{ padding: 20 }}>Criando chat...</p>;
+    }
+    if (!input.trim() || !chatId) return;
 
     const userMessage = input;
 
@@ -45,11 +58,11 @@ const Chat = () => {
     ]);
 
     try {
-      const data = await sendChatMessage(userMessage);
+      const data = await sendChatMessage(chatId, userMessage);
 
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: data.response },
+        { sender: "bot", text: data.assistant_message },
       ]);
     } catch (error) {
       setMessages((prev) => [

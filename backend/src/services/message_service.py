@@ -49,7 +49,6 @@ class MessageService:
         try:
             ai_response = ai_service.send_message(
                     question=content,
-                    maintenance_mode=chat.maintenance_mode,
                     history=history
                 )
         except Exception as e:

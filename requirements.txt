@@ -2,6 +2,7 @@ Flask
 Flask-SQLAlchemy
 Flask-Migrate
 Flask-Cors
+flask_jwt_extended
 langchain-community
 langchain-text-splitters
 python-dotenv
@@ -10,3 +11,4 @@ langchain-huggingface
 SQLAlchemy
 pypdf
 faiss-cpu
+sentence-transformers
