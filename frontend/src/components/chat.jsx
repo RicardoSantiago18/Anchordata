@@ -1,67 +1,66 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './chat.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./chat.css";
+
+// Service
+import { sendChatMessage } from "../services/chat.service";
 
 // MUI Icons
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import AddIcon from '@mui/icons-material/Add';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import AddIcon from "@mui/icons-material/Add";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 const Chat = () => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [hasSentMessage, setHasSentMessage] = useState(false);
-  const [botText, setBotText] = useState('');
   const messagesEndRef = useRef(null);
 
   const isTyping = input.length > 0;
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(scrollToBottom, [messages, botText]);
+  useEffect(scrollToBottom, [messages]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
-    setHasSentMessage(true);
+    const userMessage = input;
 
-    setMessages(prev => [
+    setHasSentMessage(true);
+    setInput("");
+
+    // Mensagem do usuário
+    setMessages((prev) => [
       ...prev,
-      { sender: 'user', text: input }
+      { sender: "user", text: userMessage },
     ]);
 
-    setInput('');
-    setBotText('');
+    try {
+      const data = await sendChatMessage(userMessage);
 
-    const fullResponse =
-      'Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.';
-
-    let index = 0;
-
-    const interval = setInterval(() => {
-      setBotText(prev => prev + fullResponse[index]);
-      index++;
-      if (index >= fullResponse.length) {
-        clearInterval(interval);
-        setMessages(prev => [
-          ...prev,
-          { sender: 'bot', text: fullResponse }
-        ]);
-        setBotText('');
-      }
-    }, 25);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: data.response },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "Erro ao responder. Tente novamente." },
+      ]);
+    }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
     }
@@ -79,12 +78,18 @@ const Chat = () => {
         </div>
 
         <nav className="sidebar-nav">
-          <button className="nav-item active"><HomeOutlinedIcon /></button>
-          <button className="nav-item"><FolderOutlinedIcon /></button>
+          <button className="nav-item active">
+            <HomeOutlinedIcon />
+          </button>
+          <button className="nav-item">
+            <FolderOutlinedIcon />
+          </button>
         </nav>
 
         <div className="sidebar-bottom">
-          <button className="nav-item logout"><LogoutOutlinedIcon /></button>
+          <button className="nav-item logout">
+            <LogoutOutlinedIcon />
+          </button>
         </div>
       </aside>
 
@@ -92,7 +97,9 @@ const Chat = () => {
         {/* Header */}
         <header className="chat-header">
           <div className="user-info">
-            <div className="user-avatar"><PersonOutlineIcon /></div>
+            <div className="user-avatar">
+              <PersonOutlineIcon />
+            </div>
             <span className="user-name">nome sobrenome</span>
           </div>
 
@@ -109,7 +116,6 @@ const Chat = () => {
         {/* Chat */}
         <main className="chat-content">
           <div className="chat-inner">
-
             {!hasSentMessage && (
               <>
                 <div className="chat-title-container">
@@ -122,36 +128,39 @@ const Chat = () => {
                   <div className="welcome-icon">
                     <PersonOutlineIcon fontSize="large" />
                   </div>
-                  <p className="welcome-text">Olá, Tudo bem?</p>
-                  <h1 className="main-question">Como podemos te ajudar?</h1>
+                  <p className="welcome-text">Olá, tudo bem?</p>
+                  <h1 className="main-question">
+                    Como podemos te ajudar?
+                  </h1>
                 </div>
               </>
             )}
 
             {/* Mensagens */}
-            <div className={`messages-area ${hasSentMessage ? 'active' : ''}`}>
+            <div
+              className={`messages-area ${
+                hasSentMessage ? "active" : ""
+              }`}
+            >
               {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message ${msg.sender}`}
-                >
+                <div key={index} className={`message ${msg.sender}`}>
                   {msg.text}
                 </div>
               ))}
-
-              {botText && (
-                <div className="message bot">
-                  {botText}
-                </div>
-              )}
 
               <div ref={messagesEndRef} />
             </div>
 
             {/* Input */}
-            <div className={`input-container ${hasSentMessage ? 'fixed-bottom' : ''}`}>
+            <div
+              className={`input-container ${
+                hasSentMessage ? "fixed-bottom" : ""
+              }`}
+            >
               <div className="input-box">
-                <button className="btn-add"><AddIcon /></button>
+                <button className="btn-add">
+                  <AddIcon />
+                </button>
                 <input
                   type="text"
                   placeholder="Pergunte alguma coisa..."
@@ -173,14 +182,13 @@ const Chat = () => {
                   <span>Dúvidas Frequentes</span>
                 </div>
                 <div className="faq-grid">
-                  <button className="faq-item">a vida é como uma</button>
-                  <button className="faq-item">caixa de chocolates</button>
-                  <button className="faq-item">você nunca sabe</button>
-                  <button className="faq-item">o que pode vir</button>
+                  <button className="faq-item">Exemplo 1</button>
+                  <button className="faq-item">Exemplo 2</button>
+                  <button className="faq-item">Exemplo 3</button>
+                  <button className="faq-item">Exemplo 4</button>
                 </div>
               </div>
             )}
-
           </div>
         </main>
       </div>
