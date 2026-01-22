@@ -1,15 +1,17 @@
 from flask import request, jsonify
 from src.services.message_service import MessageService
 from src.services.ai.ai_service import AIService
+from src.utils.mock_user import get_mock_user
 
-def send_message(chat_id, current_user):
+def send_message(chat_id, current_user=None):
     """
     POST /chats/<chat_id>/messages
     """
 
     try:
+        current_user = current_user or get_mock_user()
         data = request.get_json() or {}
-        content = data.get("message")
+        content = data.get("content")
 
         if not content:
             return jsonify({"Error": "Mensagem é obrigatória"}), 400
@@ -30,12 +32,13 @@ def send_message(chat_id, current_user):
         return jsonify({"error": str(e)}), 500
     
 
-def list_messages(chat_id, current_user):
+def list_messages(chat_id, current_user=None):
     """
     DGET /chats/<chat_id>/messages
     """
 
     try:
+        current_user = current_user or get_mock_user()
         messages = MessageService.list_messages(chat_id, current_user.id)
         return jsonify(messages), 200
     

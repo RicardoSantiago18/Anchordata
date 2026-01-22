@@ -52,7 +52,8 @@ class MessageService:
                     maintenance_mode=chat.maintenance_mode,
                     history=history
                 )
-        except Exception:
+        except Exception as e:
+            print("Erro IA >>>", e)
             ai_response = "Desculpe, ocorreu um erro ao processar sua solicitação."
 
 
