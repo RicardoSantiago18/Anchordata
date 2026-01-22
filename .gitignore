@@ -1,0 +1,60 @@
+# --- Gerais / Editores ---
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Frontend (Node/React/Vite) ---
+# Ignora dependências e builds do frontend
+node_modules/
+frontend/node_modules/
+dist/
+dist-ssr/
+frontend/dist/
+*.local
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Logs de erro do npm/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Backend (Python/Flask) ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+backend/**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes Virtuais (Venv)
+venv/
+.venv/
+env/
+bin/
+lib/
+develop-eggs/
+eggs/
+parts/
+sdist/
+var/
+*.egg-info/
+
+# Configurações e Instância Flask
+instance/
+.webassets-cache
+.env
+backend/.env
+
+# Bases de Dados (SQLite)
+*.db
+*.sqlite3
+
