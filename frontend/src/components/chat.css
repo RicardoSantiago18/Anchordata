@@ -365,13 +365,38 @@ body { /* Corpo geral da página */
   }
 }
 
-/* === MENSAGENS === */
+/* local das mensagens */
 .messages-area {
   width: 100%;
-  max-width: 720px;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
+.message {
+  max-width: 70%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* chat de pergunta do usuário usuário */
+.message.user {
+  align-self: flex-end;
+  background-color: #cfcfcf;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+/* chat de resposta  da ia */
+.message.bot {
+  align-self: flex-start;
+  color: #333;
+}
+
+/* input fixo embaixo após envio */
+.input-container.fixed-bottom {
+  margin-top: auto;
+  width: 100%;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './chat.css';
 
 // MUI Icons
@@ -16,18 +16,48 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 const Chat = () => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
+  const [hasSentMessage, setHasSentMessage] = useState(false);
+  const [botText, setBotText] = useState('');
+  const messagesEndRef = useRef(null);
 
   const isTyping = input.length > 0;
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(scrollToBottom, [messages, botText]);
 
   const sendMessage = () => {
     if (!input.trim()) return;
 
-    setMessages(prev => [...prev, { sender: 'user', text: input }]);
-    setInput('');
+    setHasSentMessage(true);
 
-    setTimeout(() => {
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Resposta simulada da IA.' }]);
-    }, 700);
+    setMessages(prev => [
+      ...prev,
+      { sender: 'user', text: input }
+    ]);
+
+    setInput('');
+    setBotText('');
+
+    const fullResponse =
+      'Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s.';
+
+    let index = 0;
+
+    const interval = setInterval(() => {
+      setBotText(prev => prev + fullResponse[index]);
+      index++;
+      if (index >= fullResponse.length) {
+        clearInterval(interval);
+        setMessages(prev => [
+          ...prev,
+          { sender: 'bot', text: fullResponse }
+        ]);
+        setBotText('');
+      }
+    }, 25);
   };
 
   const handleKeyDown = (e) => {
@@ -79,24 +109,47 @@ const Chat = () => {
         {/* Chat */}
         <main className="chat-content">
           <div className="chat-inner">
-            {/* Título */}
-            <div className="chat-title-container">
-              <h2 className="chat-title">
-                Nome chat <ExpandMoreIcon fontSize="small" />
-              </h2>
+
+            {!hasSentMessage && (
+              <>
+                <div className="chat-title-container">
+                  <h2 className="chat-title">
+                    Nome chat <ExpandMoreIcon fontSize="small" />
+                  </h2>
+                </div>
+
+                <div className="welcome-section">
+                  <div className="welcome-icon">
+                    <PersonOutlineIcon fontSize="large" />
+                  </div>
+                  <p className="welcome-text">Olá, Tudo bem?</p>
+                  <h1 className="main-question">Como podemos te ajudar?</h1>
+                </div>
+              </>
+            )}
+
+            {/* Mensagens */}
+            <div className={`messages-area ${hasSentMessage ? 'active' : ''}`}>
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`message ${msg.sender}`}
+                >
+                  {msg.text}
+                </div>
+              ))}
+
+              {botText && (
+                <div className="message bot">
+                  {botText}
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
             </div>
 
-            {/* Conteúdo superior (permanece sempre) */}
-            <div className="welcome-section">
-              <div className="welcome-icon">
-                <PersonOutlineIcon fontSize="large" />
-              </div>
-              <p className="welcome-text">Olá, Tudo bem?</p>
-              <h1 className="main-question">Como podemos te ajudar?</h1>
-            </div>
-
-            {/* Input (não se move) */}
-            <div className="input-container">
+            {/* Input */}
+            <div className={`input-container ${hasSentMessage ? 'fixed-bottom' : ''}`}>
               <div className="input-box">
                 <button className="btn-add"><AddIcon /></button>
                 <input
@@ -112,8 +165,8 @@ const Chat = () => {
               </div>
             </div>
 
-            {/* FAQ — SOME AO DIGITAR */}
-            {!isTyping && (
+            {/* FAQ */}
+            {!isTyping && !hasSentMessage && (
               <div className="faq-section">
                 <div className="faq-header">
                   <InfoOutlinedIcon />
@@ -127,6 +180,7 @@ const Chat = () => {
                 </div>
               </div>
             )}
+
           </div>
         </main>
       </div>
