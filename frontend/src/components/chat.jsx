@@ -156,7 +156,9 @@ const Chat = () => {
               }`}
             >
               {messages.map((msg, index) => (
-                <div key={index} className={`message ${msg.sender}`}>
+                <div key={index} className={`message ${msg.sender}`}
+                style={{ whiteSpace: "pre-wrap"}}
+                >
                   {msg.text}
                 </div>
               ))}

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 from flask_cors import CORS
 from database.config import Config
 from database.db import db
@@ -16,9 +17,11 @@ def create_app():
     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
 
-    @app.route("/chat", methods=["OPTIONS"])
-    def chat_options():
-        return "", 200
+    @app.before_request
+    def handle_options():
+        if request.method == "OPTIONS":
+            return "", 200
+        
 
     db.init_app(app)
     Migrate(app, db)
