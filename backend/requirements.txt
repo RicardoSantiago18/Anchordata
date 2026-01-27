@@ -10,3 +10,5 @@ langchain-huggingface
 SQLAlchemy
 pypdf
 faiss-cpu
+PyJWT
+Werkzeug

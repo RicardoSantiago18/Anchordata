@@ -12,3 +12,5 @@ SQLAlchemy
 pypdf
 faiss-cpu
 sentence-transformers
+PyJWT
+Werkzeug
