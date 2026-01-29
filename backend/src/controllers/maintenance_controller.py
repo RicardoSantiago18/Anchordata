@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from services.maintenance_service import MaintenanceService
+from src.services.maintenance_service import MaintenanceService
 
 
 def create_maintenance():

@@ -25,12 +25,5 @@ class Machine(db.Model):
     # Ativo ou inativo
     is_active: so.Mapped[bool] = so.mapped_column(default=True)
 
-    # Relacionamento
-    maintenances = relationship(
-        "Maintenance",
-        backref="machine",
-        lazy="dynamic",
-    )
-
     def __repr__(self):
         return f"<Machine {self.nome_maquina}>"
