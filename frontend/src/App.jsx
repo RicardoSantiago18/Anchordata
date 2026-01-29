@@ -1,16 +1,19 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./components/login";
+import CadMaq from "./components/cadmaq";
 import Chat from "./components/chat";
 
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/chat" element={<Chat />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {/* rota inicial */}
+      <Route path="/" element={<Navigate to="/login" />} />
+
+      {/* telas */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/maquinas" element={<CadMaq />} />
+      <Route path="/chat" element={<Chat />} />
+    </Routes>
   );
 }
-
-export default App;

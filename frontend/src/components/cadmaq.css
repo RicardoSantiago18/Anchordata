@@ -1,0 +1,177 @@
+/* cadmaq.css */
+
+/* Página inteira */
+.cadmaq-page {
+  height: 100vh;
+  width: 100vw;
+  background: #d3d3d3;
+  display: flex;
+}
+
+/* Sidebar */
+.cadmaq-sidebar {
+  width: 260px;
+  background: #6f6f6f;
+  border-right: 2px solid #4f4f4f;
+  padding: 24px 18px 18px;
+  box-sizing: border-box;
+}
+
+.cadmaq-brand {
+  color: #eaeaea;
+  font-weight: 800;
+  font-size: 34px;
+  letter-spacing: 0.3px;
+  margin: 0 0 14px;
+}
+
+.cadmaq-sidebar-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 0;
+  margin: 0 0 16px;
+}
+
+/* Itens do menu */
+.cadmaq-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.cadmaq-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0);
+  cursor: pointer;
+  transition: background 0.12s ease, border 0.12s ease;
+}
+
+.cadmaq-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cadmaq-nav-item.active {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.cadmaq-nav-icon {
+  display: grid;
+  place-items: center;
+  color: #e9e9e9;
+}
+
+.cadmaq-nav-label {
+  color: #e9e9e9;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Content */
+.cadmaq-content {
+  flex: 1;
+  background: #cfcfcf;
+  border-left: 2px solid #8a8a8a;
+  padding: 28px 48px;
+  box-sizing: border-box;
+}
+
+/* Título */
+.cadmaq-title {
+  margin: 0 0 18px;
+  font-size: 42px;
+  font-weight: 700;
+  color: #5a5a5a;
+  letter-spacing: 0.2px;
+}
+
+/* Busca */
+.cadmaq-search-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 46px;
+}
+
+.cadmaq-search {
+  width: 62%;
+  max-width: 720px;
+}
+
+.cadmaq-search .MuiOutlinedInput-root {
+  height: 44px;
+  border-radius: 6px;
+  background: #d9d9d9;
+  color: #4f4f4f;
+}
+
+.cadmaq-search .MuiOutlinedInput-notchedOutline {
+  border-color: #8a8a8a;
+  border-width: 2px;
+}
+
+.cadmaq-search:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #7a7a7a;
+}
+
+.cadmaq-search .MuiInputBase-input {
+  font-size: 18px;
+  padding-left: 14px;
+}
+
+/* Área dos cards */
+.cadmaq-cards {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin-top: 10px;
+  margin-left: 48px;
+}
+
+/* Card da máquina */
+.cadmaq-machine-card {
+  width: 360px;
+  height: 92px;
+  border-radius: 8px;
+  background: #d9d9d9;
+  border: 2px solid #8a8a8a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cadmaq-machine-text {
+  font-size: 34px;
+  font-weight: 700;
+  color: #5a5a5a;
+  text-transform: lowercase;
+}
+
+/* Botão circular (+) */
+.cadmaq-add {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 4px solid #5a5a5a;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cadmaq-add svg {
+  font-size: 46px;
+  color: #4a4a4a;
+}
+
+/* Espaçador entre menus (opcional) */
+.cadmaq-nav-spacer {
+  height: 14px;
+}
