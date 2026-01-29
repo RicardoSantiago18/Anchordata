@@ -25,7 +25,8 @@ const Chat = () => {
   const maquinaSelecionada = location.state?.maquina; // { id, nome } (ou undefined)
 
   const [chatId, setChatId] = useState(null);
-  const [isCreatingChat, setIsCreatingChat] = useState(true);
+  const [isCreatingChat, setIsCreatingChat] = useState(false);
+
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -238,11 +239,7 @@ const Chat = () => {
 
             {/* Mensagens */}
             <div className={`messages-area ${hasSentMessage ? "active" : ""}`}>
-              {isCreatingChat && (
-                <div className="message bot" style={{ whiteSpace: "pre-wrap" }}>
-                  Criando chat...
-                </div>
-              )}
+              
 
               {messages.map((msg, index) => (
                 <div
@@ -274,7 +271,8 @@ const Chat = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  disabled={!chatId || isCreatingChat}
+                  disabled={isCreatingChat}
+
                 />
 
                 <button
