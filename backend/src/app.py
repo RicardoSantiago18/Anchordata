@@ -31,12 +31,14 @@ def create_app():
     from src.routes.login_routes import login_bp
     from src.routes.home_routes import home_bp
     from src.routes.user_routes import user_bp
+    from src.routes.maintenance_routes import maintenance_bp
 
     app.register_blueprint(chat_bp)
     app.register_blueprint(message_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(maintenance_bp)
 
     return app
 

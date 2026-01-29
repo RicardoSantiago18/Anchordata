@@ -2,6 +2,7 @@ from typing import Optional
 from datetime import datetime, timezone
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from sqlalchemy.orm import relationship
 from database.db import db
 
 class Machine(db.Model):
@@ -24,6 +25,12 @@ class Machine(db.Model):
     # Ativo ou inativo
     is_active: so.Mapped[bool] = so.mapped_column(default=True)
 
+    # Relacionamento
+    maintenances = relationship(
+        "Maintenance",
+        backref="machine",
+        lazy="dynamic",
+    )
 
     def __repr__(self):
         return f"<Machine {self.nome_maquina}>"
