@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from database.db import db
-from models.maintenance import Maintenance
-from models.maquina_model import Machine
+from src.models.maintenance_model import Maintenance
+from src.models.maquina_model import Machine
 
 class MaintenanceService:
 
@@ -14,13 +14,6 @@ class MaintenanceService:
         pecas_trocadas: str | None,
         resultado: str
     ):
-        machine = Machine.query.filter_by(
-            id=machine_id,
-            is_active=True
-        ).first()
-
-        if not machine:
-            raise ValueError("Máquina não encontrada")
         
         maintenance = Maintenance(
             engineer_id = engineer_id,

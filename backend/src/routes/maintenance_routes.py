@@ -7,5 +7,5 @@ maintenance_bp = Blueprint(
     url_prefix='/maintenances'
     )
 
-maintenance_bp.routes("/", methods=["POST"])(create_maintenance)
-maintenance_bp.routes("/machine/<int:machine_id>", methods=["GET"])(list_machine_maintenances)
+maintenance_bp.route("/", methods=["POST"])(create_maintenance)
+maintenance_bp.route("/machine/<int:machine_id>", methods=["GET"])(list_machine_maintenances)
