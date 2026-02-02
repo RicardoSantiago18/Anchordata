@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom"; // ✅ agora inclui useParams
 import "./chat.css";
 
 // Service
@@ -20,13 +20,32 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 const Chat = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams(); // ✅ pega o :id da rota /chat/:id
 
-  // ✅ máquina recebida de /maquinas (CadMaq)
-  const maquinaSelecionada = location.state?.maquina; // { id, nome } (ou undefined)
+  // ✅ 1) se vier máquina pelo state, usa ela
+  const maquinaFromState = location.state?.maquina; // { id, nome } (ou undefined)
+
+  // ✅ 2) id da máquina vindo da URL (sempre string) -> converte pra string mesmo
+  const machineId = id ? String(id) : null;
+
+  // ✅ 3) Define "maquinaSelecionada" de forma robusta:
+  // - prioriza state (tem nome, etc.)
+  // - se não tiver state, cria um objeto mínimo usando o id da URL
+  const maquinaSelecionada = useMemo(() => {
+    if (maquinaFromState) return maquinaFromState;
+
+    if (machineId) {
+      return {
+        id: machineId,
+        nome: `Máquina ${machineId}`,
+      };
+    }
+
+    return undefined;
+  }, [maquinaFromState, machineId]);
 
   const [chatId, setChatId] = useState(null);
   const [isCreatingChat, setIsCreatingChat] = useState(false);
-
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -62,14 +81,12 @@ const Chat = () => {
     };
   }, []);
 
-  // ✅ se tiver máquina selecionada, já coloca uma mensagem inicial (opcional)
+  // ✅ se tiver máquina selecionada (via state OU via id), coloca uma mensagem inicial (opcional)
   useEffect(() => {
-    if (!maquinaSelecionada) return;
+    if (!maquinaSelecionada?.nome) return;
 
-    // você pode trocar esse texto do jeito que quiser
     const texto = `Você está conversando sobre: ${maquinaSelecionada.nome}`;
     setMessages((prev) => {
-      // evita duplicar se o usuário voltar e a rota mandar state de novo
       const jaTem = prev.some((m) => m.sender === "system" && m.text === texto);
       if (jaTem) return prev;
       return [...prev, { sender: "system", text: texto }];
@@ -88,8 +105,13 @@ const Chat = () => {
       setInput("");
 
       // mantém o contexto da máquina se existir
-      if (maquinaSelecionada) {
-        setMessages([{ sender: "system", text: `Você está conversando sobre: ${maquinaSelecionada.nome}` }]);
+      if (maquinaSelecionada?.nome) {
+        setMessages([
+          {
+            sender: "system",
+            text: `Você está conversando sobre: ${maquinaSelecionada.nome}`,
+          },
+        ]);
       }
     } finally {
       setIsCreatingChat(false);
@@ -131,12 +153,10 @@ const Chat = () => {
   };
 
   const handleGoHome = () => {
-    // ✅ volta para Máquinas
     navigate("/maquinas");
   };
 
   const handleLogout = () => {
-    // ✅ volta para Login (depois você pode limpar token aqui)
     navigate("/login");
   };
 
@@ -152,7 +172,6 @@ const Chat = () => {
         </div>
 
         <nav className="sidebar-nav">
-          {/* ✅ home agora volta para /maquinas */}
           <button
             className="nav-item active"
             type="button"
@@ -168,7 +187,6 @@ const Chat = () => {
         </nav>
 
         <div className="sidebar-bottom">
-          {/* ✅ logout volta para /login */}
           <button
             className="nav-item logout"
             type="button"
@@ -188,9 +206,13 @@ const Chat = () => {
               <PersonOutlineIcon />
             </div>
 
-            {/* ✅ se veio máquina, mostra no header */}
+            {/* ✅ agora mostra nome da máquina (state ou fallback pelo id) */}
             <span className="user-name">
-              {maquinaSelecionada?.nome ? maquinaSelecionada.nome : "nome sobrenome"}
+              {maquinaSelecionada?.nome
+                ? maquinaSelecionada.nome
+                : machineId
+                ? `Máquina ${machineId}`
+                : "nome sobrenome"}
             </span>
           </div>
 
@@ -218,7 +240,11 @@ const Chat = () => {
               <>
                 <div className="chat-title-container">
                   <h2 className="chat-title">
-                    {maquinaSelecionada?.nome ? maquinaSelecionada.nome : "Nome chat"}{" "}
+                    {maquinaSelecionada?.nome
+                      ? maquinaSelecionada.nome
+                      : machineId
+                      ? `Máquina ${machineId}`
+                      : "Nome chat"}{" "}
                     <ExpandMoreIcon fontSize="small" />
                   </h2>
                 </div>
@@ -230,6 +256,8 @@ const Chat = () => {
                   <p className="welcome-text">
                     {maquinaSelecionada?.nome
                       ? `Olá! Vamos falar sobre "${maquinaSelecionada.nome}"?`
+                      : machineId
+                      ? `Olá! Vamos falar sobre a máquina ${machineId}?`
                       : "Olá, tudo bem?"}
                   </p>
                   <h1 className="main-question">Como podemos te ajudar?</h1>
@@ -239,8 +267,6 @@ const Chat = () => {
 
             {/* Mensagens */}
             <div className={`messages-area ${hasSentMessage ? "active" : ""}`}>
-              
-
               {messages.map((msg, index) => (
                 <div
                   key={index}
@@ -266,13 +292,14 @@ const Chat = () => {
                   placeholder={
                     maquinaSelecionada?.nome
                       ? `Pergunte algo sobre ${maquinaSelecionada.nome}...`
+                      : machineId
+                      ? `Pergunte algo sobre a máquina ${machineId}...`
                       : "Pergunte alguma coisa..."
                   }
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={isCreatingChat}
-
                 />
 
                 <button

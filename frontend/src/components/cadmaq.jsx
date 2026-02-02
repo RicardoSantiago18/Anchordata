@@ -1,291 +1,378 @@
-// cadmaq.jsx
+// src/pages/CadMaq.jsx
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // ✅ ADICIONADO
 import {
   Box,
+  Paper,
   Typography,
-  ButtonBase,
+  IconButton,
+  Button,
   TextField,
   InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
   Divider,
+  Chip,
+  Card,
+  CardContent,
+  CardActions,
+  Grid,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+
+// MUI Icons
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AddIcon from "@mui/icons-material/Add";
-import ViewListIcon from "@mui/icons-material/ViewList";
-import DescriptionIcon from "@mui/icons-material/Description";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import SearchIcon from "@mui/icons-material/Search";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 export default function CadMaq() {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState("");
+  const navigate = useNavigate(); // ✅ ADICIONADO
 
-  const maquinas = useMemo(
+  const [search, setSearch] = useState("");
+  const [order, setOrder] = useState("recentes");
+
+  // Mock (trocar depois por dados reais)
+  const machines = useMemo(
     () => [
-      { id: 1, nome: "impressora 3d" },
-      // depois você adiciona mais
+      { id: 1, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 2, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 3, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 4, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 5, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 6, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 7, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
+      { id: 8, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
     ],
     []
   );
 
-  const filtradas = useMemo(() => {
-    const s = search.trim().toLowerCase();
-    if (!s) return maquinas;
-    return maquinas.filter((m) => m.nome.toLowerCase().includes(s));
-  }, [maquinas, search]);
+  const filteredMachines = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    let list = machines.filter((m) => {
+      if (!q) return true;
+      return (
+        m.nome.toLowerCase().includes(q) ||
+        m.serie.toLowerCase().includes(q) ||
+        (m.estado || "").toLowerCase().includes(q)
+      );
+    });
 
-  function handleOpenMachine(maquina) {
-    // ✅ indo para o chat e levando a máquina selecionada (opcional, mas útil)
-    navigate("/chat", { state: { maquina } });
-  }
+    // Ordenações simples (placeholder)
+    if (order === "a-z") list = [...list].sort((a, b) => a.nome.localeCompare(b.nome));
+    if (order === "z-a") list = [...list].sort((a, b) => b.nome.localeCompare(a.nome));
 
-  function handleAddMachine() {
-    // por enquanto, só navega (você pode trocar isso por um modal/cadastro depois)
-    console.log("Adicionar máquina");
-  }
+    return list;
+  }, [machines, search, order]);
 
-  function goTo(label) {
-    const map = {
-      "Máquinas": "/maquinas",
-      "Relatórios": "/relatorios", // crie a rota depois se quiser
-      "Dashboard": "/dashboard",   // crie a rota depois se quiser
-      "Configurações": "/configuracoes", // crie a rota depois se quiser
-      "Usuários": "/usuarios", // crie a rota depois se quiser
-    };
+  const handleAddMachine = () => {
+    // TODO: abrir modal / navegar para formulário de cadastro
+    console.log("Adicionar Máquina");
+  };
 
-    const route = map[label];
-    if (route) navigate(route);
-    else console.log("Rota ainda não criada para:", label);
-  }
+  const handleEnterMachine = (id) => {
+    // ✅ AGORA NAVEGA PARA O CHAT DA MÁQUINA
+    navigate(`/chat/${id}`);
+  };
 
   return (
-    <Box sx={sx.page}>
-      {/* SIDEBAR */}
-      <Box component="aside" sx={sx.sidebar}>
-        <Typography sx={sx.brand}>AnchorData</Typography>
-        <Divider sx={sx.sidebarDivider} />
-
-        <Box sx={sx.nav}>
-          <NavItem active icon={<ViewListIcon />} label="Máquinas" onClick={() => goTo("Máquinas")} />
-          <NavItem icon={<DescriptionIcon />} label="Relatórios" onClick={() => goTo("Relatórios")} />
-          <NavItem icon={<DashboardIcon />} label="Dashboard" onClick={() => goTo("Dashboard")} />
-
-          <Box sx={{ height: 14 }} />
-
-          <NavItem icon={<SettingsIcon />} label="Configurações" onClick={() => goTo("Configurações")} />
-          <NavItem icon={<PeopleAltIcon />} label="Usuários" onClick={() => goTo("Usuários")} />
-        </Box>
-      </Box>
-
-      {/* CONTEÚDO */}
-      <Box component="main" sx={sx.content}>
-        <Typography sx={sx.title}>Máquinas cadastradas</Typography>
-
-        <Box sx={sx.searchRow}>
-          <TextField
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Pesquisar em Máquinas Registradas..."
-            variant="outlined"
-            size="small"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon sx={{ color: "#5f5f5f" }} />
-                </InputAdornment>
-              ),
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100%",
+        bgcolor: "#d3d3d3",
+        p: 2,
+        boxSizing: "border-box",
+      }}
+    >
+      <Box sx={{ display: "flex", gap: 2, height: "calc(100vh - 16px)" }}>
+        {/* Sidebar */}
+        <Paper
+          elevation={0}
+          sx={{
+            width: 68,
+            borderRadius: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            py: 2,
+            position: "relative",
+          }}
+        >
+          <Paper
+            elevation={0}
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: 2,
+              border: "1px solid #ddd",
+              display: "grid",
+              placeItems: "center",
+              mb: 2,
             }}
-            sx={sx.searchField}
-          />
-        </Box>
-
-        <Box sx={sx.cardsArea}>
-          {filtradas.map((m) => (
-            <ButtonBase
-              key={m.id}
-              onClick={() => handleOpenMachine(m)}
-              sx={sx.machineCard}
-            >
-              <Typography sx={sx.machineText}>{m.nome}</Typography>
-            </ButtonBase>
-          ))}
-
-          <ButtonBase
-            onClick={handleAddMachine}
-            aria-label="Adicionar máquina"
-            sx={sx.addCircle}
           >
-            <AddIcon sx={sx.addIcon} />
-          </ButtonBase>
+            <Typography sx={{ fontSize: 12 }}>Logo</Typography>
+          </Paper>
+
+          {/* Botão de recolher */}
+          <IconButton
+            size="small"
+            sx={{
+              position: "absolute",
+              right: -14,
+              top: 74,
+              bgcolor: "#fff",
+              border: "1px solid #ddd",
+              width: 26,
+              height: 26,
+              "&:hover": { bgcolor: "#fff" },
+            }}
+            aria-label="Recolher sidebar"
+          >
+            <ChevronRightIcon fontSize="small" />
+          </IconButton>
+
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2, mt: 2 }}>
+            <IconButton aria-label="Home">
+              <HomeOutlinedIcon />
+            </IconButton>
+
+            <Paper
+              elevation={0}
+              sx={{
+                borderRadius: 2,
+                bgcolor: "#eee",
+                display: "grid",
+                placeItems: "center",
+              }}
+            >
+              <IconButton aria-label="Máquinas">
+                <FolderOutlinedIcon />
+              </IconButton>
+            </Paper>
+
+            <IconButton aria-label="Usuários">
+              <PersonOutlineIcon />
+            </IconButton>
+          </Box>
+        </Paper>
+
+        {/* Área principal */}
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+          {/* Topbar */}
+          <Paper
+            elevation={0}
+            sx={{
+              borderRadius: 3,
+              p: 1.2,
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+            }}
+          >
+            {/* User */}
+            <Paper
+              elevation={0}
+              sx={{
+                px: 1.2,
+                py: 0.9,
+                borderRadius: 2,
+                border: "1px solid #ddd",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                flex: 1,
+              }}
+            >
+              <Paper
+                elevation={0}
+                sx={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 2,
+                  border: "1px solid #ddd",
+                  display: "grid",
+                  placeItems: "center",
+                }}
+              >
+                <PersonOutlineIcon fontSize="small" />
+              </Paper>
+
+              <Typography sx={{ color: "#444" }}>nome sobrenome</Typography>
+            </Paper>
+
+            {/* Botão adicionar */}
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleAddMachine}
+              sx={{ borderRadius: 999, textTransform: "none", px: 2 }}
+            >
+              Adicionar Máquina
+            </Button>
+
+            {/* Sino */}
+            <IconButton aria-label="Notificações">
+              <NotificationsNoneIcon />
+            </IconButton>
+          </Paper>
+
+          {/* Conteúdo interno (card grande) */}
+          <Paper
+            elevation={0}
+            sx={{
+              flex: 1,
+              borderRadius: 3,
+              p: 2.2,
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+            }}
+          >
+            <Typography variant="h5" sx={{ textAlign: "center", mb: 1 }}>
+              Máquinas
+            </Typography>
+
+            <Divider sx={{ mb: 2 }} />
+
+            {/* Linha: Ordenar + Buscar */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography sx={{ color: "#444" }}>Ordenar</Typography>
+                <FormControl size="small" sx={{ minWidth: 150 }}>
+                  <Select value={order} onChange={(e) => setOrder(e.target.value)} displayEmpty>
+                    <MenuItem value="recentes">Recentes</MenuItem>
+                    <MenuItem value="a-z">A-Z</MenuItem>
+                    <MenuItem value="z-a">Z-A</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                <TextField
+                  size="small"
+                  placeholder="Buscar"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  sx={{ width: "50%", minWidth: 260 }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon fontSize="small" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+            </Box>
+
+            {/* Lista de cards (com scroll) */}
+            <Paper
+              elevation={0}
+              sx={{
+                bgcolor: "#e5e5e5",
+                borderRadius: 3,
+                p: 2,
+                flex: 1,
+                minHeight: 0,
+                overflowY: "auto",
+              }}
+            >
+              <Grid container spacing={2}>
+                {filteredMachines.map((m) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={m.id}>
+                    <Card
+                      elevation={0}
+                      sx={{
+                        borderRadius: 3,
+                        border: "1px solid #d2d2d2",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {/* topo: estado */}
+                      <Box sx={{ p: 1, display: "flex", justifyContent: "flex-end" }}>
+                        <Chip
+                          size="small"
+                          label={m.estado || "Estado"}
+                          variant="outlined"
+                          sx={{ bgcolor: "#f3f3f3" }}
+                        />
+                      </Box>
+
+                      {/* imagem placeholder */}
+                      <Box
+                        sx={{
+                          height: 110,
+                          display: "grid",
+                          placeItems: "center",
+                          px: 2,
+                        }}
+                      >
+                        <Paper
+                          elevation={0}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: 2,
+                            border: "1px solid #d7d7d7",
+                            display: "grid",
+                            placeItems: "center",
+                          }}
+                        >
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <ImageOutlinedIcon />
+                          </Box>
+                        </Paper>
+                      </Box>
+
+                      {/* base cinza com infos */}
+                      <Box sx={{ bgcolor: "#bdbdbd", mt: 1 }}>
+                        <CardContent sx={{ pb: 1.2 }}>
+                          <Typography sx={{ fontWeight: 600 }}>{m.nome}</Typography>
+                          <Typography sx={{ fontSize: 12, color: "#333", mt: 0.5 }}>
+                            Nº Série: {m.serie}
+                          </Typography>
+                        </CardContent>
+
+                        <CardActions sx={{ pb: 1.8, px: 2 }}>
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            onClick={() => handleEnterMachine(m.id)} // ✅ AGORA VAI PRA ROTA
+                            endIcon={<ArrowForwardIosIcon fontSize="small" />}
+                            sx={{
+                              borderRadius: 999,
+                              textTransform: "none",
+                              bgcolor: "#e0e0e0",
+                              color: "#000",
+                              boxShadow: "none",
+                              "&:hover": { bgcolor: "#dadada", boxShadow: "none" },
+                            }}
+                          >
+                            Entrar
+                          </Button>
+                        </CardActions>
+                      </Box>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          </Paper>
         </Box>
       </Box>
     </Box>
   );
 }
-
-function NavItem({ icon, label, active = false, onClick }) {
-  return (
-    <ButtonBase
-      onClick={onClick}
-      sx={{
-        ...sx.navItem,
-        ...(active ? sx.navItemActive : null),
-      }}
-    >
-      <Box sx={sx.navIcon}>{icon}</Box>
-      <Typography sx={sx.navLabel}>{label}</Typography>
-    </ButtonBase>
-  );
-}
-
-const sx = {
-  page: {
-    height: "100vh",
-    width: "100vw",
-    bgcolor: "#d3d3d3",
-    display: "flex",
-  },
-
-  /* Sidebar */
-  sidebar: {
-    width: 260,
-    bgcolor: "#6f6f6f",
-    borderRight: "2px solid #4f4f4f",
-    px: 3,
-    pt: 3,
-    boxSizing: "border-box",
-  },
-  brand: {
-    color: "#eaeaea",
-    fontWeight: 800,
-    fontSize: 34,
-    letterSpacing: 0.3,
-    mb: 2,
-  },
-  sidebarDivider: {
-    borderColor: "rgba(255,255,255,0.25)",
-    mb: 2,
-  },
-  nav: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 14,
-    mt: 1,
-  },
-  navItem: {
-    width: "100%",
-    borderRadius: "10px",
-    px: 1.7,
-    py: 1.2,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 14,
-    bgcolor: "transparent",
-    border: "1px solid rgba(255,255,255,0.0)",
-    transition: "all .12s ease",
-    "&:hover": {
-      bgcolor: "rgba(255,255,255,0.08)",
-    },
-  },
-  navItemActive: {
-    bgcolor: "rgba(255,255,255,0.18)",
-    border: "1px solid rgba(255,255,255,0.25)",
-  },
-  navIcon: {
-    display: "grid",
-    placeItems: "center",
-    color: "#e9e9e9",
-    "& svg": { fontSize: 22 },
-  },
-  navLabel: {
-    color: "#e9e9e9",
-    fontSize: 20,
-    fontWeight: 600,
-  },
-
-  /* Content */
-  content: {
-    flex: 1,
-    bgcolor: "#cfcfcf",
-    borderLeft: "2px solid #8a8a8a",
-    px: 6,
-    pt: 4,
-    boxSizing: "border-box",
-  },
-  title: {
-    fontSize: 42,
-    fontWeight: 700,
-    color: "#5a5a5a",
-    letterSpacing: 0.2,
-    mb: 3,
-  },
-
-  /* Search */
-  searchRow: {
-    display: "flex",
-    justifyContent: "center",
-    mb: 6,
-  },
-  searchField: {
-    width: "62%",
-    maxWidth: 720,
-    "& .MuiOutlinedInput-root": {
-      height: 44,
-      borderRadius: "6px",
-      bgcolor: "#d9d9d9",
-      color: "#4f4f4f",
-    },
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#8a8a8a",
-      borderWidth: 2,
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#7a7a7a",
-    },
-    "& .MuiInputBase-input": {
-      fontSize: 18,
-      px: 1.2,
-    },
-  },
-
-  /* Cards */
-  cardsArea: {
-    display: "flex",
-    alignItems: "center",
-    gap: 6,
-    mt: 2,
-    ml: 6,
-  },
-  machineCard: {
-    width: 360,
-    height: 92,
-    borderRadius: "8px",
-    bgcolor: "#d9d9d9",
-    border: "2px solid #8a8a8a",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  machineText: {
-    fontSize: 34,
-    fontWeight: 700,
-    color: "#5a5a5a",
-    textTransform: "lowercase",
-  },
-
-  addCircle: {
-    width: 92,
-    height: 92,
-    borderRadius: "50%",
-    border: "4px solid #5a5a5a",
-    display: "grid",
-    placeItems: "center",
-    bgcolor: "transparent",
-  },
-  addIcon: {
-    fontSize: 46,
-    color: "#4a4a4a",
-  },
-};

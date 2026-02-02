@@ -10,10 +10,17 @@ export default function App() {
       {/* rota inicial */}
       <Route path="/" element={<Navigate to="/login" />} />
 
-      {/* telas */}
+      {/* telas principais */}
       <Route path="/login" element={<Login />} />
+
+      {/* tela de máquinas */}
       <Route path="/maquinas" element={<CadMaq />} />
+
+      {/* chat genérico (caso queira abrir sem id) */}
       <Route path="/chat" element={<Chat />} />
+
+      {/* ✅ chat específico por máquina */}
+      <Route path="/chat/:id" element={<Chat />} />
     </Routes>
   );
 }
