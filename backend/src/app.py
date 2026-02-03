@@ -10,8 +10,8 @@ def create_app():
     app.config.from_object(Config)
 
     # Ativar CORS para comunicação com o frontend
-    CORS(    app,
-    resources={r"/*": {"origins": "http://localhost:5173"}},
+    CORS(app,
+    resources={r"/*": {"origins": ["http://localhost:5173", "http://localhost:5174"]}},
     supports_credentials=True,
     allow_headers=["Content-Type", "Authorization"],
     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
