@@ -14,6 +14,16 @@ class Machine(db.Model):
     nome_maquina: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique = True)
     # numero de série
     num_serie: so.Mapped[str] = so.mapped_column(sa.String(128), unique=True, index=True)
+    # data de fabricação
+    data_fabricacao: so.Mapped[datetime] = so.mapped_column(sa.DateTime, nullable=False)
+    #Marca da máquina
+    marca: so.Mapped[str] = so.mapped_column(sa.String(64), nullable=False)
+    # Fabricante da máquina
+    fabricante: so.Mapped[str] = so.mapped_column(sa.String(128), nullable=False)
+    # Setor de funcionamento
+    setor: so.Mapped[str] = so.mapped_column(sa.String(64), nullable=False)
+    # Contato do fabricante
+    contato_fabricante: so.Mapped[str] = so.mapped_column(sa.String(128), nullable=False)
     # Status da máquina
     status: so.Mapped[str] = so.mapped_column(sa.String(64), default=" Regime Saudável", nullable=False)
     # Data de criação
@@ -22,8 +32,6 @@ class Machine(db.Model):
     updated_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     # Descrição
     description: so.Mapped[str] = so.mapped_column(sa.String(512), index=True, nullable=False)
-    # Ativo ou inativo
-    is_active: so.Mapped[bool] = so.mapped_column(default=True)
 
     def __repr__(self):
         return f"<Machine {self.nome_maquina}>"
