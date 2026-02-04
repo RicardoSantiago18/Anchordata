@@ -1,0 +1,491 @@
+/* src/pages/caduser.css */
+
+/* ===== Reset / Base ===== */
+* {
+  margin: 0; /* Remove margens padrões */
+  padding: 0; /* Remove paddings padrões */
+  box-sizing: border-box; /* Facilita cálculo de largura/altura */
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif; /* Fonte padrão */
+}
+
+.caduser-wrapper {
+  height: 100vh; /* Tela inteira */
+  width: 100vw; /* Tela inteira */
+  display: flex; /* Sidebar + conteúdo lado a lado */
+  background: #1f1f1f; /* Fundo escuro externo (como no print) */
+  padding: 18px; /* “moldura” externa */
+  gap: 14px; /* Espaço entre sidebar e main */
+}
+
+/* ===== Sidebar ===== */
+.caduser-sidebar {
+  background: #ffffff; /* Fundo branco da sidebar */
+  border-radius: 14px; /* Cantos arredondados */
+  display: flex; /* Layout vertical */
+  flex-direction: column; /* Coluna */
+  align-items: center; /* Centraliza ícones */
+  padding: 12px 8px; /* Respiro interno */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); /* Sombra suave */
+  position: relative; /* Para ajustes finos */
+  overflow: hidden; /* Evita “vazar” conteúdo */
+}
+
+/* Estado fechado (print mostra bem fininha) */
+.caduser-sidebar.closed {
+  width: 58px; /* Largura fina */
+}
+
+/* Caso você queira abrir depois */
+.caduser-sidebar.open {
+  width: 210px; /* Largura aberta (placeholder) */
+}
+
+.caduser-logo-box {
+  width: 36px; /* Caixa do logo */
+  height: 36px; /* Caixa do logo */
+  border: 1px solid #d8d8d8; /* Borda do logo */
+  border-radius: 10px; /* Arredondado */
+  display: grid; /* Centraliza */
+  place-items: center; /* Centraliza */
+  color: #5a5a5a; /* Cor do texto */
+  font-size: 12px; /* Tamanho do texto */
+  margin-bottom: 16px; /* Espaço abaixo */
+}
+
+.caduser-sidebar-icons {
+  display: flex; /* Coluna de ícones */
+  flex-direction: column; /* Vertical */
+  gap: 10px; /* Espaçamento entre botões */
+  width: 100%; /* Ocupa sidebar */
+  align-items: center; /* Centraliza */
+  margin-top: 8px; /* Respiro */
+  flex: 1; /* Empurra o “sair” pra baixo */
+}
+
+.caduser-sidebar-bottom {
+  width: 100%; /* Ocupa sidebar */
+  display: flex; /* Centraliza */
+  justify-content: center; /* Centraliza */
+  padding-bottom: 6px; /* Respiro */
+}
+
+/* Botões da sidebar */
+.caduser-sidebtn {
+  width: 40px; /* Tamanho do botão */
+  height: 40px; /* Tamanho do botão */
+  border-radius: 12px; /* Arredondado */
+  color: #5a5a5a; /* Cor do ícone */
+}
+
+.caduser-sidebtn:hover {
+  background: #f1f1f1; /* Hover suave */
+}
+
+.caduser-sidebtn.active {
+  background: #efefef; /* Estado ativo */
+  color: #2f2f2f; /* Ícone mais forte */
+}
+
+/* ===== Main ===== */
+.caduser-main {
+  flex: 1; /* Ocupa o resto da tela */
+  display: flex; /* Topbar + conteúdo */
+  flex-direction: column; /* Coluna */
+  gap: 14px; /* Espaçamento vertical */
+  min-width: 0; /* Evita overflow em flex */
+}
+
+/* ===== Topbar ===== */
+.caduser-topbar {
+  background: #ffffff; /* Fundo branco */
+  border-radius: 14px; /* Arredondado */
+  padding: 12px 14px; /* Respiro */
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza vertical */
+  justify-content: space-between; /* Esquerda e direita */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); /* Sombra */
+}
+
+.caduser-topbar-left {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 10px; /* Espaço entre itens */
+}
+
+.caduser-collapse-btn {
+  width: 36px; /* Botão seta */
+  height: 36px; /* Botão seta */
+  border-radius: 10px; /* Arredondado */
+  border: 1px solid #d9d9d9; /* Bordinha */
+}
+
+.rot-0 {
+  transform: rotate(0deg); /* Seta normal */
+  transition: transform 0.2s ease; /* Animação */
+}
+
+.rot-180 {
+  transform: rotate(180deg); /* Seta virada */
+  transition: transform 0.2s ease; /* Animação */
+}
+
+.caduser-userchip {
+  height: 36px; /* Altura do “chip” */
+  border: 1px solid #d9d9d9; /* Borda */
+  border-radius: 12px; /* Arredondado */
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 8px; /* Espaçamento */
+  padding: 0 10px; /* Respiro interno */
+  background: #fbfbfb; /* Fundo leve */
+}
+
+.caduser-userchip-icon {
+  color: #5a5a5a; /* Cor do ícone */
+  font-size: 20px; /* Tamanho */
+}
+
+.caduser-userchip-text {
+  color: #3a3a3a; /* Cor do texto */
+  font-size: 14px; /* Tamanho */
+}
+
+.caduser-topbar-right {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 10px; /* Espaçamento */
+}
+
+.caduser-add-btn {
+  border-radius: 12px !important; /* Arredondado */
+  border: 1px solid #d9d9d9 !important; /* Borda leve */
+  color: #2f2f2f !important; /* Texto */
+  background: #ffffff !important; /* Fundo */
+  text-transform: none !important; /* Sem CAPS */
+  height: 36px; /* Altura */
+  padding: 0 12px !important; /* Respiro */
+}
+
+.caduser-notify-btn {
+  width: 36px; /* Botão sino */
+  height: 36px; /* Botão sino */
+  border-radius: 12px; /* Arredondado */
+  border: 1px solid #d9d9d9; /* Borda */
+}
+
+/* ===== Content ===== */
+.caduser-content {
+  background: #ffffff; /* Fundo branco */
+  border-radius: 14px; /* Arredondado */
+  padding: 18px; /* Respiro */
+  display: flex; /* Layout */
+  flex-direction: column; /* Coluna */
+  gap: 12px; /* Espaçamento */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); /* Sombra */
+  min-height: 0; /* Evita overflow */
+}
+
+/* Header (Usuários) */
+.caduser-header {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  justify-content: center; /* Centraliza no meio */
+  gap: 10px; /* Espaço */
+  padding-top: 4px; /* Respiro */
+}
+
+.caduser-header-icon {
+  color: #1f1f1f; /* Cor do ícone */
+}
+
+.caduser-header-title {
+  font-size: 22px !important; /* Título */
+  font-weight: 600 !important; /* Peso */
+  color: #1f1f1f; /* Cor */
+}
+
+.caduser-divider {
+  opacity: 0.6; /* Linha bem leve */
+}
+
+/* ===== Controls ===== */
+.caduser-controls {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  justify-content: space-between; /* Esquerda e direita */
+  gap: 12px; /* Espaço */
+  flex-wrap: wrap; /* Quebra em telas menores */
+}
+
+.caduser-controls-left {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 18px; /* Espaçamento */
+  flex-wrap: wrap; /* Quebra */
+}
+
+.caduser-controls-right {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 10px; /* Espaço */
+}
+
+.caduser-control {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 10px; /* Espaço */
+}
+
+.caduser-control-label {
+  font-size: 13px !important; /* Label pequena */
+  color: #4c4c4c; /* Cinza */
+}
+
+.caduser-viewtoggles {
+  display: flex; /* Linha */
+  align-items: center; /* Centraliza */
+  gap: 6px; /* Espaço */
+  border: 1px solid #d9d9d9; /* Borda */
+  border-radius: 10px; /* Arredondado */
+  padding: 2px; /* Respiro */
+  background: #fbfbfb; /* Fundo leve */
+}
+
+.caduser-viewbtn {
+  width: 34px; /* Botão */
+  height: 30px; /* Botão */
+  border-radius: 9px; /* Arredondado */
+  color: #6b6b6b; /* Ícone */
+}
+
+.caduser-viewbtn.active {
+  background: #eaeaea; /* Selecionado */
+  color: #1f1f1f; /* Ícone forte */
+}
+
+.caduser-order {
+  min-width: 160px; /* Largura do select */
+}
+
+.caduser-search {
+  width: 320px; /* Largura do buscar */
+  max-width: 100%; /* Responsivo */
+}
+
+/* ===== List Area (caixa cinza grande) ===== */
+.caduser-list-area {
+  background: #e3e3e3; /* Fundo cinza do “painel” */
+  border-radius: 14px; /* Arredondado */
+  padding: 14px; /* Respiro */
+  flex: 1; /* Preenche altura */
+  min-height: 0; /* Evita overflow */
+  overflow: auto; /* Scroll interno */
+}
+
+/* ===== Table ===== */
+.caduser-table {
+  display: flex; /* Coluna */
+  flex-direction: column; /* Coluna */
+  gap: 10px; /* Espaço */
+}
+
+.caduser-row {
+  display: grid; /* Grid de colunas */
+  grid-template-columns: 2.2fr 2.2fr 1.6fr 0.8fr 0.9fr; /* Proporções */
+  align-items: center; /* Centraliza vertical */
+  gap: 10px; /* Espaço */
+  padding: 10px 12px; /* Respiro */
+  border-radius: 12px; /* Arredondado */
+}
+
+.caduser-row-head {
+  background: #d7d7d7; /* Cabeçalho mais escuro */
+  padding: 12px; /* Respiro */
+}
+
+.caduser-row-head .caduser-col {
+  font-size: 12px; /* Texto menor */
+  font-weight: 600; /* Destaque */
+  color: #4b4b4b; /* Cinza */
+}
+
+.caduser-row-body {
+  background: #efefef; /* Linhas claras */
+}
+
+.caduser-row-body:hover {
+  filter: brightness(0.98); /* Hover sutil */
+}
+
+.caduser-rows {
+  display: flex; /* Coluna */
+  flex-direction: column; /* Coluna */
+  gap: 10px; /* Espaço */
+}
+
+/* Colunas */
+.caduser-col {
+  display: flex; /* Flex para alinhar */
+  align-items: center; /* Centraliza */
+  gap: 10px; /* Espaço */
+  min-width: 0; /* Evita estourar */
+}
+
+/* Avatar e nome */
+.caduser-avatar {
+  width: 30px; /* Bolinha */
+  height: 30px; /* Bolinha */
+  border-radius: 50%; /* Circular */
+  background: #ffffff; /* Fundo branco */
+  display: grid; /* Centraliza */
+  place-items: center; /* Centraliza */
+  border: 1px solid #d0d0d0; /* Borda */
+  flex: 0 0 auto; /* Não encolhe */
+}
+
+.caduser-name {
+  font-size: 14px !important; /* Nome */
+  color: #2d2d2d; /* Cor */
+  white-space: nowrap; /* Não quebra */
+  overflow: hidden; /* Corta */
+  text-overflow: ellipsis; /* Reticências */
+}
+
+/* Email e função */
+.caduser-col.email,
+.caduser-col.funcao {
+  font-size: 13px; /* Texto */
+  color: #3a3a3a; /* Cor */
+  white-space: nowrap; /* Não quebra */
+  overflow: hidden; /* Corta */
+  text-overflow: ellipsis; /* Reticências */
+}
+
+/* Ações */
+.caduser-action {
+  width: 34px; /* Botão ação */
+  height: 34px; /* Botão ação */
+  border-radius: 10px; /* Arredondado */
+  background: #ffffff; /* Fundo */
+  border: 1px solid #d0d0d0; /* Borda */
+}
+
+.caduser-action:hover {
+  background: #f3f3f3; /* Hover */
+}
+
+.caduser-action.danger {
+  border-color: #e0b2b2; /* Borda “perigo” */
+}
+
+/* Empty */
+.caduser-empty {
+  padding: 24px; /* Respiro */
+  text-align: center; /* Centraliza texto */
+  color: #3a3a3a; /* Cor */
+}
+
+/* ===== Cards (Blocos) ===== */
+.caduser-grid {
+  margin-top: 0; /* Remove margem do Grid */
+}
+
+.caduser-card {
+  background: #bdbdbd; /* Card cinza (como no print) */
+  border-radius: 14px; /* Arredondado */
+  padding: 12px; /* Respiro */
+  border: 1px solid rgba(0, 0, 0, 0.12); /* Borda leve */
+}
+
+.caduser-card-top {
+  display: flex; /* Linha */
+  align-items: flex-start; /* Alinha topo */
+  gap: 12px; /* Espaço */
+}
+
+.caduser-card-avatar {
+  width: 36px; /* Avatar */
+  height: 36px; /* Avatar */
+  border-radius: 50%; /* Circular */
+  background: #ffffff; /* Fundo */
+  display: grid; /* Centraliza */
+  place-items: center; /* Centraliza */
+  border: 1px solid rgba(0, 0, 0, 0.18); /* Borda */
+  flex: 0 0 auto; /* Não encolhe */
+}
+
+.caduser-card-info {
+  flex: 1; /* Ocupa espaço */
+  min-width: 0; /* Evita overflow */
+}
+
+.caduser-card-name {
+  font-size: 14px !important; /* Nome */
+  font-weight: 600 !important; /* Destaque */
+  color: #2a2a2a; /* Cor */
+  white-space: nowrap; /* Não quebra */
+  overflow: hidden; /* Corta */
+  text-overflow: ellipsis; /* Reticências */
+}
+
+.caduser-card-role {
+  font-size: 12px !important; /* Função */
+  color: #2f2f2f; /* Cor */
+}
+
+.caduser-card-email {
+  font-size: 12px !important; /* Email */
+  color: #2f2f2f; /* Cor */
+  white-space: nowrap; /* Não quebra */
+  overflow: hidden; /* Corta */
+  text-overflow: ellipsis; /* Reticências */
+}
+
+.caduser-card-status {
+  display: flex; /* Alinha switch */
+  align-items: center; /* Centraliza */
+  justify-content: flex-end; /* Direita */
+  padding-top: 2px; /* Respiro */
+}
+
+.caduser-card-actions {
+  display: flex; /* Linha */
+  justify-content: flex-end; /* Ações à direita */
+  gap: 8px; /* Espaço */
+  margin-top: 10px; /* Espaço acima */
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 980px) {
+  .caduser-row {
+    grid-template-columns: 1.8fr 2fr 1.6fr 0.9fr 1fr; /* Ajuste em telas menores */
+  }
+
+  .caduser-search {
+    width: 100%; /* Buscar ocupa linha */
+  }
+}
+
+@media (max-width: 720px) {
+  .caduser-wrapper {
+    padding: 12px; /* Menos moldura */
+  }
+
+  .caduser-sidebar.closed {
+    width: 52px; /* Sidebar menor */
+  }
+
+  .caduser-row {
+    grid-template-columns: 2fr 2fr; /* Simplifica grid */
+    grid-auto-rows: auto; /* Altura automática */
+    row-gap: 8px; /* Espaço vertical */
+  }
+
+  /* “Força” colunas virarem blocos */
+  .caduser-col.funcao,
+  .caduser-col.status,
+  .caduser-col.acoes {
+    justify-content: flex-start; /* Alinha à esquerda */
+  }
+}
