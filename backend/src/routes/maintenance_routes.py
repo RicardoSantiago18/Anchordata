@@ -1,11 +1,9 @@
 from flask import Blueprint
-from src.controllers.maintenance_controller import create_maintenance, list_machine_maintenances
+from src.controllers.maintenance_controller import finalize_maintenance
 
-maintenance_bp = Blueprint(
-    'maintenance', 
-    __name__, 
-    url_prefix='/maintenances'
-    )
 
-maintenance_bp.route("/", methods=["POST"])(create_maintenance)
-maintenance_bp.route("/machine/<int:machine_id>", methods=["GET"])(list_machine_maintenances)
+maintenance_bp = Blueprint("maintenance", __name__)
+
+maintenance_bp.route(
+    "/maintenance/finalize", methods=["POST"]
+    )(finalize_maintenance)

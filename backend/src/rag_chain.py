@@ -13,6 +13,7 @@ VECTOR_DIR = "data/vectorstore"
 
 load_dotenv()
 
+
 def format_history(history):
     if not history:
         return "Nenhum histórico disponível."
@@ -22,8 +23,6 @@ def format_history(history):
         for user, assistant in history
     )
 
-def safe_mode(mode):
-    return mode or "Corretiva"
 
 def create_chain():
     llm = load_llm()
@@ -32,13 +31,13 @@ def create_chain():
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
 
-    db = FAISS.load_local(
+    vector_db = FAISS.load_local(
         VECTOR_DIR,
         embeddings,
         allow_dangerous_deserialization=True
     )
 
-    retriever = db.as_retriever(search_kwargs={"k": 4})
+    retriever = vector_db.as_retriever(search_kwargs={"k": 4})
 
     prompt = ChatPromptTemplate.from_template(
         """
