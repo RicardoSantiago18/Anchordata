@@ -1,4 +1,4 @@
-from models.timeline_event_model import TimelineEvent
+from src.models.timeline_event_model import TimelineEvent
 from database.db import db
 import json
 
