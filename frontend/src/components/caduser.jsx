@@ -1,5 +1,6 @@
 // src/pages/CadUser.jsx
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ NOVO
 import {
   Box,
   Paper,
@@ -72,6 +73,8 @@ const seedUsers = [
 ];
 
 export default function CadUser() {
+  const navigate = useNavigate(); // ✅ NOVO
+
   // Sidebar (fechada no print)
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -84,7 +87,6 @@ export default function CadUser() {
   const [users, setUsers] = useState(seedUsers);
 
   function handleAddUser() {
-    // Placeholder: depois você liga isso em modal/tela de cadastro real
     const newUser = {
       id: `u${Date.now()}`,
       nome: "Novo Usuário",
@@ -102,12 +104,10 @@ export default function CadUser() {
   }
 
   function handleEdit(userId) {
-    // Placeholder: depois você abre modal/rota de edição
     console.log("Editar:", userId);
   }
 
   function handleDelete(userId) {
-    // Placeholder simples
     setUsers((prev) => prev.filter((u) => u.id !== userId));
   }
 
@@ -145,19 +145,28 @@ export default function CadUser() {
 
         <Box className="caduser-sidebar-icons">
           <Tooltip title="Home" placement="right">
-            <IconButton className="caduser-sidebtn">
+            <IconButton
+              className="caduser-sidebtn"
+              onClick={() => navigate("/maquinas")} // ✅ NOVO
+            >
               <HomeOutlinedIcon />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Projetos" placement="right">
-            <IconButton className="caduser-sidebtn">
+            <IconButton
+              className="caduser-sidebtn"
+              onClick={() => navigate("/maquinas")} // ✅ placeholder
+            >
               <FolderOutlinedIcon />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Usuários" placement="right">
-            <IconButton className="caduser-sidebtn active">
+            <IconButton
+              className="caduser-sidebtn active"
+              onClick={() => navigate("/usuarios")} // ✅ opcional
+            >
               <PersonOutlineIcon />
             </IconButton>
           </Tooltip>
@@ -165,7 +174,10 @@ export default function CadUser() {
 
         <Box className="caduser-sidebar-bottom">
           <Tooltip title="Sair" placement="right">
-            <IconButton className="caduser-sidebtn">
+            <IconButton
+              className="caduser-sidebtn"
+              onClick={() => navigate("/login")} // ✅ NOVO (depois você liga no logout real)
+            >
               <LogoutOutlinedIcon />
             </IconButton>
           </Tooltip>
@@ -181,9 +193,7 @@ export default function CadUser() {
               className="caduser-collapse-btn"
               onClick={() => setSidebarOpen((s) => !s)}
             >
-              <ChevronLeftIcon
-                className={sidebarOpen ? "rot-0" : "rot-180"}
-              />
+              <ChevronLeftIcon className={sidebarOpen ? "rot-0" : "rot-180"} />
             </IconButton>
 
             <Box className="caduser-userchip">

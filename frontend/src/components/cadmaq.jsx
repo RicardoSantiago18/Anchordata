@@ -1,6 +1,6 @@
 // src/pages/CadMaq.jsx
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ ADICIONADO
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -32,22 +32,19 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 export default function CadMaq() {
-  const navigate = useNavigate(); // ✅ ADICIONADO
+  // ✅ 1) navegação
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState("recentes");
 
-  // Mock (trocar depois por dados reais)
+  // Mock
   const machines = useMemo(
     () => [
       { id: 1, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
       { id: 2, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
       { id: 3, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
       { id: 4, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
-      { id: 5, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
-      { id: 6, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
-      { id: 7, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
-      { id: 8, nome: "Nome da Máquina", serie: "HNFDAF323243", estado: "Estado" },
     ],
     []
   );
@@ -63,35 +60,22 @@ export default function CadMaq() {
       );
     });
 
-    // Ordenações simples (placeholder)
     if (order === "a-z") list = [...list].sort((a, b) => a.nome.localeCompare(b.nome));
     if (order === "z-a") list = [...list].sort((a, b) => b.nome.localeCompare(a.nome));
 
     return list;
   }, [machines, search, order]);
 
-  const handleAddMachine = () => {
-    // TODO: abrir modal / navegar para formulário de cadastro
-    console.log("Adicionar Máquina");
-  };
-
-  const handleEnterMachine = (id) => {
-    // ✅ AGORA NAVEGA PARA O CHAT DA MÁQUINA
-    navigate(`/chat/${id}`);
-  };
+  // ✅ 2) funções de navegação (CLARAS)
+  const goHome = () => navigate("/maquinas");
+  const goUsers = () => navigate("/usuarios");
+  const enterMachine = (id) => navigate(`/chat/${id}`);
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        width: "100%",
-        bgcolor: "#d3d3d3",
-        p: 2,
-        boxSizing: "border-box",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", bgcolor: "#d3d3d3", p: 2 }}>
       <Box sx={{ display: "flex", gap: 2, height: "calc(100vh - 16px)" }}>
-        {/* Sidebar */}
+
+        {/* SIDEBAR */}
         <Paper
           elevation={0}
           sx={{
@@ -119,63 +103,31 @@ export default function CadMaq() {
             <Typography sx={{ fontSize: 12 }}>Logo</Typography>
           </Paper>
 
-          {/* Botão de recolher */}
-          <IconButton
-            size="small"
-            sx={{
-              position: "absolute",
-              right: -14,
-              top: 74,
-              bgcolor: "#fff",
-              border: "1px solid #ddd",
-              width: 26,
-              height: 26,
-              "&:hover": { bgcolor: "#fff" },
-            }}
-            aria-label="Recolher sidebar"
-          >
-            <ChevronRightIcon fontSize="small" />
-          </IconButton>
-
+          {/* ÍCONES */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2, mt: 2 }}>
-            <IconButton aria-label="Home">
+            {/* Home */}
+            <IconButton aria-label="Home" onClick={goHome}>
               <HomeOutlinedIcon />
             </IconButton>
 
-            <Paper
-              elevation={0}
-              sx={{
-                borderRadius: 2,
-                bgcolor: "#eee",
-                display: "grid",
-                placeItems: "center",
-              }}
-            >
-              <IconButton aria-label="Máquinas">
+            {/* Máquinas (ativo) */}
+            <Paper elevation={0} sx={{ borderRadius: 2, bgcolor: "#eee" }}>
+              <IconButton aria-label="Máquinas" onClick={goHome}>
                 <FolderOutlinedIcon />
               </IconButton>
             </Paper>
 
-            <IconButton aria-label="Usuários">
+            {/* 👤 Usuários (BONEQUINHO) */}
+            <IconButton aria-label="Usuários" onClick={goUsers}>
               <PersonOutlineIcon />
             </IconButton>
           </Box>
         </Paper>
 
-        {/* Área principal */}
+        {/* ÁREA PRINCIPAL */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-          {/* Topbar */}
-          <Paper
-            elevation={0}
-            sx={{
-              borderRadius: 3,
-              p: 1.2,
-              display: "flex",
-              alignItems: "center",
-              gap: 1.5,
-            }}
-          >
-            {/* User */}
+          {/* TOPBAR */}
+          <Paper elevation={0} sx={{ borderRadius: 3, p: 1.2, display: "flex", gap: 1.5 }}>
             <Paper
               elevation={0}
               sx={{
@@ -189,187 +141,54 @@ export default function CadMaq() {
                 flex: 1,
               }}
             >
-              <Paper
-                elevation={0}
-                sx={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 2,
-                  border: "1px solid #ddd",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <PersonOutlineIcon fontSize="small" />
-              </Paper>
-
+              <PersonOutlineIcon fontSize="small" />
               <Typography sx={{ color: "#444" }}>nome sobrenome</Typography>
             </Paper>
 
-            {/* Botão adicionar */}
             <Button
               variant="outlined"
               startIcon={<AddIcon />}
-              onClick={handleAddMachine}
-              sx={{ borderRadius: 999, textTransform: "none", px: 2 }}
+              sx={{ borderRadius: 999, textTransform: "none" }}
             >
               Adicionar Máquina
             </Button>
 
-            {/* Sino */}
-            <IconButton aria-label="Notificações">
+            <IconButton>
               <NotificationsNoneIcon />
             </IconButton>
           </Paper>
 
-          {/* Conteúdo interno (card grande) */}
-          <Paper
-            elevation={0}
-            sx={{
-              flex: 1,
-              borderRadius: 3,
-              p: 2.2,
-              display: "flex",
-              flexDirection: "column",
-              minHeight: 0,
-            }}
-          >
-            <Typography variant="h5" sx={{ textAlign: "center", mb: 1 }}>
+          {/* CONTEÚDO */}
+          <Paper elevation={0} sx={{ flex: 1, borderRadius: 3, p: 2 }}>
+            <Typography variant="h5" textAlign="center">
               Máquinas
             </Typography>
 
-            <Divider sx={{ mb: 2 }} />
+            <Divider sx={{ my: 2 }} />
 
-            {/* Linha: Ordenar + Buscar */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                mb: 2,
-              }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography sx={{ color: "#444" }}>Ordenar</Typography>
-                <FormControl size="small" sx={{ minWidth: 150 }}>
-                  <Select value={order} onChange={(e) => setOrder(e.target.value)} displayEmpty>
-                    <MenuItem value="recentes">Recentes</MenuItem>
-                    <MenuItem value="a-z">A-Z</MenuItem>
-                    <MenuItem value="z-a">Z-A</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-
-              <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
-                <TextField
-                  size="small"
-                  placeholder="Buscar"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  sx={{ width: "50%", minWidth: 260 }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Box>
-            </Box>
-
-            {/* Lista de cards (com scroll) */}
-            <Paper
-              elevation={0}
-              sx={{
-                bgcolor: "#e5e5e5",
-                borderRadius: 3,
-                p: 2,
-                flex: 1,
-                minHeight: 0,
-                overflowY: "auto",
-              }}
-            >
-              <Grid container spacing={2}>
-                {filteredMachines.map((m) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={m.id}>
-                    <Card
-                      elevation={0}
-                      sx={{
-                        borderRadius: 3,
-                        border: "1px solid #d2d2d2",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {/* topo: estado */}
-                      <Box sx={{ p: 1, display: "flex", justifyContent: "flex-end" }}>
-                        <Chip
-                          size="small"
-                          label={m.estado || "Estado"}
-                          variant="outlined"
-                          sx={{ bgcolor: "#f3f3f3" }}
-                        />
-                      </Box>
-
-                      {/* imagem placeholder */}
-                      <Box
-                        sx={{
-                          height: 110,
-                          display: "grid",
-                          placeItems: "center",
-                          px: 2,
-                        }}
+            <Grid container spacing={2}>
+              {filteredMachines.map((m) => (
+                <Grid item xs={12} sm={6} md={4} key={m.id}>
+                  <Card elevation={0} sx={{ borderRadius: 3, border: "1px solid #ccc" }}>
+                    <CardContent>
+                      <Typography fontWeight={600}>{m.nome}</Typography>
+                      <Typography fontSize={12}>Nº Série: {m.serie}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => enterMachine(m.id)} // ✅ CHAT
+                        endIcon={<ArrowForwardIosIcon fontSize="small" />}
+                        sx={{ borderRadius: 999, bgcolor: "#e0e0e0", color: "#000" }}
                       >
-                        <Paper
-                          elevation={0}
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            borderRadius: 2,
-                            border: "1px solid #d7d7d7",
-                            display: "grid",
-                            placeItems: "center",
-                          }}
-                        >
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <ImageOutlinedIcon />
-                          </Box>
-                        </Paper>
-                      </Box>
-
-                      {/* base cinza com infos */}
-                      <Box sx={{ bgcolor: "#bdbdbd", mt: 1 }}>
-                        <CardContent sx={{ pb: 1.2 }}>
-                          <Typography sx={{ fontWeight: 600 }}>{m.nome}</Typography>
-                          <Typography sx={{ fontSize: 12, color: "#333", mt: 0.5 }}>
-                            Nº Série: {m.serie}
-                          </Typography>
-                        </CardContent>
-
-                        <CardActions sx={{ pb: 1.8, px: 2 }}>
-                          <Button
-                            fullWidth
-                            variant="contained"
-                            onClick={() => handleEnterMachine(m.id)} // ✅ AGORA VAI PRA ROTA
-                            endIcon={<ArrowForwardIosIcon fontSize="small" />}
-                            sx={{
-                              borderRadius: 999,
-                              textTransform: "none",
-                              bgcolor: "#e0e0e0",
-                              color: "#000",
-                              boxShadow: "none",
-                              "&:hover": { bgcolor: "#dadada", boxShadow: "none" },
-                            }}
-                          >
-                            Entrar
-                          </Button>
-                        </CardActions>
-                      </Box>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Paper>
+                        Entrar
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </Paper>
         </Box>
       </Box>

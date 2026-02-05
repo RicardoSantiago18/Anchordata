@@ -323,16 +323,16 @@ const Chat = () => {
                 </div>
                 <div className="faq-grid">
                   <button className="faq-item" type="button">
-                    Exemplo 1
+                    Pensa em mim
                   </button>
                   <button className="faq-item" type="button">
-                    Exemplo 2
+                    chore por mim
                   </button>
                   <button className="faq-item" type="button">
-                    Exemplo 3
+                    liga pra mim
                   </button>
                   <button className="faq-item" type="button">
-                    Exemplo 4
+                    não, não liga pra ele
                   </button>
                 </div>
               </div>
