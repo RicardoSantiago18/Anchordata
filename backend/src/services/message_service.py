@@ -1,12 +1,21 @@
 from src.services.ai.ai_service import ai_service
 from src.models.chat_model import Chat
 from src.models.message_model import Message
+from src.services.maintenance_flow_service import MaintenanceFlowService
 from database.db import db
 
 class MessageService:
 
     @staticmethod
-    def send_message(chat_id: int, user_id: int, content: str):
+    def send_message(
+        *, 
+        chat_id: int, 
+        user_id: int, 
+        content: str,
+        finalize: bool = False,
+        machine_id: int = None,
+        maintenance_type: str = None
+    ):
         chat = Chat.query.filter_by(
             id=chat_id,
             user_id=user_id,
@@ -40,12 +49,52 @@ class MessageService:
         # salva mensagem do usuário
         user_message = Message(
             chat_id=chat.id,
+            user_id=user_id,
             role="user",
             content=content
         )
         db.session.add(user_message)
 
-        # chamar IA aqui
+        # Se finalize=True, finaliza a manutenção
+
+        if finalize:
+            if not machine_id or not maintenance_type:
+                raise ValueError("machine_id e maintenance_type são obrigatórios para finalizar a manutenção.")
+            
+            result = MaintenanceFlowService.finalize_maintenance(
+                chat_id=chat.id,
+                machine_id=machine_id,
+                user_id=user_id,
+                maintenance_type=maintenance_type,
+                system_prompt_report=None,
+                system_prompt_event=None,
+                report_template_markdown=None,
+                technical_summary=content
+            )
+
+            assistant_content = (
+                "Manutenção finalizada com sucesso.\n"
+                "Relatório Técnico e evento de histórico foram gerados."
+            )
+
+            assistant_message = Message(
+                chat_id=chat.id,
+                role="assistant",
+                content=assistant_content
+            )
+            db.session.add(assistant_message)
+
+            chat.updated_at = db.func.now()
+            db.session.commit()
+
+            return {
+                "mode": "finalized",
+                "assistant_message": assistant_content,
+                "report": result["report_markdown"],
+                "event": result["event_data"]
+            }
+
+        # Conversa Técnica Normal com a IA
         try:
             ai_response = ai_service.send_message(
                     question=content,
@@ -67,7 +116,7 @@ class MessageService:
         db.session.commit()
 
         return {
-            "user_message": content,
+            "mode": "conversation",
             "assistant_message": ai_response
         }
 

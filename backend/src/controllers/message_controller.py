@@ -20,7 +20,10 @@ def send_message(chat_id, current_user=None):
         response = MessageService.send_message(
             chat_id=chat_id,
             user_id=current_user.id,
-            content=data.get("content")
+            content=data.get("content"),
+            finalize=data.get("finalize", False),
+            machine_id=data.get("machine_id"),
+            maintenance_type=data.get("maintenance_type"),
         )
 
         return jsonify(response), 201

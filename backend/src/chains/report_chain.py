@@ -5,9 +5,9 @@ from src.llm import load_llm
 def create_report_chain():
     llm = load_llm()
 
-    prompt = ChatPromptTemplate.from_template(
-        """
-        {system_prompt}
+    prompt = ChatPromptTemplate.from_template([
+        ("system", "{system_prompt}"),
+        ("human", """
 
         ────────────────────────────────────
         TIPO DE MANUTENÇÃO:
@@ -24,8 +24,8 @@ def create_report_chain():
         ────────────────────────────────────
         MODELO MARKDOWN:
         {template_markdown}
-        """
-    )
+        """)
+             ])
 
     chain = prompt | llm | StrOutputParser()
     return chain

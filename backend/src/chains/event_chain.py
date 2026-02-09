@@ -22,6 +22,20 @@ def create_event_chain():
         ────────────────────────────────────
         HISTÓRICO DA CONVERSA:
         {history}
+
+        ────────────────────────────────────
+        SAÍDA OBRIGATÓRIA (JSON PURO):
+        {{
+            "event_type": "preventiva | corretiva",
+            "title": "string",
+            "description": "string",
+            "extra_data": {{}}
+        }}
+
+        Regras:
+        - Retorne APENAS o JSON
+        - Não use markdown
+        - Não escreva textp fora do JSON
         """
     )
      

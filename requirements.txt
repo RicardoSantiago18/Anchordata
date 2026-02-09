@@ -16,3 +16,5 @@ PyJWT
 Werkzeug
 langchain-openai
 flask-cors
+markdown
+weasyprint
