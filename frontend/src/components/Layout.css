@@ -1,0 +1,140 @@
+.app-viewport {
+  display: flex;
+  background-color: #dcdcdc;
+  height: 100vh;
+  padding: 8px;
+  gap: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sidebar-container {
+  width: 230px;
+  min-width: 230px;
+  background: white;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  position: relative;
+  transition: width 0.3s ease, min-width 0.3s ease; 
+}
+
+.sidebar-container.collapsed {
+  width: 75px;
+  min-width: 75px;
+}
+
+.sidebar-logo-wrapper {
+  padding: 0 12px;
+}
+
+.sidebar-logo {
+  border: 1px solid #000;
+  border-radius: 12px;
+  text-align: center;
+  padding: 8px 0;
+  font-weight: bold;
+}
+
+.sidebar-divider {
+  margin: 15px 12px !important;
+  border-color: #f0f0f0 !important;
+}
+
+/* classe do layout das páginas do menu lateral esquerdo */
+.sidebar-nav-centered {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  padding: 0 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+  gap: 12px;
+  padding: 12px 25px; 
+  color: #333;
+  cursor: pointer;
+  border-radius: 12px;
+  margin-bottom: 10px; 
+  white-space: nowrap;
+}
+
+.sidebar-container.collapsed .nav-item {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.nav-item.active {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.nav-icon {
+  font-size: 1.4rem !important;
+  min-width: 24px;
+}
+
+/* FOOTER E TOPBAR */
+.main-layout {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.topbar-container {
+  background: white;
+  height: 48px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.content-outlet {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+}
+
+.sidebar-footer {
+  padding: 0 8px;
+  margin-top: auto; /* Mantém o footer sempre no final */
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+}
+
+.sidebar-container.collapsed .logout-button {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  right: -12px;
+  top: 115px;
+  background: #e0e0e0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  cursor: pointer;
+  z-index: 5;
+}

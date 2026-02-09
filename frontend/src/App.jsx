@@ -9,18 +9,33 @@ import CadMaq from "./components/cadmaq";
 import Chat from "./components/chat";
 import { UserProfile } from "./components/UserProfile";
 import CadUser from "./components/caduser";
+import VisualizarMaquina from "./components/visualizarmaquina";
+import Layout from "./components/Layout";
 
 export default function App() {
   return (
     <AuthProvider>
       <Routes>
-        {/* rota inicial */}
+        {/* Rota inicial */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* tela de login (pública) */}
+        {/* Tela de login (pública) */}
         <Route path="/login" element={<Login />} />
 
-        {/* telas protegidas */}
+        {/* ROTAS QUE USAM O NOVO LAYOUT (SIDEBAR + TOPBAR) */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          {/* O conteúdo destas rotas será injetado no <Outlet /> dentro do Layout */}
+          <Route path="/visualizarmaquina" element={<VisualizarMaquina />} />
+          <Route path="/visualizarmaquina/:id" element={<VisualizarMaquina />} />
+        </Route>
+
+        {/* ROTAS QUE CONTINUAM COM O HEADER ANTIGO */}
         <Route
           path="/maquinas"
           element={
@@ -33,7 +48,6 @@ export default function App() {
           }
         />
 
-        {/* ✅ cadastro de usuário (protegido) */}
         <Route
           path="/usuarios"
           element={
@@ -46,7 +60,6 @@ export default function App() {
           }
         />
 
-        {/* chat genérico (protegido) */}
         <Route
           path="/chat"
           element={
@@ -59,7 +72,6 @@ export default function App() {
           }
         />
 
-        {/* chat específico por máquina (protegido) */}
         <Route
           path="/chat/:id"
           element={
@@ -72,7 +84,6 @@ export default function App() {
           }
         />
 
-        {/* perfil do usuário (protegido) */}
         <Route
           path="/perfil"
           element={
