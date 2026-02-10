@@ -18,3 +18,5 @@ langchain-openai
 flask-cors
 markdown
 weasyprint
+pytest
+flask-login
