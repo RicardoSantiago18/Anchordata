@@ -1,230 +1,102 @@
-/* src/pages/cadmaq.css */
-
-/* ========= Base ========= */
-.cadmaq-page {
-  /* mantém o fundo externo semelhante ao designer */
-  background: #d3d3d3;
-  min-height: 100vh;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Card grande (a “caixa branca” onde fica Máquinas) */
+/* Painel Branco Principal (Ocupa o Outlet) */
 .cadmaq-panel {
-  /* deixa bem "limpo" como no layout */
+  background: white;
   border-radius: 18px;
-}
-
-/* Caixa cinza interna (onde ficam os cards) */
-.cadmaq-list {
-  background: #e5e5e5;
-  border-radius: 18px;
-
-  /* IMPORTANTE:
-     a altura fixa + overflow faz sobrar o “branco” no final,
-     e evita que a grid “estique” até preencher tudo */
-  height: 430px;              /* ajuste fino: 400~520 dependendo do seu monitor */
-  max-height: 430px;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  /* dá a sensação de área mais "arejada" */
-  padding: 18px;
-  box-sizing: border-box;
-}
-
-/* ========= Grid: 4 em cima + 4 em baixo ========= */
-
-/* Controla o grid do MUI dentro da lista */
-.cadmaq-list .MuiGrid-container {
-  /* o MUI já usa flex, mas reforçamos o comportamento */
-  align-content: flex-start;  /* não distribui no eixo vertical */
-}
-
-/* Cada item do Grid (o "tile") */
-.cadmaq-list .MuiGrid-item {
-  /* força o card a ficar num tamanho mais próximo do mockup */
-  display: flex;
-}
-
-/* O Card do MUI dentro do item */
-.cadmaq-list .MuiGrid-item .MuiCard-root {
-  width: 100%;
-  border-radius: 18px;
-  border: 1px solid #d2d2d2;
-  overflow: hidden;
-
-  /* altura de card pensada para caber 2 linhas dentro da cadmaq-list */
-  height: 245px; /* ajuste fino */
+  padding: 20px;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
-/* Área da “imagem” placeholder (topo do card) */
-.cadmaq-list .MuiGrid-item .MuiCard-root > .MuiBox-root {
-  /* no seu JSX tem Box do chip + Box da imagem, então não travamos
-     o primeiro. Ajustamos o segundo via seletor mais tolerante abaixo. */
+/* Header com Título e Botão de Adicionar */
+.cadmaq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-/* Ajuste do “quadrado” de imagem placeholder */
-.cadmaq-list .MuiGrid-item .MuiCard-root .MuiPaper-root {
-  /* isso pega o paper do placeholder (borda da imagem) */
-  border-radius: 14px;
+.cadmaq-title {
+  font-weight: 500 !important;
+  color: #333;
 }
 
-/* Rodapé cinza do card (base com Nome/Série e botão) */
-.cadmaq-list .MuiGrid-item .MuiCard-root > .MuiBox-root:last-child {
-  background: #bdbdbd;
-  margin-top: auto; /* empurra pro fim */
+.add-machine-btn {
+  background-color: #e0e0e0 !important;
+  color: #333 !important;
+  border-radius: 999px !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  font-weight: bold !important;
 }
 
-/* Texto do nome e série mais “compactos” (parecido com o designer) */
-.cadmaq-list .MuiGrid-item .MuiCardContent-root {
-  padding-bottom: 8px;
+.add-machine-btn:hover {
+  background-color: #d0d0d0 !important;
 }
 
-/* Botão "Entrar" estilo pílula mais baixo/compacto */
-.cadmaq-list .MuiGrid-item .MuiButton-root {
-  border-radius: 999px;
-  text-transform: none;
-}
-
-/* ========= Responsividade (mantém 4 colunas em telas grandes) ========= */
-/* Em telas bem grandes, mantém a sensação do mock */
-@media (min-width: 1200px) {
-  .cadmaq-list {
-    height: 430px;
-    max-height: 430px;
-  }
-}
-
-/* Em telas médias, deixa 3 colunas (natural) e mantém espaço */
-@media (max-width: 1199px) {
-  .cadmaq-list {
-    height: 520px;
-    max-height: 520px;
-  }
-}
-
-/* Em telas menores, vira 2 colunas/1 coluna e precisa mais altura */
-@media (max-width: 900px) {
-  .cadmaq-list {
-    height: 600px;
-    max-height: 600px;
-  }
-}
-/* src/pages/cadmaq.css */
-
-/* ========= Base ========= */
-.cadmaq-page {
-  /* mantém o fundo externo semelhante ao designer */
-  background: #d3d3d3;
-  min-height: 100vh;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Card grande (a “caixa branca” onde fica Máquinas) */
-.cadmaq-panel {
-  /* deixa bem "limpo" como no layout */
-  border-radius: 18px;
-}
-
-/* Caixa cinza interna (onde ficam os cards) */
-.cadmaq-list {
+/* Listagem Cinza Interna */
+.cadmaq-list-container {
   background: #e5e5e5;
   border-radius: 18px;
-
-  /* IMPORTANTE:
-     a altura fixa + overflow faz sobrar o “branco” no final,
-     e evita que a grid “estique” até preencher tudo */
-  height: 430px;              /* ajuste fino: 400~520 dependendo do seu monitor */
-  max-height: 430px;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  /* dá a sensação de área mais "arejada" */
-  padding: 18px;
-  box-sizing: border-box;
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto; /* Permite scroll se houver muitas máquinas */
 }
 
-/* ========= Grid: 4 em cima + 4 em baixo ========= */
-
-/* Controla o grid do MUI dentro da lista */
-.cadmaq-list .MuiGrid-container {
-  /* o MUI já usa flex, mas reforçamos o comportamento */
-  align-content: flex-start;  /* não distribui no eixo vertical */
-}
-
-/* Cada item do Grid (o "tile") */
-.cadmaq-list .MuiGrid-item {
-  /* força o card a ficar num tamanho mais próximo do mockup */
-  display: flex;
-}
-
-/* O Card do MUI dentro do item */
-.cadmaq-list .MuiGrid-item .MuiCard-root {
-  width: 100%;
-  border-radius: 18px;
+/* Estilização dos Cards de Máquina */
+.machine-card {
+  border-radius: 18px !important;
   border: 1px solid #d2d2d2;
-  overflow: hidden;
-
-  /* altura de card pensada para caber 2 linhas dentro da cadmaq-list */
-  height: 245px; /* ajuste fino */
+  height: 260px;
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s;
 }
 
-/* Área da “imagem” placeholder (topo do card) */
-.cadmaq-list .MuiGrid-item .MuiCard-root > .MuiBox-root {
-  /* no seu JSX tem Box do chip + Box da imagem, então não travamos
-     o primeiro. Ajustamos o segundo via seletor mais tolerante abaixo. */
+.machine-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Ajuste do “quadrado” de imagem placeholder */
-.cadmaq-list .MuiGrid-item .MuiCard-root .MuiPaper-root {
-  /* isso pega o paper do placeholder (borda da imagem) */
+.machine-image-placeholder {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  margin: 10px;
   border-radius: 14px;
+  border: 1px dashed #ccc;
 }
 
-/* Rodapé cinza do card (base com Nome/Série e botão) */
-.cadmaq-list .MuiGrid-item .MuiCard-root > .MuiBox-root:last-child {
+.machine-card-content {
+  padding: 0 15px 10px 15px !important;
+}
+
+.machine-name {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #333;
+}
+
+.machine-serie {
+  font-size: 0.75rem !important;
+  color: #666;
+}
+
+/* Rodapé do Card */
+.machine-card-actions {
   background: #bdbdbd;
-  margin-top: auto; /* empurra pro fim */
+  padding: 10px 15px !important;
 }
 
-/* Texto do nome e série mais “compactos” (parecido com o designer) */
-.cadmaq-list .MuiGrid-item .MuiCardContent-root {
-  padding-bottom: 8px;
-}
-
-/* Botão "Entrar" estilo pílula mais baixo/compacto */
-.cadmaq-list .MuiGrid-item .MuiButton-root {
-  border-radius: 999px;
-  text-transform: none;
-}
-
-/* ========= Responsividade (mantém 4 colunas em telas grandes) ========= */
-/* Em telas bem grandes, mantém a sensação do mock */
-@media (min-width: 1200px) {
-  .cadmaq-list {
-    height: 430px;
-    max-height: 430px;
-  }
-}
-
-/* Em telas médias, deixa 3 colunas (natural) e mantém espaço */
-@media (max-width: 1199px) {
-  .cadmaq-list {
-    height: 520px;
-    max-height: 520px;
-  }
-}
-
-/* Em telas menores, vira 2 colunas/1 coluna e precisa mais altura */
-@media (max-width: 900px) {
-  .cadmaq-list {
-    height: 600px;
-    max-height: 600px;
-  }
+.enter-btn {
+  background-color: #e0e0e0 !important;
+  color: #000 !important;
+  border-radius: 999px !important;
+  text-transform: none !important;
+  font-weight: bold !important;
+  font-size: 0.85rem !important;
+  box-shadow: none !important;
 }

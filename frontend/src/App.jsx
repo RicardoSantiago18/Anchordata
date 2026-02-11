@@ -31,8 +31,12 @@ export default function App() {
           }
         >
           {/* O conteúdo destas rotas será injetado no <Outlet /> dentro do Layout */}
+          <Route path="/maquinas" element={<CadMaq />} />
           <Route path="/visualizarmaquina" element={<VisualizarMaquina />} />
           <Route path="/visualizarmaquina/:id" element={<VisualizarMaquina />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:id" element={<Chat />} />
+          <Route path="/perfil" element={<UserProfile />} />
         </Route>
 
         {/* ROTAS QUE CONTINUAM COM O HEADER ANTIGO */}
@@ -41,7 +45,7 @@ export default function App() {
           element={
             <ProtectedRoute>
               <>
-                <Header />
+                
                 <CadMaq />
               </>
             </ProtectedRoute>
@@ -77,7 +81,7 @@ export default function App() {
           element={
             <ProtectedRoute>
               <>
-                <Header />
+                
                 <Chat />
               </>
             </ProtectedRoute>
@@ -89,7 +93,7 @@ export default function App() {
           element={
             <ProtectedRoute>
               <>
-                <Header />
+                
                 <UserProfile />
               </>
             </ProtectedRoute>
