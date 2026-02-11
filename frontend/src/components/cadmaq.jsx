@@ -49,14 +49,14 @@ export default function CadMaq() {
           Máquinas
         </Typography>
         
-        <Button
+        {/*<Button
           variant="contained"
           startIcon={<AddIcon />}
           className="add-machine-btn"
           onClick={() => console.log("Adicionar nova máquina")}
         >
           Adicionar Máquina
-        </Button>
+        </Button>*/}
       </Box>
 
       <Divider sx={{ mb: 3 }} />

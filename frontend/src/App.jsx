@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Header } from "./components/Header";
-
+import AdicionarMaquina from "./components/AdicionarMaquina";
 import Login from "./components/login";
 import CadMaq from "./components/cadmaq";
 import Chat from "./components/chat";
@@ -19,10 +19,10 @@ export default function App() {
         {/* Rota inicial */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Tela de login (pública) */}
+        {/* Tela de login  */}
         <Route path="/login" element={<Login />} />
 
-        {/* ROTAS QUE USAM O NOVO LAYOUT (SIDEBAR + TOPBAR) */}
+        {/* rotas que usam o layout */}
         <Route
           element={
             <ProtectedRoute>
@@ -30,8 +30,9 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          {/* O conteúdo destas rotas será injetado no <Outlet /> dentro do Layout */}
+          {/* conteúdo que será injetado dentro do outlet do layout */}
           <Route path="/maquinas" element={<CadMaq />} />
+          <Route path="/maquinas/adicionar" element={<AdicionarMaquina />} />
           <Route path="/visualizarmaquina" element={<VisualizarMaquina />} />
           <Route path="/visualizarmaquina/:id" element={<VisualizarMaquina />} />
           <Route path="/chat" element={<Chat />} />
@@ -39,7 +40,7 @@ export default function App() {
           <Route path="/perfil" element={<UserProfile />} />
         </Route>
 
-        {/* ROTAS QUE CONTINUAM COM O HEADER ANTIGO */}
+        {/* rotas que continuam com o header usando antes */}
         <Route
           path="/maquinas"
           element={

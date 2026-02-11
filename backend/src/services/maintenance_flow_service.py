@@ -3,7 +3,7 @@ from src.chains.event_chain import create_event_chain
 from src.services.timeline_event_service import TimelineEventService
 from src.models.chat_model import Chat
 from src.models.message_model import Message
-from src.services.pdf_service import PDFService
+#from src.services.pdf_service import PDFService
 from pathlib import Path
 from database.db import db
 

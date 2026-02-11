@@ -8,6 +8,7 @@
   overflow: hidden;
 }
 
+/* SIDEBAR */
 .sidebar-container {
   width: 230px;
   min-width: 230px;
@@ -17,7 +18,7 @@
   flex-direction: column;
   padding: 20px 0;
   position: relative;
-  transition: width 0.3s ease, min-width 0.3s ease; 
+  transition: width 0.3s ease, min-width 0.3s ease;
 }
 
 .sidebar-container.collapsed {
@@ -42,26 +43,26 @@
   border-color: #f0f0f0 !important;
 }
 
-/* classe do layout das páginas do menu lateral esquerdo */
-.sidebar-nav-centered {
+/* NAVEGAÇÃO CENTRALIZADA VERTICALMENTE */
+.sidebar-nav-middle {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
-  padding: 0 10px;
+  justify-content: flex-start;
+  padding: 0 8px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  justify-content: flex-start; 
   gap: 12px;
-  padding: 12px 25px; 
+  padding: 12px 15px;
   color: #333;
   cursor: pointer;
   border-radius: 12px;
-  margin-bottom: 10px; 
+  margin-bottom: 8px;
   white-space: nowrap;
+  transition: all 0.2s;
 }
 
 .sidebar-container.collapsed .nav-item {
@@ -74,12 +75,46 @@
   font-weight: bold;
 }
 
-.nav-icon {
-  font-size: 1.4rem !important;
-  min-width: 24px;
+.nav-icon-wrapper svg {
+  font-size: 1.5rem !important;
 }
 
-/* FOOTER E TOPBAR */
+/* FOOTER DA SIDEBAR */
+.sidebar-footer {
+  padding: 0 8px;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.sidebar-container.collapsed .logout-button {
+  justify-content: center;
+}
+
+/* BOTÃO DE RECOLHER */
+.sidebar-toggle {
+  position: absolute;
+  right: -12px;
+  top: 110px;
+  background: #e0e0e0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* ÁREA PRINCIPAL E TOPBAR */
 .main-layout {
   flex-grow: 1;
   display: flex;
@@ -98,44 +133,46 @@
   padding: 0 20px;
 }
 
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* AÇÕES DO TOPO */
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-add-machine-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-add-machine-top:hover {
+  background-color: #333;
+}
+
+.notif-icon {
+  background: #f5f5f5 !important;
+}
+
+/* ÁREA DO CONTEÚDO (OUTLET) */
 .content-outlet {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden; 
+  overflow: hidden;
 }
-
-.sidebar-footer {
-  padding: 0 8px;
-  margin-top: auto; /* Mantém o footer sempre no final */
-}
-
-.logout-button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
-  cursor: pointer;
-}
-
-.sidebar-container.collapsed .logout-button {
-  justify-content: center;
-  padding: 12px 0;
-}
-
-.sidebar-toggle {
-  position: absolute;
-  right: -12px;
-  top: 115px;
-  background: #e0e0e0;
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
-  cursor: pointer;
-  z-index: 5;
-}
-
