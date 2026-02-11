@@ -19,7 +19,6 @@ def send_message(chat_id, current_user=None):
         # Salvar pergunta + resposta no banco
         response = MessageService.send_message(
             chat_id=chat_id,
-            user_id=current_user.id,
             content=data.get("content"),
             finalize=data.get("finalize", False),
             machine_id=data.get("machine_id"),
@@ -32,6 +31,8 @@ def send_message(chat_id, current_user=None):
         return jsonify({"error": str(e)}), 404
     
     except Exception as e:
+        import traceback
+        print("ERRO SEND_MESSAGE:", traceback.format_exc())
         return jsonify({"error": str(e)}), 500
     
 

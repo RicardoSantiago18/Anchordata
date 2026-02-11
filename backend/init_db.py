@@ -25,9 +25,9 @@ def init_database():
     
     with app.app_context():
         # Criar todas as tabelas
-        #print("🔄 Criando tabelas do banco de dados...")
-        #db.create_all()
-        #print("✅ Tabelas criadas com sucesso!")
+        print("🔄 Criando tabelas do banco de dados...")
+        db.create_all()
+        print("✅ Tabelas criadas com sucesso!")
         
         # Verificar se já existe admin
         admin_user = User.query.filter_by(email='admin@anchordata.com').first()
