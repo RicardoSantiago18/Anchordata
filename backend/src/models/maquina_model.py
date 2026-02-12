@@ -33,5 +33,10 @@ class Machine(db.Model):
     # Descrição
     description: so.Mapped[str] = so.mapped_column(sa.String(512), index=True, nullable=False)
 
+    # Imagem da máquina
+    imagem: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True)
+    # Manual da máquina
+    manual: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True)
+
     def __repr__(self):
         return f"<Machine {self.nome_maquina}>"
