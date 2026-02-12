@@ -32,6 +32,7 @@ def create_app():
     from src.routes.home_routes import home_bp
     from src.routes.user_routes import user_bp
     from src.routes.maintenance_routes import maintenance_bp
+    from src.routes.maquina_routes import machine_bp
 
     app.register_blueprint(chat_bp)
     app.register_blueprint(message_bp)
@@ -39,6 +40,7 @@ def create_app():
     app.register_blueprint(home_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(maintenance_bp)
+    app.register_blueprint(machine_bp)
 
     return app
 
