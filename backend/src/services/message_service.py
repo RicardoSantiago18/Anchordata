@@ -39,8 +39,24 @@ class MessageService:
 
         # 3. Salva mensagem do usuário
         user_message = Message(chat_id=chat.id, role="user", content=content)
-        db.session.add(user_message)
-        db.session.commit()
+
+        # Transição de estado
+        if chat.mode == "maintenance":
+            if content.strip().lower() in [
+                "sim",
+                "finalizada",
+                "manutenção finalizada",
+                "concluída",
+                "concluida"
+            ]:
+                chat.mode = "report"
+                db.session.add(user_message)
+                db.session.commit()
+
+                return {
+                    "mode": "transition",
+                    "assistant_message": "Perfeito. Vou iniciar a geração do relatório técnico. Caso Falte alguma informação, eu irei solicitar."
+                }
 
         # 4. Se finalize=False, estamos em conversa técnica normal
         if not finalize:
@@ -48,6 +64,7 @@ class MessageService:
                 ai_response = ai_service.send_message(
                     question=content,
                     history=history, 
+                    mode=chat.mode,
                     draft_report=getattr(chat, "draft_report", None)
                 )
             except Exception as e:

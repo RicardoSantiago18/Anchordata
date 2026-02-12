@@ -2,54 +2,50 @@
 
 from src.rag_chain import create_chain
 
+
 class AIService:
-    def __init__(self):
-        self.rag_chain, self.web_search, self.llm = create_chain()
 
     def send_message(
         self,
+        *,
         question: str,
         history: list[tuple[str, str]],
-        draft_report: str = None,
-        mode: str = "collect_info"
+        mode: str,
+        draft_report: str | None = None,
     ) -> dict:
         """
         question: pergunta do usuário
         history: histórico da conversa
-        draft_report: relatório técnico em andamento (pode ser None)
-        mode: "collect_info" ou "finalize" (define comportamento da IA)
+        mode: "maintenance" ou "report"
+        draft_report: rascunho atual do relatório (opcional)
         """
 
-        MAX_DRAFT_CHARS = 2000
-
-        if draft_report is None:
-            draft_report = ""
+        # 🔁 Escolha dinâmica do prompt
+        if mode == "maintenance":
+            prompt_file = "maintenance_assistant.txt"
+        elif mode == "report":
+            prompt_file = "report_generator.txt"
         else:
-            draft_report = draft_report[-MAX_DRAFT_CHARS:]
+            prompt_file = "maintenance_assistant.txt"
 
         try:
             print(">>> IA: entrou no send_message")
-            print("Pergunta:", question)
-            print("History:", history)
-            print("Draft report atual:", draft_report)
             print("Modo:", mode)
+            print("Pergunta:", question)
 
-            # Chamada ao RAG Chain
-            resposta = self.rag_chain.invoke({
+            # Cria chain dinamicamente com prompt correto
+            rag_chain, _, _ = create_chain(prompt_file)
+
+            resposta = rag_chain.invoke({
                 "question": question,
                 "history": history,
-                "draft_report": draft_report,
-                "mode": mode
+                "draft_report": draft_report or ""
             })
 
-            # Simula atualização do draft_report
-            updated_draft = draft_report + "\n" + str(resposta)
-
-            # Texto que será mostrado ao usuário
-            user_facing_text = str(resposta) if mode != "finalize" else "Relatório final gerado."
+            updated_draft = (draft_report or "") + "\n" + resposta
 
             return {
-                "user_facing_text": user_facing_text,
+                "user_facing_text": resposta,
                 "draft_report": updated_draft
             }
 

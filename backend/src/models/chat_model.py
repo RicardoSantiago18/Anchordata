@@ -32,6 +32,11 @@ class Chat(db.Model):
     # Encerramento lógico
     is_active: so.Mapped[bool] = so.mapped_column(default=True)
 
+    # Modo operante da IA: Manutençaõ ou Geração de relatório
+    mode: so.Mapped[str] = so.mapped_column(sa.String(30), nullable=False, default="maintenance", server_default="maintenance")
+
+    # Rascunho do relatório
+    draft_report: so.Mapped[Optional[str]] = so.mapped_column(sa.Text, nullable=True)
 
     def __repr__(self):
         return f"<Chat {self.title}>"

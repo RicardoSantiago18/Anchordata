@@ -26,6 +26,14 @@ def finalize_maintenance(current_user=None):
             maintenance_type=data["maintenance_type"],
         )
 
+        print("\n===== MARKDOWN GERADO =====\n")
+        print(result["report_markdown"])
+        print("\n===========================\n")
+
+        print("\n===== PDF GERADO =====\n")
+        print(result["pdf_path"])
+        print("\n=======================\n")
+
         return jsonify(result), 200
     
     except KeyError as e:
