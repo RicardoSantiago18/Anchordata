@@ -59,9 +59,6 @@ def create_chain(prompt_name: str):
             "question": RunnableLambda(itemgetter("question")),
             "history": RunnableLambda(
                 lambda x: format_history(x["history"])
-            ),
-            "draft_report": RunnableLambda(
-                lambda x: x.get("draft_report", "")
             )
         }
         | prompt

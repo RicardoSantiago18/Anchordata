@@ -1,6 +1,6 @@
 from flask import Blueprint
-from src.controllers.message_controller import send_message, list_messages
 from flask_cors import cross_origin
+from src.controllers.message_controller import send_message, list_messages
 
 message_bp = Blueprint("messages", __name__, url_prefix="/chats")
 

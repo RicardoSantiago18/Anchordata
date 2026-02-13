@@ -31,7 +31,7 @@
 - **Descrição das peças:** 
 
 ## Observações
-- 
+Informações adicionais relevantes não incluídas acima.
 
 ## Resultado Final da Manutenção
-- 
+Resumo do estado final da máquina após intervenção. 

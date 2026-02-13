@@ -10,8 +10,8 @@ class MessageService:
 
     @staticmethod
     def send_message(
-        *, 
-        chat_id: int,  
+        *,
+        chat_id: int,
         content: str,
         finalize: bool = False,
         machine_id: int = None,
@@ -39,46 +39,34 @@ class MessageService:
 
         # 3. Salva mensagem do usuário
         user_message = Message(chat_id=chat.id, role="user", content=content)
+        db.session.add(user_message)
+        db.session.commit()
 
-        # Transição de estado
-        if chat.mode == "maintenance":
-            if content.strip().lower() in [
-                "sim",
-                "finalizada",
-                "manutenção finalizada",
-                "concluída",
-                "concluida"
-            ]:
-                chat.mode = "report"
-                db.session.add(user_message)
-                db.session.commit()
+        # Transição para modo report
+        if chat.mode == "maintenance" and content.strip().lower() in [
+            "sim", "finalizada", "manutenção finalizada", "concluída", "concluida"
+        ]:
+            chat.mode = "report"
+            chat.updated_at = db.func.now()
+            db.session.commit()
+            return {
+                "mode": "transition",
+                "assistant_message": "Perfeito. Vou iniciar a geração do relatório técnico. Caso falte alguma informação, irei solicitar."
+            }
 
-                return {
-                    "mode": "transition",
-                    "assistant_message": "Perfeito. Vou iniciar a geração do relatório técnico. Caso Falte alguma informação, eu irei solicitar."
-                }
-
-        # 4. Se finalize=False, estamos em conversa técnica normal
+        # Se finalize=False, estamos em conversa técnica normal
         if not finalize:
             try:
                 ai_response = ai_service.send_message(
                     question=content,
-                    history=history, 
-                    mode=chat.mode,
-                    draft_report=getattr(chat, "draft_report", None)
+                    history=history,
+                    mode=chat.mode
                 )
-            except Exception as e:
-                print("Erro IA >>>", traceback.format_exc())
-                ai_response = {
-                    "user_facing_text": "Desculpe, ocorreu um erro ao processar sua solicitação.",
-                    "draft_report": getattr(chat, "draft_report", None)
-                }
+            except Exception:
+                print(traceback.format_exc())
+                ai_response = {"user_facing_text": "Desculpe, ocorreu um erro ao processar sua solicitação."}
 
-            # Atualiza draft_report sem mostrar ao usuário
-            chat.draft_report = ai_response.get("draft_report", getattr(chat, "draft_report", None))
-            db.session.add(chat)
-
-            # Salva resposta da IA para o usuário (somente texto)
+            # Salva resposta da IA
             assistant_message = Message(
                 chat_id=chat.id,
                 role="assistant",
@@ -93,45 +81,34 @@ class MessageService:
                 "assistant_message": ai_response["user_facing_text"]
             }
 
-        # 5. Se finalize=True, gera relatório final e PDF
+        # Se finalize=True, gera relatório final e PDF
         else:
-            if not machine_id or not maintenance_type:
-                raise ValueError("machine_id e maintenance_type são obrigatórios para finalizar a manutenção.")
+            result = MaintenanceFlowService.finalize_maintenance(
+                chat_id=chat.id,
+                machine_id=machine_id,
+                maintenance_type=maintenance_type
+            )
 
-            try:
-                result = MaintenanceFlowService.finalize_maintenance(
-                    chat_id=chat.id,
-                    machine_id=machine_id,
-                    maintenance_type=maintenance_type,
-                    draft_report=getattr(chat, "draft_report", None)
-                )
+            assistant_content = (
+                "Manutenção finalizada com sucesso.\n"
+                "Relatório técnico gerado e PDF disponível."
+            )
 
-                assistant_content = (
-                    "Manutenção finalizada com sucesso.\n"
-                    "Relatório técnico gerado e PDF disponível."
-                )
+            assistant_message = Message(
+                chat_id=chat.id,
+                role="assistant",
+                content=assistant_content
+            )
+            db.session.add(assistant_message)
 
-                assistant_message = Message(
-                    chat_id=chat.id,
-                    role="assistant",
-                    content=assistant_content
-                )
-                db.session.add(assistant_message)
+            chat.mode = "maintenance"  # volta para o modo padrão
+            chat.updated_at = db.func.now()
+            db.session.commit()
 
-                # Limpa draft_report após finalização
-                chat.draft_report = None
-                chat.updated_at = db.func.now()
-                db.session.commit()
-
-                return {
-                    "mode": "finalized",
-                    "assistant_message": assistant_content,
-                    "report_markdown": result["report_markdown"],
-                    "pdf_path": result["pdf_path"],
-                    "event": result["event"]
-                }
-
-            except Exception as e:
-                db.session.rollback()
-                print("Erro durante finalização:", traceback.format_exc())
-                raise e
+            return {
+                "mode": "finalized",
+                "assistant_message": assistant_content,
+                "report_markdown": result["report_markdown"],
+                "pdf_path": result["pdf_path"],
+                "event": result["event"]
+            }

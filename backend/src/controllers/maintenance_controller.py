@@ -7,9 +7,9 @@ def finalize_maintenance(current_user=None):
     POST /maintenance/finalize
     """
     try:
-        current_user = current_user.id
-        data = request.get_json()
+        current_user = current_user  # se não veio, usa mock
 
+        data = request.get_json()
         chat_id = data.get("chat_id")
         machine_id = data.get("machine_id")
         maintenance_type = data.get("maintenance_type")
@@ -17,25 +17,24 @@ def finalize_maintenance(current_user=None):
         if not all([chat_id, machine_id, maintenance_type]):
             return jsonify({
                 "error": "Campos obrigatórios ausentes: chat_id, machine_id, maintenance_type"
-                }), 400
+            }), 400
 
         result = MaintenanceFlowService.finalize_maintenance(
-            chat_id=data["chat_id"],
-            machine_id=data["machine_id"],
-            user_id=current_user.id,
-            maintenance_type=data["maintenance_type"],
+            chat_id=chat_id,
+            machine_id=machine_id,
+            maintenance_type=maintenance_type
         )
 
         print("\n===== MARKDOWN GERADO =====\n")
-        print(result["report_markdown"])
+        print(result.get("report_markdown"))
         print("\n===========================\n")
 
         print("\n===== PDF GERADO =====\n")
-        print(result["pdf_path"])
+        print(result.get("pdf_path"))
         print("\n=======================\n")
 
         return jsonify(result), 200
-    
+
     except KeyError as e:
         return jsonify({"error": f"Campo obrigatório ausente: {str(e)}"}), 400
 
