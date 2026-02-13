@@ -75,6 +75,7 @@ class MaquinaService:
                 "nome_maquina": m.nome_maquina,
                 "num_serie": m.num_serie,
                 "status": m.status,
+                "imagem": m.imagem,
             }
             for m in machines
         ]

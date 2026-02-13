@@ -3,6 +3,11 @@ from src.services.maquina_service import MaquinaService
 from src.services.timeline_event_service import TimelineEventService
 
 
+def get_all_machines():
+    machines = MaquinaService.list_machines()
+    return jsonify(machines)
+
+
 def get_machine(machine_id: int):
     machine = MaquinaService.get_by_id(machine_id)
 

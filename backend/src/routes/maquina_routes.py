@@ -6,6 +6,11 @@ from src.controllers.maquina_controller import (
 
 machine_bp = Blueprint("machines", __name__, url_prefix="/api")
 
+@machine_bp.route("/machines", methods=["GET"])
+def list_machines():
+    from src.controllers.maquina_controller import get_all_machines
+    return get_all_machines()
+
 @machine_bp.route("/machines/<int:machine_id>", methods=["GET"])
 def machine_detail(machine_id):
     return get_machine(machine_id)
