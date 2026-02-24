@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from src.services.maintenance_flow_service import MaintenanceFlowService
+from src.services.message_service import MessageService
 from src.utils.mock_user import get_mock_user
 
 
@@ -32,14 +33,19 @@ def send_message(chat_id, current_user=None):
 
             return jsonify(result), 200
 
-        # Aqui você poderia salvar a mensagem no DB ou mock
-        # Simula resposta do assistente
-        assistant_response = f"Assistente recebeu: {content}"
-
-        return jsonify({
-            "assistant_message": assistant_response,
-            "mode": "conversation"
-        }), 200
+        try:
+            result = MessageService.send_message(
+                chat_id=chat_id,
+                content=content,
+                finalize=finalize,
+                machine_id=machine_id,
+                maintenance_type=maintenance_type
+            )
+            return jsonify(result), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 404
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

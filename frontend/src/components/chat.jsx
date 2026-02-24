@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import "./chat.css";
 
@@ -139,7 +141,7 @@ const Chat = () => {
           <div className={`messages-area ${hasSentMessage ? "active" : ""}`}>
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.sender}`}>
-                {msg.text}
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text || ''}</ReactMarkdown>
               </div>
             ))}
             <div ref={messagesEndRef} />

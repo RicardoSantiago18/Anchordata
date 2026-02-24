@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_cors import cross_origin
 from src.controllers.message_controller import send_message, list_messages
 
-message_bp = Blueprint("messages", __name__, url_prefix="/chats")
+message_bp = Blueprint("messages", __name__, url_prefix="/api/chats")
 
 # POST /chats/<chat_id>/messages
 @message_bp.route("/<int:chat_id>/messages", methods=["POST", "OPTIONS"], strict_slashes=False)

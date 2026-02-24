@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 export async function createChat(title = "New Chat") {
   const token = AuthService.getToken();
 
-  const response = await fetch(`${API_URL}/chats/`, {
+  const response = await fetch(`${API_URL}/chats`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export async function createChat(title = "New Chat") {
 export async function sendChatMessage(chatId, message) {
   const token = AuthService.getToken();
 
-  const response = await fetch(`${API_URL}/chats/${chatId}/messages/`, {
+  const response = await fetch(`${API_URL}/chats/${chatId}/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
