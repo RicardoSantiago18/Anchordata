@@ -34,3 +34,17 @@ from src.controllers.maquina_controller import serve_machine_file
 @machine_bp.route("/machines/files/<path:filename>", methods=["GET"])
 def get_machine_file(filename):
     return serve_machine_file(filename)
+
+from src.controllers.maquina_controller import update_machine, delete_machine
+
+@machine_bp.route("/machines/<int:machine_id>", methods=["PUT"])
+@token_required
+@role_required(UserRole.GERENTE.value, UserRole.ADMIN.value)
+def update_machine_route(machine_id):
+    return update_machine(machine_id)
+
+@machine_bp.route("/machines/<int:machine_id>", methods=["DELETE"])
+@token_required
+@role_required(UserRole.GERENTE.value, UserRole.ADMIN.value)
+def delete_machine_route(machine_id):
+    return delete_machine(machine_id)

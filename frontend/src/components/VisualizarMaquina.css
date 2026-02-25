@@ -29,6 +29,30 @@
   color: #333;
 }
 
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-btn {
+  color: #555 !important;
+}
+
+.edit-btn:hover {
+  background-color: #d5e8ff !important;
+  color: #1565c0 !important;
+}
+
+.delete-btn {
+  color: #999 !important;
+}
+
+.delete-btn:hover {
+  background-color: #fde8e8 !important;
+  color: #c62828 !important;
+}
+
 .content-body-grid {
   display: flex;
   gap: 20px;

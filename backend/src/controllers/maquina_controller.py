@@ -106,3 +106,51 @@ def serve_machine_file(filename):
     # root_dir should be .../backend
     
     return send_from_directory(root_dir, filename)
+
+
+def update_machine(machine_id: int):
+    from flask import request
+    from datetime import datetime
+
+    try:
+        data = request.form
+        imagem_file = request.files.get('imagem')
+        manual_file = request.files.get('manual')
+
+        kwargs = {}
+        optional_fields = [
+            'nome_maquina', 'num_serie', 'marca', 'setor',
+            'fabricante', 'contato_fabricante', 'description'
+        ]
+        for field in optional_fields:
+            if field in data and data[field]:
+                kwargs[field] = data[field]
+
+        if 'data_fabricacao' in data and data['data_fabricacao']:
+            try:
+                kwargs['data_fabricacao'] = datetime.strptime(data['data_fabricacao'], '%Y-%m-%d')
+            except ValueError:
+                return jsonify({"error": "Formato de data inválido. Use YYYY-MM-DD"}), 400
+
+        if imagem_file:
+            kwargs['imagem_file'] = imagem_file
+        if manual_file:
+            kwargs['manual_file'] = manual_file
+
+        machine = MaquinaService.update_machine(machine_id, **kwargs)
+        return jsonify(MaquinaService.get_by_id(machine.id)), 200
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Erro interno: {str(e)}"}), 500
+
+
+def delete_machine(machine_id: int):
+    try:
+        MaquinaService.delete_machine(machine_id)
+        return '', 204
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Erro interno: {str(e)}"}), 500
