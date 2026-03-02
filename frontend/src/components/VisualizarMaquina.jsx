@@ -253,15 +253,23 @@ const VisualizarMaquina = () => {
               {timeline.length === 0 ? (
                 <Typography variant="body2" color="textSecondary" sx={{ p: 2 }}>Nenhum evento registrado.</Typography>
               ) : (
-                timeline.map(event => (
-                  <TimelineEvent
-                    key={event.id}
-                    icon={event.event_type === 'failed' ? <ErrorOutline color="error" sx={{ fontSize: 20 }} /> : <SettingsOutlined sx={{ fontSize: 20 }} />}
-                    title={event.title}
-                    date={new Date(event.created_at).toLocaleDateString()}
-                    desc={event.description}
-                  />
-                ))
+                timeline.map(event => {
+                  // decide descrição exibida: se for markdown de relatório, não mostrar
+                  let descToShow = event.description;
+                  if (descToShow && descToShow.startsWith("# Relatório")) {
+                    descToShow = null;
+                  }
+                  return (
+                    <TimelineEvent
+                      key={event.id}
+                      icon={event.event_type === 'failed' ? <ErrorOutline color="error" sx={{ fontSize: 20 }} /> : <SettingsOutlined sx={{ fontSize: 20 }} />}
+                      title={event.title}
+                      date={new Date(event.created_at).toLocaleDateString()}
+                      desc={descToShow}
+                      reportUrl={event.extra_data?.report_url}
+                    />
+                  );
+                })
               )}
             </div>
           </div>
@@ -321,12 +329,17 @@ const MetricCard = ({ icon, label, value, footer }) => (
   </div>
 );
 
-const TimelineEvent = ({ icon, title, date, desc }) => (
+const TimelineEvent = ({ icon, title, date, desc, reportUrl }) => (
   <div className="event-item">
     <div className="event-icon">{icon}</div>
     <div className="event-card">
       <div className="event-head"><strong>{title}</strong> <span>{date}</span></div>
-      <p>{desc}</p>
+      {desc && <p>{desc}</p>}
+      {reportUrl && (
+        <a href={reportUrl} className="timeline-report-link" target="_blank" rel="noopener noreferrer">
+          📄 Ver relatório
+        </a>
+      )}
     </div>
   </div>
 );

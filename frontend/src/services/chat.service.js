@@ -30,8 +30,16 @@ export async function createChat(title = "New Chat") {
   return response.json();
 }
 
-export async function sendChatMessage(chatId, message) {
+export async function sendChatMessage(chatId, message, finalize = false, machineId = null, maintenanceType = null) {
   const token = AuthService.getToken();
+
+  const body = { content: message };
+  
+  if (finalize) {
+    body.finalize = true;
+    body.machine_id = machineId;
+    body.maintenance_type = maintenanceType;
+  }
 
   const response = await fetch(`${API_URL}/chats/${chatId}/messages`, {
     method: "POST",
@@ -40,7 +48,7 @@ export async function sendChatMessage(chatId, message) {
       "Authorization": `Bearer ${token}`,
     },
     credentials: "include",
-    body: JSON.stringify({ content: message }),
+    body: JSON.stringify(body),
   });
 
   if (response.status === 401) {

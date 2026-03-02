@@ -231,3 +231,12 @@
   font-size: 0.7rem;
   color: #666;
 }
+
+/* link para relatório dentro da timeline */
+.timeline-report-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: #2a5db0;
+  text-decoration: underline;
+}

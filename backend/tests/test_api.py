@@ -49,3 +49,10 @@ def test_generate_markdown_corretiva(mock_generate_pdf, logged_in_client, test_u
 
     response = logged_in_client.post("/maintenance/finalize", json=payload)
     assert response.status_code == 200
+
+    data = response.get_json()
+    from src.models.timeline_event_model import TimelineEvent
+    event = TimelineEvent.query.filter_by(machine_id=machine.id).first()
+    assert event is not None
+    assert event.description == "Relatório técnico gerado"
+    assert "report_url" in (event.extra_data or {})

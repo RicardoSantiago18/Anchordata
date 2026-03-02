@@ -1,4 +1,6 @@
 from pathlib import Path
+import os
+from datetime import datetime
 from src.chains.report_chain import create_report_chain
 from src.rag_chain import create_chain
 from src.chains.event_chain import create_event_chain
@@ -65,14 +67,21 @@ class MaintenanceFlowService:
 
         report_markdown = None
 
-        # 5. Tentar report_chain
+        # 5. Tentar report_chain (com histórico truncado para evitar overflow de tokens)
         try:
             report_chain = create_report_chain()
+            
+            # Limitar histórico: apenas últimas 3 trocas para evitar prompt muito grande
+            truncated_history = "\n".join(f"Usuário: {u}\nAssistente: {a}" for u, a in history[-3:])
+            
+            # Limitar summary também se ficar muito grande
+            truncated_summary = technical_summary if len(technical_summary) < 1000 else technical_summary[:1000] + "..."
+            
             response = report_chain.invoke({
                 "system_prompt": system_prompt_report,
                 "maintenance_type": maintenance_type,
-                "summary": technical_summary,
-                "history": history_text,
+                "summary": truncated_summary,
+                "history": truncated_history,
                 "template_markdown": report_template_markdown
             })
 
@@ -86,26 +95,50 @@ class MaintenanceFlowService:
         # 6. Fallback RAG chain se ainda não gerou
         if not report_markdown:
             try:
+                print("[INFO] Tentando RAG chain para gerar relatório...")
                 rag_chain, _, _ = create_chain("report_generator.txt")
+                
+                # RAG chain espera apenas {question} e {history}, não template_markdown ou summary
                 question = (
-                    f"Gere o relatório final em Markdown usando o modelo abaixo:\n\n"
-                    f"{report_template_markdown}\n\nResumo técnico:\n{technical_summary}"
+                    f"Com base no histórico e na conversa, gere um relatório de manutenção em Markdown. "
+                    f"Resumo técnico: {technical_summary[:300]}"
                 )
 
-                report_markdown = rag_chain.invoke({
+                rag_response = rag_chain.invoke({
                     "question": question,
-                    "history": history_text
+                    "history": history[-3:] if history else []  # Apenas últimas 3 mensagens
                 })
 
-                if not report_markdown or report_markdown.strip() == "":
-                    raise ValueError("RAG chain não retornou conteúdo válido.")
-
-                print("[DEBUG] rag_chain returned length:", len(report_markdown))
+                if rag_response and isinstance(rag_response, str) and rag_response.strip() != "":
+                    report_markdown = rag_response
+                    print("[DEBUG] rag_chain retornou length:", len(report_markdown))
+                else:
+                    print(f"[WARN] RAG chain retornou resposta vazia ou inválida")
             except Exception as e:
-                print(f"[ERROR] rag_chain.invoke failed: {e}")
-                report_markdown = f"Falha ao gerar relatório. Resumo técnico disponível:\n{technical_summary}"
+                print(f"[ERROR] rag_chain falhou: {type(e).__name__}: {str(e)[:200]}")
 
-        # 7. Pós-processamento: garantir preenchimento de todos os campos obrigatórios
+        # 7. Último fallback: preencher template manualmente com dados do histórico
+        if not report_markdown:
+            print("[INFO] Usando fallback de preenchimento de template")
+            report_markdown = report_template_markdown
+            
+            # Extrair dados do histórico para preencher campos obrigatórios
+            last_user_msg = history[-1][0] if history else "Informação não disponível"
+            last_assistant_msg = history[-1][1] if history else "Informação não disponível"
+            
+            replacements = {
+                "- **Data:**": f"- **Data:** {datetime.now().strftime('%d/%m/%Y')}",
+                "- **Responsável pela Manutenção:**": f"- **Responsável pela Manutenção:** Registado via Portal",
+                "- **Descrição do problema:**": f"- **Descrição do problema:** {last_user_msg}",
+                "- **Medidas tomadas:**": f"- **Medidas tomadas:** {last_assistant_msg}",
+                "- **Resultado das medidas:**": f"- **Resultado das medidas:** Ação concluída conforme descrito",
+                "( ) Sim ( ) Não": "(x) Sim ( ) Não" if "parada" in history_text.lower() else "( ) Sim (x) Não",
+            }
+            
+            for old, new in replacements.items():
+                report_markdown = report_markdown.replace(old, new, 1)
+        
+        # 8. Pós-processamento: garantir preenchimento de todos os campos obrigatórios
         report_markdown = report_markdown or f"Falha ao gerar relatório. Resumo técnico disponível:\n{technical_summary}"
         mandatory_fields = [
             "Data:", "Responsável pela Manutenção:", "ID:", "Máquina:", "Código da Máquina:",
@@ -124,6 +157,9 @@ class MaintenanceFlowService:
             markdown_content=report_markdown,
             filename=f"maintenance_{chat_id}.pdf"
         )
+        # calcular url imediatamente para uso posterior
+        pdf_filename = os.path.basename(pdf_path)
+        pdf_url = f"/api/reports/{pdf_filename}"
 
         # 9. Gerar evento de timeline
         try:
@@ -138,20 +174,28 @@ class MaintenanceFlowService:
             print(f"[WARN] event_chain.invoke failed: {e}")
             event_data = {}
 
+        # prepare extra_data merging any chain-provided data
+        timeline_extra = event_data.get("extra_data", {}) or {}
+        # add link to generated PDF so timeline template pode renderizá-lo
+        timeline_extra["report_url"] = pdf_url
+
         TimelineEventService.create_event(
             event_type=event_data.get("event_type", maintenance_type_lower),
             title=event_data.get("title", "Manutenção realizada"),
-            description=report_markdown,
+            # descrição fixa para evitar vazamento do relatório completo
+            description="Relatório técnico gerado",
             users_id=chat.user_id,
             conversation_history=history,
             machine_id=machine_id,
             chat_id=chat_id,
-            extra_data=event_data.get("extra_data", {})
+            extra_data=timeline_extra
         )
 
         # 10. Retorno
         return {
             "report_markdown": report_markdown,
             "pdf_path": pdf_path,
+            "pdf_url": pdf_url,
             "event": event_data
         }
+

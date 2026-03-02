@@ -21,6 +21,7 @@ const Chat = () => {
 
   const maquinaFromState = location.state?.maquina;
   const machineId = id ? String(id) : null;
+  const maintenanceTypeFromState = location.state?.maintenanceType || "corretiva";
 
   const maquinaSelecionada = useMemo(() => {
     if (maquinaFromState) return maquinaFromState;
@@ -35,6 +36,9 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [hasSentMessage, setHasSentMessage] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [chatMode, setChatMode] = useState(null);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isTyping = input.length > 0;
@@ -95,8 +99,45 @@ const Chat = () => {
     try {
       const data = await sendChatMessage(chatId, userMessage);
       setMessages((prev) => [...prev, { sender: "bot", text: data.assistant_message }]);
+      
+      // Capturar modo da resposta (para transição para "report")
+      if (data.mode) {
+        setChatMode(data.mode);
+      }
+      
+      // Se houver pdf_url, armazenar para mostrar botão de download
+      if (data.pdf_url) {
+        setPdfUrl(data.pdf_url);
+      }
     } catch (error) {
       setMessages((prev) => [...prev, { sender: "bot", text: "Erro ao responder. Tente novamente." }]);
+    }
+  };
+
+  const generateReport = async () => {
+    if (!chatId || !maquinaSelecionada?.id) return;
+    setIsGeneratingReport(true);
+    try {
+      const data = await sendChatMessage(
+        chatId,
+        "Gerar relatório",
+        true, // finalize = true
+        maquinaSelecionada.id,
+        maintenanceTypeFromState
+      );
+      setMessages((prev) => [...prev, { sender: "bot", text: data.assistant_message }]);
+      
+      // Se houver pdf_url, armazenar para mostrar botão de download
+      if (data.pdf_url) {
+        setPdfUrl(data.pdf_url);
+      }
+      
+      // Limpar modo após gerar relatório
+      setChatMode(null);
+    } catch (error) {
+      setMessages((prev) => [...prev, { sender: "bot", text: "Erro ao gerar relatório. Tente novamente." }]);
+    } finally {
+      setIsGeneratingReport(false);
     }
   };
 
@@ -146,6 +187,28 @@ const Chat = () => {
             ))}
             <div ref={messagesEndRef} />
           </div>
+
+          {/* Botão para Gerar Relatório */}
+          {chatMode === "transition" && !pdfUrl && (
+            <div className="report-generation-section">
+              <button 
+                className="btn-generate-report" 
+                onClick={generateReport}
+                disabled={isGeneratingReport}
+              >
+                {isGeneratingReport ? "Gerando relatório..." : "📋 Gerar Relatório"}
+              </button>
+            </div>
+          )}
+
+          {/* Botão de Download do PDF */}
+          {pdfUrl && (
+            <div className="pdf-download-section">
+              <a href={pdfUrl} download className="btn-download-pdf">
+                📄 Baixar Relatório PDF
+              </a>
+            </div>
+          )}
 
           {/* Container do Input */}
           <div className={`chat-input-wrapper ${hasSentMessage ? "sticky" : ""}`}>

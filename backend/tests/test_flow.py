@@ -50,3 +50,13 @@ def test_finalize_maintenance_endpoint(mock_generate_pdf, client, test_user):
     response = logged_in_client.post("/maintenance/finalize", json=payload)
     print(response.data.decode())
     assert response.status_code == 200
+
+    data = response.get_json()
+
+    # verificar que evento de timeline foi criado e descrição é curta
+    from src.models.timeline_event_model import TimelineEvent
+    event = TimelineEvent.query.filter_by(machine_id=machine.id).first()
+    assert event is not None
+    assert event.description == "Relatório técnico gerado", "descrição deve ser constante e não incluir relatório"
+    assert "report_url" in (event.extra_data or {}), "extra_data deve incluir link do relatório"
+    assert event.extra_data["report_url"].endswith(".pdf")
