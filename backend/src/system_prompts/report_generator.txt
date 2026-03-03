@@ -22,6 +22,9 @@ Exemplo de comportamento esperado:
 ### Template a ser preenchido:
 {template_markdown}
 
+### Informações da máquina:
+{machine_info}
+
 ### Resumo técnico:
 {summary}
 

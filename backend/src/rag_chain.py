@@ -48,18 +48,27 @@ def create_chain(prompt_name: str):
             return "Nenhum contexto técnico relevante encontrado."
         return "\n\n".join(doc.page_content for doc in docs)
 
+    # optional filter by machine_id metadata
+    def filter_by_machine(docs, machine_id=None):
+        if machine_id is None:
+            return docs
+        return [d for d in docs if d.metadata.get("machine_id") == str(machine_id)]
+
+    def retrieve_and_filter(inputs):
+        """Retrieves docs and filters by machine_id"""
+        question = inputs.get("question")
+        machine_id = inputs.get("machine_id")
+        docs = retriever.invoke(question)
+        return format_docs(filter_by_machine(docs, machine_id))
+
     # Usamos itemgetter para pegar apenas os campos específicos do dicionário de entrada
     rag_chain = (
         {
-            "context": (
-                RunnableLambda(itemgetter("question"))
-                | retriever
-                | RunnableLambda(format_docs)
-            ),
+            "context": RunnableLambda(retrieve_and_filter),
             "question": RunnableLambda(itemgetter("question")),
             "history": RunnableLambda(
-                lambda x: format_history(x["history"])
-            )
+                lambda x: format_history(x["history"])),
+            "machine_id": RunnableLambda(lambda x: x.get("machine_id"))
         }
         | prompt
         | llm

@@ -59,6 +59,12 @@ class MaquinaService:
                 file_path = os.path.join(base_dir, filename)
                 manual_file.save(file_path)
                 machine.manual = f"data/machines/{machine.id}/{filename}"
+                # automatically index manual for RAG
+                try:
+                    from src.ingest import add_pdf_to_vectorstore
+                    add_pdf_to_vectorstore(file_path, machine.id, filename)
+                except Exception as e:
+                    print(f"[WARN] falha ao indexar manual no vectorstore: {e}")
 
             db.session.commit()
 
@@ -178,6 +184,12 @@ class MaquinaService:
                 file_path = os.path.join(base_dir, filename)
                 manual_file.save(file_path)
                 machine.manual = f"data/machines/{machine.id}/{filename}"
+                # index the manual so the RAG retriever knows about it
+                try:
+                    from src.ingest import add_pdf_to_vectorstore
+                    add_pdf_to_vectorstore(file_path, machine.id, filename)
+                except Exception as e:
+                    print(f"[WARN] falha ao indexar manual no vectorstore: {e}")
 
         db.session.commit()
         return machine

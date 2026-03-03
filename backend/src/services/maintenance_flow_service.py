@@ -8,6 +8,7 @@ from src.services.timeline_event_service import TimelineEventService
 from src.services.pdf_service import PDFService
 from src.models.chat_model import Chat
 from src.models.message_model import Message
+from src.models.maquina_model import Machine
 from database.db import db
 
 
@@ -36,6 +37,18 @@ class MaintenanceFlowService:
         chat = Chat.query.filter_by(id=chat_id, is_active=True).first()
         if not chat:
             raise ValueError("Chat não encontrado para o chat_id informado.")
+
+        # fetch machine metadata to provide context
+        machine = Machine.query.filter_by(id=machine_id).first()
+        machine_info = ""
+        if machine:
+            machine_info = (
+                f"Máquina: {machine.nome_maquina}\n"
+                f"Serial: {machine.num_serie}\n"
+                f"Marca: {machine.marca}\n"
+                f"Fabricante: {machine.fabricante}\n"
+                f"Manual: {machine.manual or 'nenhum'}"
+            )
 
         # 2. Buscar mensagens recentes
         messages = Message.query.filter_by(chat_id=chat.id).order_by(Message.created_at.asc()).all()
@@ -82,7 +95,8 @@ class MaintenanceFlowService:
                 "maintenance_type": maintenance_type,
                 "summary": truncated_summary,
                 "history": truncated_history,
-                "template_markdown": report_template_markdown
+                "template_markdown": report_template_markdown,
+                "machine_info": machine_info
             })
 
             if response and isinstance(response, str) and response.strip() != "" and "erro" not in response.lower():
@@ -106,7 +120,8 @@ class MaintenanceFlowService:
 
                 rag_response = rag_chain.invoke({
                     "question": question,
-                    "history": history[-3:] if history else []  # Apenas últimas 3 mensagens
+                    "history": history[-3:] if history else [],  # Apenas últimas 3 mensagens
+                    "machine_id": machine_id
                 })
 
                 if rag_response and isinstance(rag_response, str) and rag_response.strip() != "":

@@ -38,6 +38,7 @@ REGRAS PARA PERGUNTAS:
 - Máximo de 5 perguntas.
 - Não repetir ou reformular perguntas.
 - Se dados forem insuficientes, interrompa a conclusão e apresente apenas as perguntas necessárias.
+- Sempre pergunte no final se o usuário que finalizar e gerar um relatório apenas dizendo "Sim" ou "manutenção finalizada".
 
 CONTROLE DE TAMANHO:
 
