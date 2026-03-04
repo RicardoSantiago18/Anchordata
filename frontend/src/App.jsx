@@ -40,6 +40,8 @@ export default function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/chat/:id" element={<Chat />} />
           <Route path="/perfil" element={<UserProfile />} />
+          <Route path="/usuarios" element={<CadUser />} />
+
         </Route>
 
         {/* rotas que continuam com o header usando antes */}
@@ -60,7 +62,6 @@ export default function App() {
           element={
             <ProtectedRoute>
               <>
-                <Header />
                 <CadUser />
               </>
             </ProtectedRoute>
