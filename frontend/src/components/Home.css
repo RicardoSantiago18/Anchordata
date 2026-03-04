@@ -1,0 +1,138 @@
+.home-dashboard {
+  padding: 20px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  /* altura máxima baseada na tela menos a topbar = 130px */
+  height: calc(100vh - 150px); 
+  overflow-y: auto; 
+}
+
+/* Linha Superior de Status */
+.status-row {
+  display: flex;
+  gap: 20px;
+}
+
+.status-card {
+  background: #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 180px;
+}
+
+.status-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.status-label {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.2;
+}
+
+/* Grid Principal */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  grid-template-rows: auto auto; 
+  gap: 20px;
+  flex: 1;
+}
+
+.grid-item {
+  background: #e0e0e0;
+  border-radius: 18px;
+  padding: 15px; 
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Seção de Usuários */
+.users-section {
+  grid-column: 1;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.users-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+
+.user-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.user-avatar-box {
+  background: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.user-name { font-weight: 600; font-size: 0.7rem !important; }
+.user-role { color: #666; font-size: 0.6rem !important; }
+
+.projects-section {
+  max-height: 350px; 
+}
+
+/* Seção Projetos Recentes */
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto; 
+  padding-right: 5px;
+}
+
+.project-row {
+  background: white;
+  border-radius: 12px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.project-img-placeholder {
+  width: 50px;
+  height: 50px;
+  background: #ccc;
+  border-radius: 8px;
+}
+
+.project-info { flex: 1; }
+
+.status-chip {
+  background: #ccc !important;
+  color: #666 !important;
+  font-weight: bold !important;
+  border-radius: 99px !important;
+}
+
+/* Ícones de Navegação */
+.icon-top-right { position: absolute; top: 15px; right: 15px; color: #666; cursor: pointer; }
+.arrow-next { color: #666; cursor: pointer; }

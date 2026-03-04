@@ -31,17 +31,19 @@ const Layout = () => {
         <Divider className="sidebar-divider" />
 
         <nav className="sidebar-nav-middle">
+          {/* Item INÍCIO atualizado para /home */}
           <NavItem
             isCollapsed={isCollapsed}
             icon={<HomeOutlined />}
             label="Início"
-            active={isActive('/')}
-            onClick={() => navigate('/')}
+            active={isActive('/home')}
+            onClick={() => navigate('/home')}
           />
           <NavItem
             isCollapsed={isCollapsed}
             icon={<SettingsOutlined />}
             label="Máquinas"
+            /* Verifica se a rota atual contém 'maquina' para manter o item ativo em sub-rotas */
             active={location.pathname.includes('maquina') ? 'active' : ''}
             onClick={() => navigate('/maquinas')}
           />
@@ -80,7 +82,6 @@ const Layout = () => {
           </div>
 
           <div className="topbar-actions">
-            {/* botão para a rota de cadastro de máquinas */}
             <button 
               className="btn-add-machine-top" 
               onClick={() => navigate('/maquinas/adicionar')} 
@@ -95,7 +96,7 @@ const Layout = () => {
           </div>
         </header>
 
-        {/* espaço para conteúdo das páginas */}
+        {/* espaço para conteúdo das páginas (Home, CadMaq, etc) */}
         <div className="content-outlet">
           <Outlet />
         </div>
@@ -104,9 +105,8 @@ const Layout = () => {
   );
 };
 
-
 const NavItem = ({ icon, label, active, onClick, isCollapsed }) => (
-  <Tooltip title={isCollapsed ? label : ''} placement="right">
+  <Tooltip title={isCollapsed ? label : ''} placement="right" arrow>
     <div className={`nav-item ${active}`} onClick={onClick}>
       <div className="nav-icon-wrapper">{icon}</div>
       {!isCollapsed && <span className="nav-text">{label}</span>}

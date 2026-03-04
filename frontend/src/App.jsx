@@ -11,6 +11,7 @@ import { UserProfile } from "./components/UserProfile";
 import CadUser from "./components/caduser";
 import VisualizarMaquina from "./components/visualizarmaquina";
 import Layout from "./components/Layout";
+import Home from "./components/Home"; 
 
 export default function App() {
   return (
@@ -18,7 +19,7 @@ export default function App() {
       <Routes>
         {/* Rota inicial */}
         <Route path="/" element={<Navigate to="/login" />} />
-
+        
         {/* Tela de login  */}
         <Route path="/login" element={<Login />} />
 
@@ -31,6 +32,7 @@ export default function App() {
           }
         >
           {/* conteúdo que será injetado dentro do outlet do layout */}
+          <Route path="/home" element={<Home />} />
           <Route path="/maquinas" element={<CadMaq />} />
           <Route path="/maquinas/adicionar" element={<AdicionarMaquina />} />
           <Route path="/visualizarmaquina" element={<VisualizarMaquina />} />
