@@ -34,10 +34,13 @@ export async function sendChatMessage(chatId, message, finalize = false, machine
   const token = AuthService.getToken();
 
   const body = { content: message };
+
+  if (machineId) {
+    body.machine_id = machineId;
+  }
   
   if (finalize) {
     body.finalize = true;
-    body.machine_id = machineId;
     body.maintenance_type = maintenanceType;
   }
 

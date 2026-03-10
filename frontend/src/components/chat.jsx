@@ -97,14 +97,14 @@ const Chat = () => {
     setInput("");
     setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
     try {
-      const data = await sendChatMessage(chatId, userMessage);
+      const data = await sendChatMessage(chatId, userMessage, false, maquinaSelecionada?.id);
       setMessages((prev) => [...prev, { sender: "bot", text: data.assistant_message }]);
-      
+
       // Capturar modo da resposta (para transição para "report")
       if (data.mode) {
         setChatMode(data.mode);
       }
-      
+
       // Se houver pdf_url, armazenar para mostrar botão de download
       if (data.pdf_url) {
         setPdfUrl(data.pdf_url);
@@ -126,12 +126,12 @@ const Chat = () => {
         maintenanceTypeFromState
       );
       setMessages((prev) => [...prev, { sender: "bot", text: data.assistant_message }]);
-      
+
       // Se houver pdf_url, armazenar para mostrar botão de download
       if (data.pdf_url) {
         setPdfUrl(data.pdf_url);
       }
-      
+
       // Limpar modo após gerar relatório
       setChatMode(null);
     } catch (error) {
@@ -153,9 +153,9 @@ const Chat = () => {
       {/* Cabeçalho do Chat (Dentro do Painel) */}
       <div className="chat-internal-header">
         <div className="chat-title-info">
-           <span className="chat-machine-badge">
-             {maquinaSelecionada?.nome || "Chat Geral"}
-           </span>
+          <span className="chat-machine-badge">
+            {maquinaSelecionada?.nome || "Chat Geral"}
+          </span>
         </div>
         {/*<button className="btn-new-chat-alt" onClick={startNewChat} disabled={isCreatingChat}>
           <AddIcon fontSize="small" /> Novo Chat
@@ -170,8 +170,8 @@ const Chat = () => {
                 <PersonOutlineIcon fontSize="large" />
               </div>
               <p className="welcome-text">
-                {maquinaSelecionada?.nome 
-                  ? `Olá! Vamos falar sobre "${maquinaSelecionada.nome}"?` 
+                {maquinaSelecionada?.nome
+                  ? `Olá! Vamos falar sobre "${maquinaSelecionada.nome}"?`
                   : "Olá! Como posso ajudar hoje?"}
               </p>
               <h1 className="main-question">Como podemos te ajudar?</h1>
@@ -191,8 +191,8 @@ const Chat = () => {
           {/* Botão para Gerar Relatório */}
           {chatMode === "transition" && !pdfUrl && (
             <div className="report-generation-section">
-              <button 
-                className="btn-generate-report" 
+              <button
+                className="btn-generate-report"
                 onClick={generateReport}
                 disabled={isGeneratingReport}
               >
