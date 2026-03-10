@@ -60,7 +60,8 @@ class MessageService:
                 ai_response = ai_service.send_message(
                     question=content,
                     history=history,
-                    mode=chat.mode
+                    mode=chat.mode,
+                    machine_id=machine_id
                 )
             except Exception:
                 print(traceback.format_exc())

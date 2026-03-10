@@ -38,9 +38,7 @@ class MaquinaService:
         if imagem_file or manual_file:
             import os
             from werkzeug.utils import secure_filename
-            from flask import current_app
 
-            # Define base path for machine files: backend/data/machines/<id>/
             base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'machines', str(machine.id))
             os.makedirs(base_dir, exist_ok=True)
 
@@ -48,10 +46,6 @@ class MaquinaService:
                 filename = secure_filename(imagem_file.filename)
                 file_path = os.path.join(base_dir, filename)
                 imagem_file.save(file_path)
-                # Store relative path or absolute? Relative is better for portability.
-                # Let's store relative to backend root or just filename if structured.
-                # The plan said "save file paths in the database".
-                # Let's store "data/machines/<id>/<filename>"
                 machine.imagem = f"data/machines/{machine.id}/{filename}"
 
             if manual_file:
@@ -59,14 +53,15 @@ class MaquinaService:
                 file_path = os.path.join(base_dir, filename)
                 manual_file.save(file_path)
                 machine.manual = f"data/machines/{machine.id}/{filename}"
-                # automatically index manual for RAG
-                try:
-                    from src.ingest import add_pdf_to_vectorstore
-                    add_pdf_to_vectorstore(file_path, machine.id, filename)
-                except Exception as e:
-                    print(f"[WARN] falha ao indexar manual no vectorstore: {e}")
 
             db.session.commit()
+
+        # Index machine metadata + manual into per-machine vectorstore
+        try:
+            from src.ingest import index_machine_to_rag
+            index_machine_to_rag(machine)
+        except Exception as e:
+            print(f"[WARN] falha ao indexar máquina no vectorstore: {e}")
 
         return machine
 
@@ -184,14 +179,17 @@ class MaquinaService:
                 file_path = os.path.join(base_dir, filename)
                 manual_file.save(file_path)
                 machine.manual = f"data/machines/{machine.id}/{filename}"
-                # index the manual so the RAG retriever knows about it
-                try:
-                    from src.ingest import add_pdf_to_vectorstore
-                    add_pdf_to_vectorstore(file_path, machine.id, filename)
-                except Exception as e:
-                    print(f"[WARN] falha ao indexar manual no vectorstore: {e}")
 
         db.session.commit()
+
+        # Re-index: remove old vectorstore and rebuild with updated data
+        try:
+            from src.ingest import remove_machine_from_rag, index_machine_to_rag
+            remove_machine_from_rag(machine.id)
+            index_machine_to_rag(machine)
+        except Exception as e:
+            print(f"[WARN] falha ao re-indexar máquina no vectorstore: {e}")
+
         return machine
 
     # REMOÇÃO
@@ -204,6 +202,13 @@ class MaquinaService:
 
         if not machine:
             raise ValueError("Máquina não encontrada")
+
+        # Remove vectorstore for this machine
+        try:
+            from src.ingest import remove_machine_from_rag
+            remove_machine_from_rag(machine_id)
+        except Exception as e:
+            print(f"[WARN] falha ao remover vectorstore da máquina: {e}")
 
         # Remove files from disk
         base_dir = os.path.join(

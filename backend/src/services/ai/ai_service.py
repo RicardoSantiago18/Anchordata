@@ -11,11 +11,13 @@ class AIService:
         question: str,
         history: list[tuple[str, str]],
         mode: str,
+        machine_id: int = None,
     ) -> dict:
         """
         question: pergunta do usuário
         history: histórico da conversa
         mode: "maintenance" ou "report"
+        machine_id: ID da máquina para carregar vectorstore específico
         """
 
         # Escolha dinâmica do prompt
@@ -30,9 +32,10 @@ class AIService:
             print(">>> IA: entrou no send_message")
             print("Modo:", mode)
             print("Pergunta:", question)
+            print("Machine ID:", machine_id)
 
-            # Cria chain dinamicamente com prompt correto
-            rag_chain, _, _ = create_chain(prompt_file)
+            # Cria chain com vectorstore específico da máquina
+            rag_chain, _, _ = create_chain(prompt_file, machine_id=machine_id)
 
             resposta = rag_chain.invoke({
                 "question": question,
