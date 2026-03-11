@@ -118,10 +118,19 @@ class MaintenanceFlowService:
                     f"Resumo técnico: {technical_summary[:300]}"
                 )
 
+                # Para evitar KeyError caso o prompt exija outros campos (summary, machine_info, template_markdown),
+                # fornecemos valores mesmos quando a chain é usada como fallback.
+                rag_template = report_template_markdown
+                if len(rag_template) > 2000:
+                    rag_template = rag_template[:2000] + "\n\n...[TEMPLATE TRUNCADO]"
+
                 rag_response = rag_chain.invoke({
                     "question": question,
                     "history": history[-3:] if history else [],  # Apenas últimas 3 mensagens
-                    "machine_id": machine_id
+                    "machine_id": machine_id,
+                    "summary": truncated_summary,
+                    "machine_info": machine_info,
+                    "template_markdown": rag_template,
                 })
 
                 if rag_response and isinstance(rag_response, str) and rag_response.strip() != "":

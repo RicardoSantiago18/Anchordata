@@ -81,8 +81,11 @@ def create_chain(prompt_name: str, machine_id: int = None):
         {
             "context": RunnableLambda(retrieve_and_format),
             "question": RunnableLambda(itemgetter("question")),
-            "history": RunnableLambda(
-                lambda x: format_history(x["history"])),
+            "history": RunnableLambda(lambda x: format_history(x.get("history", []))),
+            # Permitir passar variáveis opcionais que o prompt pode exigir
+            "summary": RunnableLambda(lambda x: x.get("summary", "")),
+            "machine_info": RunnableLambda(lambda x: x.get("machine_info", "")),
+            "template_markdown": RunnableLambda(lambda x: x.get("template_markdown", "")),
         }
         | prompt
         | llm
