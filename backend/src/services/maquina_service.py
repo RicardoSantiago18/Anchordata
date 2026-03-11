@@ -1,6 +1,8 @@
 from src.models.maquina_model import Machine
+from src.models.timeline_event_model import TimelineEvent
 from database.db import db
 from datetime import datetime, timezone
+from sqlalchemy import func, desc
 
 
 class MaquinaService:
@@ -220,3 +222,38 @@ class MaquinaService:
 
         db.session.delete(machine)
         db.session.commit()
+
+    @staticmethod
+    def get_recent_interacted(limit: int = 4):
+        """
+        Retorna as últimas máquinas que tiveram interações (timeline events),
+        ordenadas pela interação mais recente.
+        """
+        subq = (
+            db.session.query(
+                TimelineEvent.machine_id,
+                func.max(TimelineEvent.created_at).label("last_interaction")
+            )
+            .group_by(TimelineEvent.machine_id)
+            .subquery()
+        )
+
+        results = (
+            db.session.query(Machine, subq.c.last_interaction)
+            .join(subq, Machine.id == subq.c.machine_id)
+            .order_by(desc(subq.c.last_interaction))
+            .limit(limit)
+            .all()
+        )
+
+        return [
+            {
+                "id": m.id,
+                "nome_maquina": m.nome_maquina,
+                "num_serie": m.num_serie,
+                "status": m.status,
+                "imagem": m.imagem,
+                "last_interaction": last.isoformat() if last else None,
+            }
+            for m, last in results
+        ]

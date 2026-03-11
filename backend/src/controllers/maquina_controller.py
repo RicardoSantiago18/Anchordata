@@ -8,6 +8,11 @@ def get_all_machines():
     return jsonify(machines)
 
 
+def get_recent_machines():
+    machines = MaquinaService.get_recent_interacted()
+    return jsonify(machines)
+
+
 def get_machine(machine_id: int):
     machine = MaquinaService.get_by_id(machine_id)
 

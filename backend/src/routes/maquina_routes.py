@@ -11,6 +11,11 @@ def list_machines():
     from src.controllers.maquina_controller import get_all_machines
     return get_all_machines()
 
+@machine_bp.route("/machines/recent", methods=["GET"])
+def recent_machines():
+    from src.controllers.maquina_controller import get_recent_machines
+    return get_recent_machines()
+
 @machine_bp.route("/machines/<int:machine_id>", methods=["GET"])
 def machine_detail(machine_id):
     return get_machine(machine_id)
