@@ -4,13 +4,16 @@ import {
   BarChart, Bar
 } from 'recharts';
 import { Box, Typography, Chip, CircularProgress } from '@mui/material';
+
+// ÍCONES
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+
 import { UserService } from '../services/user.service';
 import './Home.css';
 
 const Home = () => {
-  // estados para o back
   const [dadosErros, setDadosErros] = useState([]);
   const [dadosProducao, setDadosProducao] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
@@ -19,12 +22,12 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // simulação de chamada de api
     const fetchData = async () => {
       try {
-        // simulação de 1s
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Simulação de delay para carregamento
+        await new Promise(resolve => setTimeout(resolve, 800));
 
+        // Dados estáticos para os gráficos (baseados no seu design)
         setDadosErros([
           { name: 'Jan', valor: 5 }, { name: 'Fev', valor: 2 }, { name: 'Mar', valor: 7 },
           { name: 'Abr', valor: 15 }, { name: 'Mai', valor: 14 }, { name: 'Jun', valor: 12 },
@@ -39,14 +42,15 @@ const Home = () => {
           { name: 'Abr', prod: 900, para: 180 },
         ]);
 
+        // Busca de usuários (Backend)
         try {
           const data = await UserService.listUsers();
           setUsuarios(data.users || []);
         } catch (err) {
-          console.error("Erro ao buscar usuários:", err);
-          setUsuarios([]);
+          console.error("Erro ao buscar usuários", err);
         }
 
+        // Busca de máquinas recentes (Backend)
         try {
           const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
           const token = localStorage.getItem('token');
@@ -61,19 +65,15 @@ const Home = () => {
             setMaquinasRecentes(data || []);
           }
         } catch (err) {
-          console.error("Erro ao buscar máquinas recentes:", err);
-          setMaquinasRecentes([]);
+          console.error("Erro ao buscar máquinas", err);
         }
 
         setStatusGeral({ critico: 11, atencao: 7, saudavel: 2 });
-
         setLoading(false);
       } catch (error) {
-        console.error("Erro ao buscar dados do dashboard:", error);
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -87,90 +87,109 @@ const Home = () => {
 
   return (
     <div className="home-dashboard">
-      {/* cards de status */}
-      <div className="status-row">
-        <div className="status-card">
-          <span className="status-number">{statusGeral.critico}</span>
-          <span className="status-label">Estado Crítico</span>
-        </div>
-        <div className="status-card">
-          <span className="status-number">{statusGeral.atencao}</span>
-          <span className="status-label">Atenção</span>
-        </div>
-        <div className="status-card">
-          <span className="status-number">{statusGeral.saudavel}</span>
-          <span className="status-label">Estado Saudável</span>
-        </div>
-      </div>
-
       <div className="dashboard-grid">
-        {/* 2. card de usuários dinâmico */}
-        <div className="grid-item users-section">
-          <div className="card-header">
-            <Typography variant="h6">Usuários</Typography>
-            <ArrowOutwardIcon fontSize="small" className="icon-top-right" />
+        
+        {/* 1. STATUS GERAL (Topo Esquerda) */}
+        <div className="status-row">
+          <div className="status-card">
+            <span className="status-number">{statusGeral.critico}</span>
+            <span className="status-label">Estado Crítico</span>
           </div>
-          <div className="users-list">
-            {usuarios.map((user) => (
-              <div key={user.id} className="user-item">
-                <div className="user-avatar-box">👤</div>
-                <Typography variant="caption" className="user-name">{user.name}</Typography>
-                <Typography variant="caption" className="user-role">{user.role}</Typography>
-              </div>
-            ))}
-            <ChevronRightIcon className="arrow-next" />
+          <div className="status-card">
+            <span className="status-number">{statusGeral.atencao}</span>
+            <span className="status-label">Atenção</span>
+          </div>
+          <div className="status-card">
+            <span className="status-number">{statusGeral.saudavel}</span>
+            <span className="status-label">Estado Saudável</span>
           </div>
         </div>
 
-        {/* 3. gráfico de erros */}
+        {/* 2. CARD DE USUÁRIOS (Meio Esquerda - Design da Imagem) */}
+        <div className="grid-item users-section">
+          <ArrowOutwardIcon className="icon-top-right" />
+          <ChevronRightIcon className="arrow-next" />
+          
+          <Typography className="card-title">Usuários</Typography>
+          
+          <div className="users-list">
+            {usuarios.slice(0, 4).length > 0 ? (
+              usuarios.slice(0, 4).map((user) => (
+                <div key={user.id} className="user-item">
+                  <div className="user-avatar-box">
+                    <PersonOutlineIcon style={{ color: '#000', fontSize: '28px' }} />
+                  </div>
+                  <Typography className="user-name">{user.name.split(' ')[0]}</Typography>
+                  <Typography className="user-role">{user.role || 'Técnico'}</Typography>
+                </div>
+              ))
+            ) : (
+              // Placeholder caso não venha do backend
+              [1, 2, 3, 4].map((i) => (
+                <div key={i} className="user-item">
+                  <div className="user-avatar-box"><PersonOutlineIcon /></div>
+                  <Typography className="user-name">Usuário</Typography>
+                  <Typography className="user-role">Técnico</Typography>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* 3. IDENTIFICAÇÃO DE ERROS (Direita - Ocupa Row 1 e 2) */}
         <div className="grid-item chart-section">
-          <Typography variant="h6" align="center" gutterBottom>Identificações de Erros</Typography>
-          <ResponsiveContainer width="100%" height={180}>
+          <Typography variant="h6" align="center" gutterBottom>Identificação de Erros</Typography>
+          <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dadosErros}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ddd" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ccc" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="valor" stroke="#333" strokeWidth={2} dot={{ r: 4, fill: '#fff', stroke: '#333' }} />
+              <Line 
+                type="monotone" 
+                dataKey="valor" 
+                stroke="#000" 
+                strokeWidth={3} 
+                dot={{ r: 4, fill: '#fff', stroke: '#000', strokeWidth: 2 }} 
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* 4. gráfico produçõa x paradas */}
+        {/* 4. PRODUÇÃO X PARADAS (Base Esquerda) */}
         <div className="grid-item production-section">
           <Typography variant="h6" align="center" gutterBottom>Produção x Paradas</Typography>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dadosProducao}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ddd" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ccc" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} />
+              <YAxis axisLine={false} tickLine={false} />
               <Tooltip />
-              <Bar dataKey="prod" fill="#333" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="para" fill="#888" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="prod" fill="#000" radius={[5, 5, 0, 0]} />
+              <Bar dataKey="para" fill="#999" radius={[5, 5, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* 5. últimas máquinas interagidas */}
+        {/* 5. PROJETOS RECENTES (Base Direita) */}
         <div className="grid-item projects-section">
-          <Typography variant="h6" align="center" gutterBottom>Máquinas Recentes</Typography>
+          <Typography variant="h6" align="center" gutterBottom>Projetos Recentes</Typography>
           <div className="projects-list">
             {maquinasRecentes.length === 0 ? (
-              <Typography variant="body2" color="textSecondary" align="center">Nenhuma interação recente</Typography>
+              <Typography variant="body2" color="textSecondary" align="center">Sem interações</Typography>
             ) : (
               maquinasRecentes.map((maq) => (
                 <div key={maq.id} className="project-row">
-                  {maq.imagem ? (
-                    <img
-                      src={`${import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api'}/machines/files/${maq.imagem}`}
-                      alt={maq.nome_maquina}
-                      className="project-img-placeholder"
-                      style={{ objectFit: 'cover', borderRadius: '6px' }}
-                    />
-                  ) : (
-                    <div className="project-img-placeholder" />
-                  )}
-                  <div className="project-info">
+                  <div className="project-img-placeholder">
+                    {maq.imagem && (
+                      <img 
+                        src={`${import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api'}/machines/files/${maq.imagem}`} 
+                        alt="" 
+                        style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover' }}
+                      />
+                    )}
+                  </div>
+                  <div style={{ flex: 1 }}>
                     <Typography variant="body2" fontWeight="bold">{maq.nome_maquina}</Typography>
                     <Typography variant="caption" color="textSecondary">N° Série: {maq.num_serie}</Typography>
                   </div>
@@ -180,6 +199,7 @@ const Home = () => {
             )}
           </div>
         </div>
+
       </div>
     </div>
   );

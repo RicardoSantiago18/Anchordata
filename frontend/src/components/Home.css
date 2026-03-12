@@ -1,117 +1,184 @@
+/* 1. CONTAINER PRINCIPAL (MOLDURA GERAL ARREDONDADA) */
 .home-dashboard {
+  margin: 10px;
   padding: 20px;
-  background-color: transparent;
+  background-color: #ffffff; 
+  border-radius: 30px; 
+  border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  /* altura máxima baseada na tela menos a topbar = 130px */
-  height: calc(100vh - 150px); 
-  overflow-y: auto; 
+  height: calc(100vh - 100px); 
+  overflow: hidden; 
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* Linha Superior de Status */
-.status-row {
-  display: flex;
+/* 2. GRID DASHBOARD */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr; 
+  grid-template-rows: auto auto 1fr; 
   gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* 3. CARDS GERAIS */
+.grid-item {
+  background: #e0e0e0; 
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 4. COLUNA ESQUERDA - STATUS */
+.status-row {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  gap: 15px;
 }
 
 .status-card {
   background: #e0e0e0;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 15px;
+  padding: 15px;
   display: flex;
   align-items: center;
-  gap: 15px;
-  min-width: 180px;
-}
-
-.status-number {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #1a1a1a;
-}
-
-.status-label {
-  font-size: 0.9rem;
-  color: #333;
-  line-height: 1.2;
-}
-
-/* Grid Principal */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  grid-template-rows: auto auto; 
-  gap: 20px;
+  gap: 12px;
   flex: 1;
 }
 
-.grid-item {
-  background: #e0e0e0;
-  border-radius: 18px;
-  padding: 15px; 
+.status-number { font-size: 2.2rem; font-weight: bold; color: #000; }
+.status-label { font-size: 0.85rem; line-height: 1.2; color: #333; }
+
+/* 5. CARD DE USUÁRIOS (AJUSTADO PARA A ESQUERDA) */
+.users-section {
+  grid-column: 1;
+  grid-row: 2;
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  padding: 20px !important;
+  min-height: 160px;
 }
 
-/* Seção de Usuários */
-.users-section {
-  grid-column: 1;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.users-section .card-title {
+  font-size: 1.4rem;
   margin-bottom: 20px;
+  font-weight: 500;
+  color: #000;
+  width: 100%;
+  text-align: center;
+  /* Se quiser o título mais a esquerda também, mude para: padding-left: 20px; text-align: left; */
+}
+
+.icon-top-right {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 22px !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.arrow-next {
+  position: absolute;
+  right: 12px;
+  top: 55%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 24px !important;
+  color: #000;
 }
 
 .users-list {
   display: flex;
-  justify-content: space-around;
+  width: 100%;
+  /*justify-content: flex-start; /* Alinha os itens ao início (esquerda) */
   align-items: center;
-  position: relative;
+  gap: 35px; 
+  flex: 1;
+  /* AJUSTE AQUI: Aumente ou diminua esse valor para mover o bloco lateralmente */
+  padding-left: 25px; 
 }
 
 .user-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .user-avatar-box {
   background: white;
-  width: 45px;
-  height: 45px;
-  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.user-name { font-weight: 600; font-size: 0.7rem !important; }
-.user-role { color: #666; font-size: 0.6rem !important; }
+.user-name {
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  color: #000;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.user-role {
+  font-size: 0.75rem !important;
+  color: #666;
+  text-align: center;
+}
+
+/* 6. COLUNA DIREITA - GRÁFICO */
+.chart-section {
+  grid-column: 2;
+  grid-row: 1 / span 2; 
+}
+
+/* 7. LINHA INFERIOR */
+.production-section {
+  grid-column: 1;
+  grid-row: 3;
+}
 
 .projects-section {
-  max-height: 350px; 
+  grid-column: 2;
+  grid-row: 3;
 }
 
-/* Seção Projetos Recentes */
+/* 8. LISTA DE PROJETOS */
 .projects-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  overflow-y: auto; 
-  padding-right: 5px;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  margin-top: 10px;
 }
+
+.projects-list::-webkit-scrollbar { width: 6px; }
+.projects-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
 
 .project-row {
   background: white;
-  border-radius: 12px;
-  padding: 10px 15px;
+  border-radius: 15px;
+  padding: 12px 18px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -121,18 +188,11 @@
   width: 50px;
   height: 50px;
   background: #ccc;
-  border-radius: 8px;
+  border-radius: 10px;
 }
-
-.project-info { flex: 1; }
 
 .status-chip {
-  background: #ccc !important;
+  background: #e0e0e0 !important;
   color: #666 !important;
-  font-weight: bold !important;
   border-radius: 99px !important;
 }
-
-/* Ícones de Navegação */
-.icon-top-right { position: absolute; top: 15px; right: 15px; color: #666; cursor: pointer; }
-.arrow-next { color: #666; cursor: pointer; }
