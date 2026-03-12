@@ -1,13 +1,13 @@
-/* 1. CONTAINER PRINCIPAL (MOLDURA GERAL ARREDONDADA) */
+/* 1. container principal */
 .home-dashboard {
-  margin: 10px;
+  /*margin: 10px;*/
   padding: 20px;
   background-color: #ffffff; 
   border-radius: 30px; 
   border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 100px); 
+  height: 1010px;
   overflow: hidden; 
   box-sizing: border-box;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -55,7 +55,7 @@
 .status-number { font-size: 2.2rem; font-weight: bold; color: #000; }
 .status-label { font-size: 0.85rem; line-height: 1.2; color: #333; }
 
-/* 5. CARD DE USUÁRIOS (AJUSTADO PARA A ESQUERDA) */
+/* 5. CARD DE USUÁRIOS  */
 .users-section {
   grid-column: 1;
   grid-row: 2;
@@ -75,7 +75,7 @@
   color: #000;
   width: 100%;
   text-align: center;
-  /* Se quiser o título mais a esquerda também, mude para: padding-left: 20px; text-align: left; */
+  /* padding-left: 20px; text-align: left; */
 }
 
 .icon-top-right {
@@ -103,11 +103,10 @@
 .users-list {
   display: flex;
   width: 100%;
-  /*justify-content: flex-start; /* Alinha os itens ao início (esquerda) */
+  /*justify-content: flex-start; /* */
   align-items: center;
   gap: 35px; 
   flex: 1;
-  /* AJUSTE AQUI: Aumente ou diminua esse valor para mover o bloco lateralmente */
   padding-left: 25px; 
 }
 
