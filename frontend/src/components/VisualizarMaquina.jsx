@@ -165,9 +165,6 @@ const VisualizarMaquina = () => {
           <IconButton onClick={() => navigate(-1)} className="action-btn">
             <ArrowBack fontSize="small" />
           </IconButton>
-          <IconButton className="action-btn">
-            <ArrowForward fontSize="small" />
-          </IconButton>
         </div>
         <Typography variant="h5" className="machine-title">{machine.nome_maquina}</Typography>
         <div className="header-right-actions">
