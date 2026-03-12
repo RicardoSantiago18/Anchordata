@@ -1,12 +1,30 @@
 /* Painel principal que entra no Outlet */
 .chat-panel-container {
   background: white;
-  border-radius: 24px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 20px;
+  height: calc(100% - 2px);
+  margin: 1px;
+  border: 1px solid #c9c9c9;
   overflow: hidden;
+  
+  /* A MESMA FONTE DA HOME */
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  box-sizing: border-box;
+}
+
+/* IMPORTANTE: Garante que os componentes do Material UI (Typography) 
+   dentro do chat herdem essa fonte e não usem a padrão do navegador */
+.chat-panel-container .MuiTypography-root {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* Ajuste fino para os inputs e botões também seguirem a fonte */
+.chat-panel-container input, 
+.chat-panel-container button {
+  font-family: inherit;
 }
 
 /* Header interno do chat */
@@ -48,10 +66,15 @@
 /* Área de rolagem do chat */
 .chat-main-area {
   flex: 1;
-  overflow-y: auto;
-  padding: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  
+  /* Mude para flex-start para que a margin-top do texto funcione */
+  justify-content: flex-start; 
+  
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .chat-inner {
@@ -101,7 +124,7 @@
 
 /* Input de Texto */
 .chat-input-wrapper {
-  margin-top: auto;
+  margin-top: 80px;
   padding: 20px 0;
   background: white;
 }
@@ -116,8 +139,10 @@
   border-radius: 16px;
   display: flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 1px 15px;
   gap: 8px;
+
+
 }
 
 .input-box input {
@@ -129,28 +154,57 @@
 }
 
 .btn-send {
-  background: #000;
+  /* Se quiser remover o círculo preto igual à imagem: */
+ 
+ 
+  background: #000; 
   color: #fff;
-  width: 35px;
-  height: 35px;
+
+  width: 30px;            /* Tamanho da área do botão */
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
+  padding: 0;
+  transition: 0.2s;
 }
 
-.btn-send:disabled {
-  background: #ccc;
+/* Para aumentar ou diminuir APENAS o tamanho da seta */
+.btn-send svg {
+  font-size: 1.0rem !important; /* Ajuste este valor para a seta crescer ou diminuir */
 }
+
+/* Cor quando o botão estiver desativado (campo vazio) */
+/*.btn-send:disabled {
+  background: transparent;
+  color: #eee; 
+}*/
 
 /* Sugestões/FAQ */
+
+
+.faq-header {
+  display: flex;
+  align-items: center; /* centraliza o ícone verticalmente com o texto */
+  gap: 8px;            /* espaçamento entre o ícone e a palavra */
+  color: #171616;         
+  font-size: 0.9rem;   
+  margin-bottom: 12px; /* espaço para os cards de baixo */
+}
+
+.faq-header svg {
+  color: #171616;      
+  font-size: 1.1rem !important; 
+}
+
 .faq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .faq-item {
@@ -239,4 +293,76 @@
 .btn-generate-report:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+/* Remove o fundo e o sombreado do botão + */
+.btn-add {
+  background: transparent; /* Remove a cor de fundo/sombreado */
+  border: none;            /* Garante que não haja bordas */
+  box-shadow: none;        /* Remove qualquer sombra residual */
+  color: #c0c0c0;         /* Cor do ícone (ajuste como preferir) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 8px;       /* Espaço entre o + e o texto */
+  outline: none;           /* Remove o contorno ao clicar */
+}
+
+/* Opcional: mudar a cor apenas quando passar o mouse */
+.btn-add:hover {
+  color: #888;             /* Escurece levemente o ícone no hover */
+  background: transparent; /* Garante que o fundo continue transparente */
+}
+
+.welcome-section {
+  display: flex;
+  flex-direction: column; /* Empilha os itens (ícone, depois texto) */
+  align-items: center;    /* Centraliza os itens da pilha */
+  text-align: center;     /* Garante que o texto dentro das tags fique centralizado */
+  margin-bottom: 5px;    /* Espaço antes de chegar no input */
+  width: 100%;
+  /* --- CONTROLE DE ALTURA AQUI --- */
+  margin-top: 40px;  /* Aumente (ex: 100px) para DESCER o texto */
+                     /* Diminua (ex: 10px) para SUBIR o texto */
+  
+}
+
+/* Centralizando especificamente o título */
+.main-question {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center; /* Força a centralização do texto */
+}
+
+/* Centralizando o ícone de Person que fica em cima */
+.welcome-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: #c0c0c0;
+}
+
+/* Header interno do chat */
+.chat-internal-header {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  padding: 15px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0; 
+  position: relative;     
+}
+
+.chat-machine-badge {
+  background: transparent; 
+  padding: 0;
+  font-weight: 600;
+  color: #171616;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px; 
 }

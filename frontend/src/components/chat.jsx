@@ -64,15 +64,7 @@ const Chat = () => {
     return () => { mounted = false; };
   }, []);
 
-  useEffect(() => {
-    if (!maquinaSelecionada?.nome) return;
-    const texto = `Você está conversando sobre: ${maquinaSelecionada.nome}`;
-    setMessages((prev) => {
-      const jaTem = prev.some((m) => m.sender === "system" && m.text === texto);
-      if (jaTem) return prev;
-      return [...prev, { sender: "system", text: texto }];
-    });
-  }, [maquinaSelecionada]);
+ 
 
   const startNewChat = async () => {
     try {
@@ -170,9 +162,7 @@ const Chat = () => {
                 <PersonOutlineIcon fontSize="large" />
               </div>
               <p className="welcome-text">
-                {maquinaSelecionada?.nome
-                  ? `Olá! Vamos falar sobre "${maquinaSelecionada.nome}"?`
-                  : "Olá! Como posso ajudar hoje?"}
+            
               </p>
               <h1 className="main-question">Como podemos te ajudar?</h1>
             </div>
@@ -233,7 +223,7 @@ const Chat = () => {
             <div className="faq-section">
               <div className="faq-header">
                 <InfoOutlinedIcon fontSize="small" />
-                <span>Sugestões</span>
+                <span>Dúvidas Frequentes</span>
               </div>
               <div className="faq-grid">
                 <button className="faq-item">Como fazer a manutenção?</button>

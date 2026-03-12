@@ -50,6 +50,10 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 0 8px;
+
+  /* Ajuste Fino */
+  margin-top: 55px;    /* Isso empurra os itens para baixo */
+  margin-bottom: 20px; /* Isso garante que eles não encostem no rodapé */
 }
 
 .nav-item {
@@ -101,7 +105,7 @@
 .sidebar-toggle {
   position: absolute;
   right: -12px;
-  top: 110px;
+  top: 95px;
   background: #e0e0e0;
   width: 24px;
   height: 24px;
