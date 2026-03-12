@@ -34,7 +34,11 @@ def finalize_maintenance(current_user=None):
         print(result.get("pdf_path"))
         print("\n=======================\n")
 
-        return jsonify(result), 200
+        return send_file(
+            result["pdf_path"],
+            mimetype="application/pdf",
+            as_attachment=True,
+        )
 
     except KeyError as e:
         return jsonify({"error": f"Campo obrigatório ausente: {str(e)}"}), 400
@@ -51,7 +55,7 @@ def download_pdf(filename):
     Faz download do PDF gerado
     """
     try:
-        reports_dir = "data/reports"
+        reports_dir = os.path.abspath("data/reports")
         file_path = os.path.join(reports_dir, filename)
         
         # Validar segurança: garantir que só serve ficheiros de data/reports

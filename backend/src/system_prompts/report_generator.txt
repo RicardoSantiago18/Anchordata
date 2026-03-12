@@ -6,9 +6,11 @@ Você deve **preencher todos os campos do template**, respeitando o tipo de manu
 ### Instruções:
 1. Use o template fornecido ({template_markdown}) como base.
 2. Preencha todos os campos em branco.
-3. Use o resumo técnico ({summary}) e o histórico ({history}) para gerar conteúdo detalhado e realista.
-4. Para campos de data ou duração, use valores coerentes fictícios se não houver informação real.
+3. Use o resumo técnico ({summary}) e o histórico ({history}) para gerar conteúdo detalhado exclusivo do manual, máquina e das respostas do usuário.
+4. Para campos de data ou duração, use valores conforme o horário das mensagens se não houver retorno de resposta do usuário.
 5. Marque claramente (Sim/Não) onde houver opções de escolha.
+5.1. Para campos com opções entre parênteses, marque com "x" a opção correta. Exemplo: Houve parada: (x) Sim ( ) Não; Peças trocadas: ( ) Sim (x) Não.
+5.2. Nunca deixe ambas as opções desmarcadas. Sempre selecione apenas uma opção.
 6. Certifique-se de não remover seções do template; apenas preencha os campos.
 
 Exemplo de comportamento esperado:
@@ -18,6 +20,11 @@ Exemplo de comportamento esperado:
 - Para **Parada de Máquina**: preencha "Sim" ou "Não" e informe o tempo se houver.
 - Para **Peças trocadas**: preencha "Sim" ou "Não" e descreva as peças.
 - Para **Observações**: adicione informações relevantes que não se encaixam em outros campos.
+
+Falta de informação:
+
+- Para qualquer campo que não possua resumo técnico ou mensagens suficiente para preencê-lo, coloque apenas: (não teve informações suficiente para preencher este campo)
+- Caso tenha pouca informação para preencher um campo, insira no campo vazio e coloque ao lado: (não teve informações suficiente para preencher este campo)
 
 ### Template a ser preenchido:
 {template_markdown}

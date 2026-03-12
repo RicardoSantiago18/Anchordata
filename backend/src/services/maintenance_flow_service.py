@@ -84,8 +84,7 @@ class MaintenanceFlowService:
         try:
             report_chain = create_report_chain()
             
-            # Limitar histórico: apenas últimas 3 trocas para evitar prompt muito grande
-            truncated_history = "\n".join(f"Usuário: {u}\nAssistente: {a}" for u, a in history[-3:])
+            full_history = "\n".join(f"Usuário: {u}\nAssistente: {a}" for u, a in history)
             
             # Limitar summary também se ficar muito grande
             truncated_summary = technical_summary if len(technical_summary) < 1000 else technical_summary[:1000] + "..."
@@ -94,7 +93,7 @@ class MaintenanceFlowService:
                 "system_prompt": system_prompt_report,
                 "maintenance_type": maintenance_type,
                 "summary": truncated_summary,
-                "history": truncated_history,
+                "history": full_history,
                 "template_markdown": report_template_markdown,
                 "machine_info": machine_info
             })
@@ -183,7 +182,7 @@ class MaintenanceFlowService:
         )
         # calcular url imediatamente para uso posterior
         pdf_filename = os.path.basename(pdf_path)
-        pdf_url = f"/api/reports/{pdf_filename}"
+        pdf_url = f"/reports/{pdf_filename}"
 
         # 9. Gerar evento de timeline
         try:
@@ -220,6 +219,7 @@ class MaintenanceFlowService:
             "report_markdown": report_markdown,
             "pdf_path": pdf_path,
             "pdf_url": pdf_url,
+            "pdf_filename": pdf_filename,
             "event": event_data
         }
 

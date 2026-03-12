@@ -39,6 +39,7 @@ REGRAS PARA PERGUNTAS:
 - Não repetir ou reformular perguntas.
 - Se dados forem insuficientes, interrompa a conclusão e apresente apenas as perguntas necessárias.
 - Sempre pergunte no final se o usuário que finalizar e gerar um relatório apenas dizendo "Sim" ou "manutenção finalizada".
+- Se o usuário quiser continuar para manutenção com falta de dados críticos para o relatório, mostre antes quais informações faltam e pergunte ao usuário o que colocar.
 
 CONTROLE DE TAMANHO:
 
@@ -53,6 +54,7 @@ CONTROLE DE QUALIDADE (verificação interna antes de finalizar):
 - Remover tópicos redundantes.
 - Garantir coerência técnica.
 - Garantir que não há seções duplicadas.
+- Garantir informações o suficiente para preencher o relatório
 
 HISTÓRICO:
 {history}
