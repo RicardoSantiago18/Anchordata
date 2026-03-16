@@ -21,7 +21,11 @@ class AIService:
         """
 
         # Escolha dinâmica do prompt
-        if mode == "maintenance":
+        if mode == "corretiva":
+            prompt_file = "maintenance_assistant_corretiva.txt"
+        elif mode == "preventiva":
+            prompt_file = "maintenance_assistant_preventiva.txt"
+        elif mode == "maintenance":
             prompt_file = "maintenance_assistant.txt"
         elif mode == "report":
             prompt_file = "report_generator.txt"

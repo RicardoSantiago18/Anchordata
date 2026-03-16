@@ -220,14 +220,27 @@ const VisualizarMaquina = () => {
             )}
           </div>
 
-          <Button
-            variant="contained"
-            className="chatbot-btn"
-            startIcon={<AutoAwesome />}
-            onClick={() => navigate(`/chat/${id}`)}
-          >
-            Chat Bot
-          </Button>
+          {/* Botões de Chat Bot Refatorados */}
+          <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+            <Button
+              variant="contained"
+              className="chatbot-btn corretiva-btn"
+              startIcon={<AutoAwesome />}
+              onClick={() => navigate(`/chat/${id}`, { state: { maquina: machine, maintenanceType: "corretiva" } })}
+              sx={{ flex: 1, backgroundColor: "#E63946", "&:hover": { backgroundColor: "#D62828" } }}
+            >
+              Corretiva
+            </Button>
+            <Button
+              variant="contained"
+              className="chatbot-btn preventiva-btn"
+              startIcon={<AutoAwesome />}
+              onClick={() => navigate(`/chat/${id}`, { state: { maquina: machine, maintenanceType: "preventiva" } })}
+              sx={{ flex: 1, backgroundColor: "#2A9D8F", "&:hover": { backgroundColor: "#21867A" } }}
+            >
+              Preventiva
+            </Button>
+          </div>
         </div>
 
         {/* coluna da direita: métricas + timeline */}

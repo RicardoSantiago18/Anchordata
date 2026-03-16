@@ -60,7 +60,7 @@ class MessageService:
                 ai_response = ai_service.send_message(
                     question=content,
                     history=history,
-                    mode=chat.mode,
+                    mode=maintenance_type or chat.mode,  # Prioriza o mode que vem da requisição
                     machine_id=machine_id
                 )
             except Exception:

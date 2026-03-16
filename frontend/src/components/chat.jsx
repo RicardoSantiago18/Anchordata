@@ -89,7 +89,7 @@ const Chat = () => {
     setInput("");
     setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
     try {
-      const data = await sendChatMessage(chatId, userMessage, false, maquinaSelecionada?.id);
+      const data = await sendChatMessage(chatId, userMessage, false, maquinaSelecionada?.id, maintenanceTypeFromState);
       setMessages((prev) => [...prev, { sender: "bot", text: data.assistant_message }]);
 
       // Capturar modo da resposta (para transição para "report")

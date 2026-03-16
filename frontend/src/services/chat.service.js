@@ -39,9 +39,12 @@ export async function sendChatMessage(chatId, message, finalize = false, machine
     body.machine_id = machineId;
   }
   
+  if (maintenanceType) {
+    body.maintenance_type = maintenanceType;
+  }
+  
   if (finalize) {
     body.finalize = true;
-    body.maintenance_type = maintenanceType;
   }
 
   const response = await fetch(`${API_URL}/chats/${chatId}/messages`, {
