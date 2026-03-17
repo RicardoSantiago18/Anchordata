@@ -68,7 +68,26 @@ const Home = () => {
           console.error("Erro ao buscar máquinas", err);
         }
 
-        setStatusGeral({ critico: 11, atencao: 7, saudavel: 2 });
+        // Busca de status geral das máquinas (Backend)
+        try {
+          const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
+          const token = localStorage.getItem('token');
+          const resStatus = await fetch(`${API_URL}/machines/status-summary`, {
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            },
+          });
+          if (resStatus.ok) {
+            const statusData = await resStatus.json();
+            setStatusGeral(statusData);
+          } else {
+            setStatusGeral({ critico: 0, atencao: 0, saudavel: 0 });
+          }
+        } catch (err) {
+          console.error("Erro ao buscar status das máquinas", err);
+          setStatusGeral({ critico: 0, atencao: 0, saudavel: 0 });
+        }
         setLoading(false);
       } catch (error) {
         setLoading(false);
