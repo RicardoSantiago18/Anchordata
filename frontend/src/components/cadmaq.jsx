@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 
 // MUI Icons
-import AddIcon from "@mui/icons-material/Add";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
@@ -22,12 +21,10 @@ import "./cadmaq.css";
 
 export default function CadMaq() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
   const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch machines from the backend
   useEffect(() => {
     const fetchMachines = async () => {
       try {
@@ -47,32 +44,20 @@ export default function CadMaq() {
     fetchMachines();
   }, []);
 
-  // ✅ Função de redirecionamento para a página de detalhes
   const enterMachine = (id) => {
     navigate(`/visualizarmaquina/${id}`);
   };
 
   return (
     <Box className="cadmaq-panel">
-      {/* Cabeçalho interno da página */}
       <Box className="cadmaq-header">
         <Typography variant="h5" className="cadmaq-title">
           Máquinas
         </Typography>
-
-        {/*<Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          className="add-machine-btn"
-          onClick={() => console.log("Adicionar nova máquina")}
-        >
-          Adicionar Máquina
-        </Button>*/}
       </Box>
 
       <Divider sx={{ mb: 3 }} />
 
-      {/* Grid de Máquinas dentro do container cinza */}
       <Box className="cadmaq-list-container">
         {loading ? (
           <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
@@ -87,49 +72,50 @@ export default function CadMaq() {
             <Typography color="textSecondary">Nenhuma máquina cadastrada</Typography>
           </Box>
         ) : (
-          <Grid container spacing={3}>
+          <Grid container spacing={22.8}>
             {machines.map((m) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={m.id}>
+              <Grid item xs={2} sm={2} md={2} lg={2} key={m.id} className="machine-grid-item">
                 <Card elevation={0} className="machine-card">
-
-                  {/* Imagem da Máquina ou Placeholder */}
                   <Box className="machine-image-placeholder">
                     {m.imagem ? (
-                      <img
-                        src={`http://localhost:5000/api/machines/files/${m.imagem}`}
-                        alt={m.nome_maquina}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          borderRadius: '14px'
-                        }}
-                        onError={(e) => {
-                          // Se a imagem falhar ao carregar, mostra o ícone placeholder
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                    ) : null}
-                    <ImageOutlinedIcon
-                      sx={{
-                        fontSize: 40,
-                        color: "#999",
-                        display: m.imagem ? 'none' : 'block'
-                      }}
-                    />
+                      <>
+                        <img
+                          src={`http://localhost:5000/api/machines/files/${m.imagem}`}
+                          alt={m.nome_maquina}
+                          className="machine-image"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            const fallback = e.target.parentNode.querySelector(".machine-image-fallback");
+                            if (fallback) {
+                              fallback.style.display = "flex";
+                            }
+                          }}
+                        />
+                        <Box className="machine-image-fallback" sx={{ display: "none" }}>
+                          <ImageOutlinedIcon sx={{ fontSize: 40, color: "#999" }} />
+                        </Box>
+                      </>
+                    ) : (
+                      <Box className="machine-image-fallback">
+                        <ImageOutlinedIcon sx={{ fontSize: 40, color: "#999" }} />
+                      </Box>
+                    )}
                   </Box>
 
                   <CardContent className="machine-card-content">
-                    <Typography className="machine-name">{m.nome_maquina}</Typography>
-                    <Typography className="machine-serie">Nº Série: {m.num_serie}</Typography>
+                    <Typography className="machine-name">
+                      {m.nome_maquina}
+                    </Typography>
+                    <Typography className="machine-serie">
+                      Nº Série: {m.num_serie}
+                    </Typography>
                   </CardContent>
 
                   <CardActions className="machine-card-actions">
                     <Button
                       fullWidth
                       variant="contained"
-                      onClick={() => enterMachine(m.id)} // ✅ Redireciona ao clicar
+                      onClick={() => enterMachine(m.id)}
                       endIcon={<ArrowForwardIosIcon sx={{ fontSize: 12 }} />}
                       className="enter-btn"
                     >

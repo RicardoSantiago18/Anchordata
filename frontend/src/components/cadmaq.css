@@ -41,46 +41,80 @@
   border-radius: 18px;
   padding: 20px;
   flex: 1;
-  overflow-y: auto; /* Permite scroll se houver muitas máquinas */
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
+.machine-grid-item {
+  width: 12.5%;
+}
 /* Estilização dos Cards de Máquina */
 .machine-card {
+  width: 185%;
   border-radius: 18px !important;
   border: 1px solid #d2d2d2;
-  height: 260px;
+  height: 300px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: white;
 }
 
 .machine-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Área fixa da imagem */
 .machine-image-placeholder {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f5f5f5;
+  width: calc(100% - 20px);
+  height: 140px;
   margin: 10px;
   border-radius: 14px;
   border: 1px dashed #ccc;
-  min-height: 140px;
+  background-color: #f5f5f5;
   position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
 }
 
+/* Imagem padronizada */
+.machine-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder do ícone */
+.machine-image-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Conteúdo textual */
 .machine-card-content {
   padding: 0 15px 10px 15px !important;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .machine-name {
   font-weight: 600 !important;
   font-size: 1rem !important;
   color: #333;
+  margin-bottom: 4px !important;
 }
 
 .machine-serie {
@@ -92,6 +126,7 @@
 .machine-card-actions {
   background: #bdbdbd;
   padding: 10px 15px !important;
+  flex-shrink: 0;
 }
 
 .enter-btn {
@@ -102,4 +137,8 @@
   font-weight: bold !important;
   font-size: 0.85rem !important;
   box-shadow: none !important;
+}
+
+.enter-btn:hover {
+  background-color: #d6d6d6 !important;
 }
