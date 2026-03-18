@@ -97,6 +97,12 @@
   border-radius: 12px;
 }
 
+.logout-button .nav-icon, 
+.logout-button span {
+  color: #000000;
+  font-weight: 500;
+}
+
 .sidebar-container.collapsed .logout-button {
   justify-content: center;
 }
