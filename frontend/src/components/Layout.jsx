@@ -82,13 +82,24 @@ const Layout = () => {
           </div>
 
           <div className="topbar-actions">
-            <button 
-              className="btn-add-machine-top" 
-              onClick={() => navigate('/maquinas/adicionar')} 
-            >
-              <AddIcon fontSize="small" />
-              <span>Adicionar Máquina</span>
-            </button>
+            {/* Renderização Condicional do Botão Principal */}
+            {location.pathname === '/usuarios' ? (
+              <button 
+                className="btn-add-machine-top" 
+                onClick={() => window.dispatchEvent(new CustomEvent("open-user-modal"))}
+              >
+                <AddIcon fontSize="small" />
+                <span>Novo Usuário</span>
+              </button>
+            ) : (
+              <button 
+                className="btn-add-machine-top" 
+                onClick={() => navigate('/maquinas/adicionar')} 
+              >
+                <AddIcon fontSize="small" />
+                <span>Adicionar Máquina</span>
+              </button>
+            )}
 
             <IconButton size="small" className="notif-icon">
               <NotificationsNone fontSize="small" />

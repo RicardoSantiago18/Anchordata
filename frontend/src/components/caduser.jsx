@@ -161,6 +161,14 @@ export default function CadUser() {
     setFormErrors({}); setShowPassword(false); setModalOpen(true);
   }
 
+  // mudança na tela de usuários do botão de adicionar máquina para o botão de adicionar usuário
+  useEffect(() => {
+    const handleOpenModal = () => openCreate();
+    
+    window.addEventListener("open-user-modal", handleOpenModal);
+    return () => window.removeEventListener("open-user-modal", handleOpenModal);
+  }, [openCreate]);
+
   return (
     <Box className="caduser-content-container">
       {/* Header e Título */}
@@ -169,9 +177,6 @@ export default function CadUser() {
           <PersonOutlineIcon sx={{ color: '#fff' }} />
           <Typography variant="h5" fontWeight="700" sx={{ color: '#fff' }}>Usuários</Typography>
         </Box>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={openCreate} className="btn-primary-black">
-          Novo Usuário
-        </Button>
       </Box>
 
       <Paper elevation={0} className="caduser-main-paper">
