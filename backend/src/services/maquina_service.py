@@ -67,6 +67,24 @@ class MaquinaService:
 
         return machine
 
+    @staticmethod
+    def get_status_summary():
+        """Returns aggregated count of machines by status category."""
+        results = db.session.query(
+            Machine.status, func.count(Machine.id)
+        ).group_by(Machine.status).all()
+
+        summary = {"critico": 0, "atencao": 0, "saudavel": 0}
+        for status, count in results:
+            normalized = status.strip().lower()
+            if "crítico" in normalized:
+                summary["critico"] = count
+            elif "atenção" in normalized:
+                summary["atencao"] = count
+            else:
+                summary["saudavel"] = count
+        return summary
+
     # CONSULTAS
     @staticmethod
     def list_machines():

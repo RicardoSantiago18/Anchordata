@@ -5,6 +5,31 @@ from src.rag_chain import create_chain
 
 class AIService:
 
+    def _build_maintenance_context(self, data: dict) -> str:
+        """ Formata os metadados da manutenção em bloco de texto para a IA."""
+        if not data:
+            return ""
+        
+        fields = {
+            "Data": data.get("date"),
+            "Responsável": data.get("responsible_name"),
+            "ID": data.get("maintenance_ide"),
+            "Tempo de Parada": data.get("downtime"),
+            "Início da Intervenção": data.get("intervention_start"),
+            "Duração": data.get("duration"),
+        }
+
+        lines = [
+            f"- {label}: {value}"
+            for label, value in fields.items()
+            if value is not None
+        ]
+
+        if not lines:
+            return ""
+        
+        return "DADOS DA MANUTENÇÃO (fornecidos pelo sistema):\n" + "\n".join(lines)
+
     def send_message(
         self,
         *,
@@ -12,6 +37,7 @@ class AIService:
         history: list[tuple[str, str]],
         mode: str,
         machine_id: int = None,
+        maintenance_data: dict = None,
     ) -> dict:
         """
         question: pergunta do usuário
@@ -37,6 +63,15 @@ class AIService:
             print("Modo:", mode)
             print("Pergunta:", question)
             print("Machine ID:", machine_id)
+            print("Maintenance Data:", maintenance_data)
+
+             # Construir contexto de metdadados e prefixa na question
+            maintenance_context = self._build_maintenance_context(maintenance_data)
+            full_question = (
+                f"{maintenance_context}\n\n{question}"
+                if maintenance_context
+                else question
+            )
 
             # Cria chain com vectorstore específico da máquina
             rag_chain, _, _ = create_chain(prompt_file, machine_id=machine_id)

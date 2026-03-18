@@ -22,6 +22,10 @@ def create_report_chain():
         ────────────────────────────────────
         INFORMAÇÕES DA MÁQUINA:
         {machine_info}
+                                                 
+        ────────────────────────────────────
+        DADOS DA MANUTENÇÃO::
+        {maintenance_metadata}
 
         ────────────────────────────────────
         RESUMO TÉCNICO DA MANUTENÇÃO:

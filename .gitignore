@@ -58,3 +58,7 @@ backend/.env
 *.db
 *.sqlite3
 
+backend/data/vectorstore/*/
+backend/**/__pycache__/
+**/__pycache__/
+*.pyc

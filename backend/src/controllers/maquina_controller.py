@@ -13,6 +13,11 @@ def get_recent_machines():
     return jsonify(machines)
 
 
+def get_status_summary():
+    summary = MaquinaService.get_status_summary()
+    return jsonify(summary)
+
+
 def get_machine(machine_id: int):
     machine = MaquinaService.get_by_id(machine_id)
 

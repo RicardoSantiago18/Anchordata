@@ -3,6 +3,7 @@ from src.services.ai.ai_service import ai_service
 from src.models.chat_model import Chat
 from src.models.message_model import Message
 from src.services.maintenance_flow_service import MaintenanceFlowService
+from src.services.maquina_service import MaquinaService
 from database.db import db
 
 
@@ -76,6 +77,21 @@ class MessageService:
             db.session.add(assistant_message)
             chat.updated_at = db.func.now()
             db.session.commit()
+
+            # Classify and update machine status based on AI conversation
+            if machine_id:
+                try:
+                    from src.chains.status_chain import classify_machine_status
+                    status_result = classify_machine_status(
+                        ai_response=ai_response["user_facing_text"],
+                        user_message=content,
+                        maintenance_type=maintenance_type or chat.mode,
+                    )
+                    if status_result and status_result.get("status"):
+                        MaquinaService.update_status(machine_id, status_result["status"])
+                        print(f"[INFO] Status da máquina {machine_id} atualizado para: {status_result['status']}")
+                except Exception as e:
+                    print(f"[WARN] Falha ao classificar status da máquina: {e}")
 
             return {
                 "mode": "conversation",

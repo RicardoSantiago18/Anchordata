@@ -9,6 +9,7 @@ from src.services.pdf_service import PDFService
 from src.models.chat_model import Chat
 from src.models.message_model import Message
 from src.models.maquina_model import Machine
+from src.models.user_model import User
 from database.db import db
 
 
@@ -41,6 +42,7 @@ class MaintenanceFlowService:
         # fetch machine metadata to provide context
         machine = Machine.query.filter_by(id=machine_id).first()
         machine_info = ""
+
         if machine:
             machine_info = (
                 f"Máquina: {machine.nome_maquina}\n"
@@ -50,6 +52,14 @@ class MaintenanceFlowService:
                 f"Manual: {machine.manual or 'nenhum'}"
             )
 
+        # Buscar usuário responsável
+        user = User.query.filter_by(id=chat.user_id).first()
+        responsible_name = user.name if user else "Não informado"
+
+        # Calcular tempo a partir de mensagens
+        intervation_start = "Não informado"
+        duration = "Não informado"
+
         # 2. Buscar mensagens recentes
         messages = Message.query.filter_by(chat_id=chat.id).order_by(Message.created_at.asc()).all()
         history = [
@@ -57,6 +67,25 @@ class MaintenanceFlowService:
             for i in range(len(messages) - 1)
             if messages[i].role == "user" and messages[i + 1].role == "assistant"
         ]
+
+        if messages:
+            first_msg_time = messages[0].created_at
+            last_msg_time = messages[-1].created_at
+            intervention_start = first_msg_time.strftime("%d/%m/%Y %H:%M:%S")
+            delta = last_msg_time - first_msg_time
+            total_minutes = int(delta.total_seconds() // 60)
+            duration = f"{total_minutes} min"
+
+        maintenance_metadata = (
+            f"DADOS DA MANUTENÇÃO:\n"
+            f"- Data: {chat.created_at.strftime('%d/%m/%Y')}\n"
+            f"- Responsável: {responsible_name}\n"
+            f"- ID da Manutenção: {chat.id}\n"
+            f"- Tipo: {maintenance_type}\n"
+            f"- Início da Intervenção: {intervention_start}\n"
+            f"- Duração: {duration}\n"
+            f"- Tempo de Parada: {duration}\n"
+        )
 
         # 3. Definir prompts e templates
         maintenance_type_lower = maintenance_type.lower()
@@ -95,7 +124,8 @@ class MaintenanceFlowService:
                 "summary": truncated_summary,
                 "history": full_history,
                 "template_markdown": report_template_markdown,
-                "machine_info": machine_info
+                "machine_info": machine_info,
+                "maintenance_metadata": maintenance_metadata,
             })
 
             if response and isinstance(response, str) and response.strip() != "" and "erro" not in response.lower():
@@ -150,8 +180,12 @@ class MaintenanceFlowService:
             last_assistant_msg = history[-1][1] if history else "Informação não disponível"
             
             replacements = {
-                "- **Data:**": f"- **Data:** {datetime.now().strftime('%d/%m/%Y')}",
-                "- **Responsável pela Manutenção:**": f"- **Responsável pela Manutenção:** Registado via Portal",
+                "- **Data:**": f"- **Data:** {chat.created_at.strftime('%d/%m/%Y')}",
+                "- **Responsável pela Manutenção:**": f"- **Responsável pela Manutenção:** {responsible_name}",
+                "- **ID:**": f"- **ID:** {chat.id}",
+                "Inicio da intervenção:": f"- **Início da intervenção:** {intervention_start}",
+                "- **Duração:**": f"- **Duração:** {duration}",
+                "- **Tempo de parada:**": f"- **Tempo de parada:** {duration}",
                 "- **Descrição do problema:**": f"- **Descrição do problema:** {last_user_msg}",
                 "- **Medidas tomadas:**": f"- **Medidas tomadas:** {last_assistant_msg}",
                 "- **Resultado das medidas:**": f"- **Resultado das medidas:** Ação concluída conforme descrito",
