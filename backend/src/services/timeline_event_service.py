@@ -1,9 +1,34 @@
+from datetime import datetime, timedelta, timezone
 from src.models.timeline_event_model import TimelineEvent
 from database.db import db
 import json
 
 
 class TimelineEventService:
+
+    @staticmethod
+    def count_events_last_n_days(machine_id: int, days: int = 60) -> dict:
+        """
+        Conta manutenções (corretiva + preventiva) e falhas
+        dos últimos `days` dias para uma máquina.
+        """
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+
+        events = (
+            TimelineEvent.query
+            .filter(
+                TimelineEvent.machine_id == machine_id,
+                TimelineEvent.created_at >= cutoff,
+            )
+            .all()
+        )
+
+        maintenances = sum(
+            1 for e in events if e.event_type in ("corretiva", "preventiva")
+        )
+        failures = sum(1 for e in events if e.event_type == "falha")
+
+        return {"maintenances": maintenances, "failures": failures}
 
     @staticmethod
     def create_event(

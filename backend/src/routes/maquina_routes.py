@@ -1,7 +1,8 @@
 from flask import Blueprint
 from src.controllers.maquina_controller import (
     get_machine,
-    get_machine_timeline
+    get_machine_timeline,
+    get_machine_metrics
 )
 
 machine_bp = Blueprint("machines", __name__, url_prefix="/api")
@@ -28,6 +29,10 @@ def machine_detail(machine_id):
 @machine_bp.route("/machines/<int:machine_id>/timeline", methods=["GET"])
 def machine_timeline(machine_id):
     return get_machine_timeline(machine_id)
+
+@machine_bp.route("/machines/<int:machine_id>/metrics", methods=["GET"])
+def machine_metrics(machine_id):
+    return get_machine_metrics(machine_id)
 
 from src.services.auth_service import role_required, token_required
 from src.models.user_model import UserRole

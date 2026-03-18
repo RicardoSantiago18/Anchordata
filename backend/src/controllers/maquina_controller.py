@@ -43,6 +43,11 @@ def get_machine_timeline(machine_id: int):
     ])
 
 
+def get_machine_metrics(machine_id: int):
+    counts = TimelineEventService.count_events_last_n_days(machine_id, days=60)
+    return jsonify(counts)
+
+
 def create_machine():
     from flask import request
     from datetime import datetime
