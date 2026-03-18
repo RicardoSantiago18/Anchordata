@@ -48,6 +48,13 @@ def get_machine_metrics(machine_id: int):
     return jsonify(counts)
 
 
+def get_failures_by_month():
+    from flask import request
+    year = request.args.get("year", type=int, default=None)
+    data = TimelineEventService.count_failures_by_month(year)
+    return jsonify(data)
+
+
 def create_machine():
     from flask import request
     from datetime import datetime

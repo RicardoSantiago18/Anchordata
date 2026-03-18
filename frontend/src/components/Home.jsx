@@ -24,16 +24,17 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Simulação de delay para carregamento
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        // Dados estáticos para os gráficos (baseados no seu design)
-        setDadosErros([
-          { name: 'Jan', valor: 5 }, { name: 'Fev', valor: 2 }, { name: 'Mar', valor: 7 },
-          { name: 'Abr', valor: 15 }, { name: 'Mai', valor: 14 }, { name: 'Jun', valor: 12 },
-          { name: 'Jul', valor: 14 }, { name: 'Ago', valor: 14 }, { name: 'Set', valor: 16 },
-          { name: 'Out', valor: 5 }, { name: 'Nov', valor: 11 }, { name: 'Dez', valor: 14 },
-        ]);
+        // Busca de falhas mensais (Backend)
+        try {
+          const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
+          const resErros = await fetch(`${API_URL}/machines/failures-by-month`);
+          if (resErros.ok) {
+            const errosData = await resErros.json();
+            setDadosErros(errosData);
+          }
+        } catch (err) {
+          console.error("Erro ao buscar falhas mensais", err);
+        }
 
         setDadosProducao([
           { name: 'Jan', prod: 1000, para: 200 },

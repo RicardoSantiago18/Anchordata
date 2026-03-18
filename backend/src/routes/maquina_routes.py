@@ -2,7 +2,8 @@ from flask import Blueprint
 from src.controllers.maquina_controller import (
     get_machine,
     get_machine_timeline,
-    get_machine_metrics
+    get_machine_metrics,
+    get_failures_by_month
 )
 
 machine_bp = Blueprint("machines", __name__, url_prefix="/api")
@@ -21,6 +22,10 @@ def recent_machines():
 def status_summary():
     from src.controllers.maquina_controller import get_status_summary
     return get_status_summary()
+
+@machine_bp.route("/machines/failures-by-month", methods=["GET"])
+def failures_by_month():
+    return get_failures_by_month()
 
 @machine_bp.route("/machines/<int:machine_id>", methods=["GET"])
 def machine_detail(machine_id):

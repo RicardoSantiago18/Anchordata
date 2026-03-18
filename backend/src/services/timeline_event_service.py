@@ -89,3 +89,40 @@ class TimelineEventService:
             .order_by(TimelineEvent.created_at.desc())
             .all()
         )
+
+    @staticmethod
+    def count_failures_by_month(year: int | None = None) -> list[dict]:
+        """
+        Conta eventos do tipo 'falha' agrupados por mês para o ano informado.
+        Retorna lista com 12 entradas: [{"name": "Jan", "valor": N}, ...]
+        """
+        if year is None:
+            year = datetime.now(timezone.utc).year
+
+        month_names = [
+            "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+            "Jul", "Ago", "Set", "Out", "Nov", "Dez",
+        ]
+
+        start = datetime(year, 1, 1, tzinfo=timezone.utc)
+        end = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+
+        events = (
+            TimelineEvent.query
+            .filter(
+                TimelineEvent.event_type == "falha",
+                TimelineEvent.created_at >= start,
+                TimelineEvent.created_at < end,
+            )
+            .all()
+        )
+
+        # agrupar por mês
+        counts = [0] * 12
+        for e in events:
+            counts[e.created_at.month - 1] += 1
+
+        return [
+            {"name": month_names[i], "valor": counts[i]}
+            for i in range(12)
+        ]
