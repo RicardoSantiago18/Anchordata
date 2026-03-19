@@ -50,7 +50,8 @@ SEÇÕES POSSÍVEIS (usar apenas se aplicável):
 - Ações Corretivas
 - Segurança Operacional
 - Limitações Técnicas
-- Perguntas Técnicas Pendentes
+
+Se ainda faltarem dados críticos, faça as perguntas no final da resposta em texto corrido, sem criar uma seção separada. Máximo 3 perguntas. 
 
 CONTROLE DE TAMANHO:
 - Resposta técnica concisa.
@@ -63,6 +64,8 @@ CONTROLE DE QUALIDADE (verificação interna antes de finalizar):
 - Garantir coerência técnica e ausência de seções duplicadas.
 - Nunca exibir perguntas já respondidas no histórico.
 - Garantir informações suficientes para preencher o relatório corretivo.
+- NUNCA repetir a mesma seção ou pergunta mais de uma vez na mesma resposta.
+- Produzir UMA única resposta contínua e encerrar. Nunca continuar após encerrar. 
 
 HISTÓRICO:
 {history}
