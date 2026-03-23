@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "./login.css";
-import logo from "../assets/logo2.png";
+import logo from "../assets/ANCHOR 1@3x 1.png";
+import iconLogin from "../assets/Ativo 2@3x 1.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ export default function Login() {
 
     try {
       await login(email, password);
-      // Após login bem-sucedido, redireciona para /maquinas
       navigate("/maquinas");
     } catch (err) {
       setError(err.message || "Erro ao fazer login. Verifique suas credenciais.");
@@ -32,7 +32,6 @@ export default function Login() {
   return (
     <div className="login-wrapper">
       <div className="login-container">
-
         {/* LADO ESQUERDO (LOGO) */}
         <div className="login-left">
           <div className="logo-placeholder">
@@ -47,23 +46,23 @@ export default function Login() {
         {/* LADO DIREITO (CARD LOGIN) */}
         <div className="login-right">
           <div className="login-card">
-
-            {/* Ícone placeholder */}
+            {/* Ícone */}
             <div className="icon-placeholder">
-              <span>ICONE</span>
+              <img
+                src={iconLogin}
+                alt="Ícone de login"
+                className="icon-image"
+              />
             </div>
 
             {/* FORMULÁRIO */}
             <form className="login-form" onSubmit={handleSubmit}>
-
-              {/* Mensagem de erro */}
               {error && (
                 <div className="error-message">
                   {error}
                 </div>
               )}
 
-              {/* Email */}
               <div className="form-group">
                 <label>Email</label>
                 <input
@@ -76,7 +75,6 @@ export default function Login() {
                 />
               </div>
 
-              {/* Senha */}
               <div className="form-group">
                 <label>Senha</label>
                 <input
@@ -89,15 +87,12 @@ export default function Login() {
                 />
               </div>
 
-              {/* Botão */}
               <button type="submit" className="login-button" disabled={loading}>
                 {loading ? "Entrando..." : "Entrar"}
               </button>
-
             </form>
           </div>
         </div>
-
       </div>
     </div>
   );
