@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Typography, Avatar, IconButton, Divider, Tooltip } from '@mui/material';
-import {
-  SettingsOutlined,
-  PeopleOutlined,
-  ExitToApp,
-  NotificationsNone,
-  HomeOutlined,
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
-  Add as AddIcon
-} from '@mui/icons-material';
+import { Box, Divider, Typography, Avatar, Tooltip, IconButton } from '@mui/material'; 
+import { KeyboardArrowLeft, KeyboardArrowRight, Add as AddIcon, PeopleOutlined } from '@mui/icons-material'; 
 import './Layout.css';
+
+// CORREÇÃO DOS CAMINHOS E IMPORTS
+import iconHome from '../assets/icons/icon-home.png';
+import iconMaquinas from '../assets/icons/icon-maquinas.png'; 
+import iconUsuarios from '../assets/icons/icon-usuarios.png';
+import iconSair from '../assets/icons/icon-sair.png'; 
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -31,25 +28,23 @@ const Layout = () => {
         <Divider className="sidebar-divider" />
 
         <nav className="sidebar-nav-middle">
-          {/* Item INÍCIO atualizado para /home */}
           <NavItem
             isCollapsed={isCollapsed}
-            icon={<HomeOutlined />}
+            icon={<img src={iconHome} className="nav-icon-png" alt="Início" />}
             label="Início"
             active={isActive('/home')}
             onClick={() => navigate('/home')}
           />
           <NavItem
             isCollapsed={isCollapsed}
-            icon={<SettingsOutlined />}
+            icon={<img src={iconMaquinas} className="nav-icon-png" alt="Máquinas" />}
             label="Máquinas"
-            /* Verifica se a rota atual contém 'maquina' para manter o item ativo em sub-rotas */
             active={location.pathname.includes('maquina') ? 'active' : ''}
             onClick={() => navigate('/maquinas')}
           />
           <NavItem
             isCollapsed={isCollapsed}
-            icon={<PeopleOutlined />}
+            icon={<img src={iconUsuarios} className="nav-icon-png" alt="Usuários" />}
             label="Usuários"
             active={isActive('/usuarios')}
             onClick={() => navigate('/usuarios')}
@@ -59,7 +54,7 @@ const Layout = () => {
         <div className="sidebar-footer">
           <Divider className="footer-divider" />
           <div className="logout-button" onClick={() => navigate('/login')}>
-            <ExitToApp className="nav-icon" />
+            <img src={iconSair} className="nav-icon-png" alt="Sair" />
             {!isCollapsed && <span>Sair</span>}
           </div>
         </div>
@@ -69,7 +64,7 @@ const Layout = () => {
         </div>
       </aside>
 
-      {/* área principal */}
+      {/* ÁREA PRINCIPAL */}
       <main className="main-layout">
         <header className="topbar-container">
           <div className="user-profile">
@@ -82,32 +77,26 @@ const Layout = () => {
           </div>
 
           <div className="topbar-actions">
-            {/* Renderização Condicional do Botão Principal */}
             {location.pathname === '/usuarios' ? (
-              <button 
-                className="btn-add-machine-top" 
-                onClick={() => window.dispatchEvent(new CustomEvent("open-user-modal"))}
+              <button
+                className="btn-add-machine-top"
+                onClick={() => window.dispatchEvent(new Event('abrir-modal-usuario'))} 
               >
                 <AddIcon fontSize="small" />
                 <span>Novo Usuário</span>
               </button>
             ) : (
-              <button 
-                className="btn-add-machine-top" 
-                onClick={() => navigate('/maquinas/adicionar')} 
+              <button
+                className="btn-add-machine-top"
+                onClick={() => navigate('/maquinas/adicionar')}
               >
                 <AddIcon fontSize="small" />
                 <span>Adicionar Máquina</span>
               </button>
             )}
-
-            <IconButton size="small" className="notif-icon">
-              <NotificationsNone fontSize="small" />
-            </IconButton>
           </div>
         </header>
 
-        {/* espaço para conteúdo das páginas (Home, CadMaq, etc) */}
         <div className="content-outlet">
           <Outlet />
         </div>
