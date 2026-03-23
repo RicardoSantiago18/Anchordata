@@ -24,6 +24,7 @@ const VisualizarMaquina = () => {
   const navigate = useNavigate();
   const [machine, setMachine] = useState(null);
   const [timeline, setTimeline] = useState([]);
+  const [metrics, setMetrics] = useState({ maintenances: 0, failures: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -42,9 +43,10 @@ const VisualizarMaquina = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [machineRes, timelineRes] = await Promise.all([
+        const [machineRes, timelineRes, metricsRes] = await Promise.all([
           fetch(`${API_URL}/machines/${id}`),
-          fetch(`${API_URL}/machines/${id}/timeline`)
+          fetch(`${API_URL}/machines/${id}/timeline`),
+          fetch(`${API_URL}/machines/${id}/metrics`)
         ]);
 
         if (!machineRes.ok) throw new Error('Falha ao carregar dados da máquina');
@@ -55,6 +57,11 @@ const VisualizarMaquina = () => {
         if (timelineRes.ok) {
           const timelineData = await timelineRes.json();
           setTimeline(timelineData);
+        }
+
+        if (metricsRes.ok) {
+          const metricsData = await metricsRes.json();
+          setMetrics(metricsData);
         }
       } catch (err) {
         console.error(err);
@@ -248,8 +255,8 @@ const VisualizarMaquina = () => {
           <div className="metrics-row">
             {/* Metrics are still mocked/calculated on backend but not available in simple get yet, using placeholders */}
             <MetricCard icon={<AccessTime fontSize="inherit" />} label="MTBF Atual" value="--" footer="Tempo médio entre as falhas" />
-            <MetricCard icon={<SettingsOutlined fontSize="inherit" />} label="Manutenções" value="--" footer="Últimos 60 dias" />
-            <MetricCard icon={<ErrorOutline fontSize="inherit" />} label="Falhas" value="--" footer="Últimos 60 dias" />
+            <MetricCard icon={<SettingsOutlined fontSize="inherit" />} label="Manutenções" value={metrics.maintenances} footer="Últimos 60 dias" />
+            <MetricCard icon={<ErrorOutline fontSize="inherit" />} label="Falhas" value={metrics.failures} footer="Últimos 60 dias" />
           </div>
 
           <Typography variant="subtitle2" className="timeline-label">Linha do Tempo:</Typography>

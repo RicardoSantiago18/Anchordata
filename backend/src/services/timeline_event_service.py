@@ -1,9 +1,34 @@
+from datetime import datetime, timedelta, timezone
 from src.models.timeline_event_model import TimelineEvent
 from database.db import db
 import json
 
 
 class TimelineEventService:
+
+    @staticmethod
+    def count_events_last_n_days(machine_id: int, days: int = 60) -> dict:
+        """
+        Conta manutenções (corretiva + preventiva) e falhas
+        dos últimos `days` dias para uma máquina.
+        """
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+
+        events = (
+            TimelineEvent.query
+            .filter(
+                TimelineEvent.machine_id == machine_id,
+                TimelineEvent.created_at >= cutoff,
+            )
+            .all()
+        )
+
+        maintenances = sum(
+            1 for e in events if e.event_type in ("corretiva", "preventiva")
+        )
+        failures = sum(1 for e in events if e.event_type == "falha")
+
+        return {"maintenances": maintenances, "failures": failures}
 
     @staticmethod
     def create_event(
@@ -64,3 +89,40 @@ class TimelineEventService:
             .order_by(TimelineEvent.created_at.desc())
             .all()
         )
+
+    @staticmethod
+    def count_failures_by_month(year: int | None = None) -> list[dict]:
+        """
+        Conta eventos do tipo 'falha' agrupados por mês para o ano informado.
+        Retorna lista com 12 entradas: [{"name": "Jan", "valor": N}, ...]
+        """
+        if year is None:
+            year = datetime.now(timezone.utc).year
+
+        month_names = [
+            "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+            "Jul", "Ago", "Set", "Out", "Nov", "Dez",
+        ]
+
+        start = datetime(year, 1, 1, tzinfo=timezone.utc)
+        end = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+
+        events = (
+            TimelineEvent.query
+            .filter(
+                TimelineEvent.event_type == "falha",
+                TimelineEvent.created_at >= start,
+                TimelineEvent.created_at < end,
+            )
+            .all()
+        )
+
+        # agrupar por mês
+        counts = [0] * 12
+        for e in events:
+            counts[e.created_at.month - 1] += 1
+
+        return [
+            {"name": month_names[i], "valor": counts[i]}
+            for i in range(12)
+        ]

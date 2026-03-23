@@ -37,6 +37,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [hasSentMessage, setHasSentMessage] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfFilename, setPdfFilename] = useState(null);
   const [chatMode, setChatMode] = useState(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const messagesEndRef = useRef(null);
@@ -100,6 +101,7 @@ const Chat = () => {
       // Se houver pdf_url, armazenar para mostrar botão de download
       if (data.pdf_url) {
         setPdfUrl(data.pdf_url);
+        setPdfFilename(data.pdf_filename);
       }
     } catch (error) {
       setMessages((prev) => [...prev, { sender: "bot", text: "Erro ao responder. Tente novamente." }]);
@@ -122,6 +124,7 @@ const Chat = () => {
       // Se houver pdf_url, armazenar para mostrar botão de download
       if (data.pdf_url) {
         setPdfUrl(data.pdf_url);
+        setPdfFilename(data.pdf_filename);
       }
 
       // Limpar modo após gerar relatório
@@ -130,6 +133,29 @@ const Chat = () => {
       setMessages((prev) => [...prev, { sender: "bot", text: "Erro ao gerar relatório. Tente novamente." }]);
     } finally {
       setIsGeneratingReport(false);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5000${pdfUrl}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Falha ao baixar o PDF");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = pdfFilename || "relatorio.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erro ao baixar PDF:", error);
     }
   };
 
@@ -194,9 +220,9 @@ const Chat = () => {
           {/* Botão de Download do PDF */}
           {pdfUrl && (
             <div className="pdf-download-section">
-              <a href={pdfUrl} download className="btn-download-pdf">
+              <button onClick={handleDownloadPdf} className="btn-download-pdf">
                 📄 Baixar Relatório PDF
-              </a>
+              </button>
             </div>
           )}
 

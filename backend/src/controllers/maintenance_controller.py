@@ -34,11 +34,11 @@ def finalize_maintenance(current_user=None):
         print(result.get("pdf_path"))
         print("\n=======================\n")
 
-        return send_file(
-            result["pdf_path"],
-            mimetype="application/pdf",
-            as_attachment=True,
-        )
+        return jsonify({
+            "pdf_url": result["pdf_url"],
+            "pdf_filename": result["pdf_filename"],
+            "assistant_message": "Relatório gerado com sucesso.",
+        }), 200
 
     except KeyError as e:
         return jsonify({"error": f"Campo obrigatório ausente: {str(e)}"}), 400
