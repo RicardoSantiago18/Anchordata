@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Typography, Avatar, IconButton, Divider, Tooltip } from '@mui/material';
+import { Box, Typography, Avatar, Divider, Tooltip } from '@mui/material';
 import {
   SettingsOutlined,
   PeopleOutlined,
   ExitToApp,
-  NotificationsNone,
   HomeOutlined,
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -31,7 +30,6 @@ const Layout = () => {
         <Divider className="sidebar-divider" />
 
         <nav className="sidebar-nav-middle">
-          {/* Item INÍCIO atualizado para /home */}
           <NavItem
             isCollapsed={isCollapsed}
             icon={<HomeOutlined />}
@@ -39,14 +37,15 @@ const Layout = () => {
             active={isActive('/home')}
             onClick={() => navigate('/home')}
           />
+
           <NavItem
             isCollapsed={isCollapsed}
             icon={<SettingsOutlined />}
             label="Máquinas"
-            /* Verifica se a rota atual contém 'maquina' para manter o item ativo em sub-rotas */
             active={location.pathname.includes('maquina') ? 'active' : ''}
             onClick={() => navigate('/maquinas')}
           />
+
           <NavItem
             isCollapsed={isCollapsed}
             icon={<PeopleOutlined />}
@@ -64,50 +63,55 @@ const Layout = () => {
           </div>
         </div>
 
-        <div className="sidebar-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? <KeyboardArrowRight fontSize="small" /> : <KeyboardArrowLeft fontSize="small" />}
+        <div
+          className="sidebar-toggle"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? (
+            <KeyboardArrowRight fontSize="small" />
+          ) : (
+            <KeyboardArrowLeft fontSize="small" />
+          )}
         </div>
       </aside>
 
-      {/* área principal */}
+      {/* ÁREA PRINCIPAL */}
       <main className="main-layout">
         <header className="topbar-container">
           <div className="user-profile">
             <Avatar sx={{ width: 28, height: 28, bgcolor: '#eee' }}>
               <PeopleOutlined fontSize="small" sx={{ color: '#666' }} />
             </Avatar>
+
             <Typography variant="body2" className="user-text">
               nome sobrenome
             </Typography>
           </div>
 
           <div className="topbar-actions">
-            {/* Renderização Condicional do Botão Principal */}
             {location.pathname === '/usuarios' ? (
-              <button 
-                className="btn-add-machine-top" 
-                onClick={() => window.dispatchEvent(new CustomEvent("open-user-modal"))}
+              <button
+                className="btn-add-machine-top"
+                onClick={() =>
+                  window.dispatchEvent(new CustomEvent('open-user-modal'))
+                }
               >
                 <AddIcon fontSize="small" />
                 <span>Novo Usuário</span>
               </button>
             ) : (
-              <button 
-                className="btn-add-machine-top" 
-                onClick={() => navigate('/maquinas/adicionar')} 
+              <button
+                className="btn-add-machine-top"
+                onClick={() => navigate('/maquinas/adicionar')}
               >
                 <AddIcon fontSize="small" />
                 <span>Adicionar Máquina</span>
               </button>
             )}
-
-            <IconButton size="small" className="notif-icon">
-              <NotificationsNone fontSize="small" />
-            </IconButton>
           </div>
         </header>
 
-        {/* espaço para conteúdo das páginas (Home, CadMaq, etc) */}
+        {/* CONTEÚDO DAS PÁGINAS */}
         <div className="content-outlet">
           <Outlet />
         </div>
