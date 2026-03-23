@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Typography, Avatar, Divider, Tooltip } from '@mui/material';
-import {
-  SettingsOutlined,
-  PeopleOutlined,
-  ExitToApp,
-  HomeOutlined,
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
-  Add as AddIcon
-} from '@mui/icons-material';
+import { Box, Divider, Typography, Avatar, Tooltip, IconButton } from '@mui/material'; 
+import { KeyboardArrowLeft, KeyboardArrowRight, Add as AddIcon, PeopleOutlined } from '@mui/icons-material'; 
 import './Layout.css';
+
+// CORREÇÃO DOS CAMINHOS E IMPORTS
+import iconHome from '../assets/icons/icon-home.png';
+import iconMaquinas from '../assets/icons/icon-maquinas.png'; 
+import iconUsuarios from '../assets/icons/icon-usuarios.png';
+import iconSair from '../assets/icons/icon-sair.png'; 
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -32,23 +30,21 @@ const Layout = () => {
         <nav className="sidebar-nav-middle">
           <NavItem
             isCollapsed={isCollapsed}
-            icon={<HomeOutlined />}
+            icon={<img src={iconHome} className="nav-icon-png" alt="Início" />}
             label="Início"
             active={isActive('/home')}
             onClick={() => navigate('/home')}
           />
-
           <NavItem
             isCollapsed={isCollapsed}
-            icon={<SettingsOutlined />}
+            icon={<img src={iconMaquinas} className="nav-icon-png" alt="Máquinas" />}
             label="Máquinas"
             active={location.pathname.includes('maquina') ? 'active' : ''}
             onClick={() => navigate('/maquinas')}
           />
-
           <NavItem
             isCollapsed={isCollapsed}
-            icon={<PeopleOutlined />}
+            icon={<img src={iconUsuarios} className="nav-icon-png" alt="Usuários" />}
             label="Usuários"
             active={isActive('/usuarios')}
             onClick={() => navigate('/usuarios')}
@@ -58,20 +54,13 @@ const Layout = () => {
         <div className="sidebar-footer">
           <Divider className="footer-divider" />
           <div className="logout-button" onClick={() => navigate('/login')}>
-            <ExitToApp className="nav-icon" />
+            <img src={iconSair} className="nav-icon-png" alt="Sair" />
             {!isCollapsed && <span>Sair</span>}
           </div>
         </div>
 
-        <div
-          className="sidebar-toggle"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? (
-            <KeyboardArrowRight fontSize="small" />
-          ) : (
-            <KeyboardArrowLeft fontSize="small" />
-          )}
+        <div className="sidebar-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
+          {isCollapsed ? <KeyboardArrowRight fontSize="small" /> : <KeyboardArrowLeft fontSize="small" />}
         </div>
       </aside>
 
@@ -82,7 +71,6 @@ const Layout = () => {
             <Avatar sx={{ width: 28, height: 28, bgcolor: '#eee' }}>
               <PeopleOutlined fontSize="small" sx={{ color: '#666' }} />
             </Avatar>
-
             <Typography variant="body2" className="user-text">
               nome sobrenome
             </Typography>
@@ -92,9 +80,7 @@ const Layout = () => {
             {location.pathname === '/usuarios' ? (
               <button
                 className="btn-add-machine-top"
-                onClick={() =>
-                  window.dispatchEvent(new CustomEvent('open-user-modal'))
-                }
+                onClick={() => window.dispatchEvent(new Event('abrir-modal-usuario'))} 
               >
                 <AddIcon fontSize="small" />
                 <span>Novo Usuário</span>
@@ -111,7 +97,6 @@ const Layout = () => {
           </div>
         </header>
 
-        {/* CONTEÚDO DAS PÁGINAS */}
         <div className="content-outlet">
           <Outlet />
         </div>
