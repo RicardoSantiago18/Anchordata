@@ -1,6 +1,6 @@
 .app-viewport {
   display: flex;
-  background-color: #dcdcdc;
+  background-color: #F6FBFC;
   height: 100vh;
   padding: 8px;
   gap: 12px;
@@ -19,6 +19,7 @@
   padding: 20px 0;
   position: relative;
   transition: width 0.3s ease, min-width 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .sidebar-container.collapsed {
@@ -81,7 +82,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 15px;
-  color: #333;
+  color: #006AFF;
   cursor: pointer;
   border-radius: 12px;
   margin-bottom: 8px;
@@ -95,7 +96,7 @@
 }
 
 .nav-item.active {
-  background-color: #e0e0e0;
+  background-color: #D7E4F7;
   font-weight: bold;
 }
 
@@ -194,7 +195,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #000;
+  background-color: #006AFF;
   color: #fff;
   border: none;
   padding: 6px 16px;
@@ -203,10 +204,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  border-color:#006AFF;
 }
 
 .btn-add-machine-top:hover {
-  background-color: #333;
+  background-color: #006AFF;
 }
 
 .notif-icon {

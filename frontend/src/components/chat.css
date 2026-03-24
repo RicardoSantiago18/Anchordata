@@ -1,6 +1,6 @@
 /* Painel principal que entra no Outlet */
 .chat-panel-container {
-  background: rgb(228, 10, 10);
+  background: white;
   border-radius: 20px;
   display: flex;
   flex-direction: column;

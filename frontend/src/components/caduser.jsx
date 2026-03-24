@@ -174,8 +174,8 @@ export default function CadUser() {
       {/* Header e Título */}
       <Box className="caduser-page-header">
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <PersonOutlineIcon sx={{ color: '#fff' }} />
-          <Typography variant="h5" fontWeight="700" sx={{ color: '#fff' }}>Usuários</Typography>
+          <PersonOutlineIcon sx={{ color: '#006AFF' }} />
+          <Typography variant="h5" fontWeight="700" sx={{ color: '#006AFF' }}>Usuários</Typography>
         </Box>
       </Box>
 
