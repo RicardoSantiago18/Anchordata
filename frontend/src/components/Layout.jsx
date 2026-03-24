@@ -4,14 +4,15 @@ import { Box, Divider, Typography, Avatar, Tooltip } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight, Add as AddIcon, PeopleOutlined } from '@mui/icons-material';
 import './Layout.css';
 
-// IMPORTS DOS ÍCONES
-import iconHome from '../assets/icons/icon-home.png';
-import iconMaquinas from '../assets/icons/icon-maquinas.png';
-import iconUsuarios from '../assets/icons/icon-usuarios.png';
-import iconSair from '../assets/icons/icon-sair.png';
+// import dos ícones do menu
+import iconHome from '../assets/icons/icon-home-blue.png';
+import iconMaquinas from '../assets/icons/icon-maquinas-blue.png';
+import iconUsuarios from '../assets/icons/icon-usuarios-blue.png';
+import iconSair from '../assets/icons/icon-sair-blue.png';
 
-// IMPORT DA LOGO DO PROJETO
+// import das logos menu
 import logoProjeto from '../assets/Ativo 2@3x 1.png';
+import logoGrandeProjeto from '../assets/Group 297.png'
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Layout = () => {
         <div className="sidebar-logo-wrapper">
           <Box className="sidebar-logo">
             <img
-              src={logoProjeto}
+              src={isCollapsed ? logoProjeto : logoGrandeProjeto}
               alt="Logo do projeto"
               className="sidebar-logo-img"
             />
