@@ -14,7 +14,8 @@ import {
 
 // MUI Icons
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import SearchIcon from "@mui/icons-material/Search";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 // Importação do CSS padronizado
 import "./cadmaq.css";
@@ -24,6 +25,7 @@ export default function CadMaq() {
   const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchMachines = async () => {
@@ -57,6 +59,23 @@ export default function CadMaq() {
       </Box>
 
       <Divider sx={{ mb: 3 }} />
+      <Box className="cadmaq-search-container">
+
+        <div className="search-wrapper">
+          <div className="search-input-box">
+            <SearchIcon className="search-icon-inside" />
+            <input 
+              type="text" 
+              placeholder="Buscar" 
+              className="input-busca"
+              onChange={(e) => setSearchTerm(e.target.value)} 
+            />
+            <ArrowUpwardIcon className="search-upload-icon" />
+          </div>
+        </div>
+      </Box>
+
+
 
       <Box className="cadmaq-list-container">
         {loading ? (
@@ -72,8 +91,12 @@ export default function CadMaq() {
             <Typography color="textSecondary">Nenhuma máquina cadastrada</Typography>
           </Box>
         ) : (
-          <Grid container spacing={22.8}>
-            {machines.map((m) => (
+          <Grid container spacing={22.5}>
+            {machines
+              .filter((m) =>
+                m.nome_maquina.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            .map((m) => (
               <Grid item xs={2} sm={2} md={2} lg={2} key={m.id} className="machine-grid-item">
                 <Card elevation={0} className="machine-card">
                   <Box className="machine-image-placeholder">
@@ -116,7 +139,7 @@ export default function CadMaq() {
                       fullWidth
                       variant="contained"
                       onClick={() => enterMachine(m.id)}
-                      endIcon={<ArrowForwardIosIcon sx={{ fontSize: 12 }} />}
+                      
                       className="enter-btn"
                     >
                       Entrar

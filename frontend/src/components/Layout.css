@@ -1,6 +1,6 @@
 .app-viewport {
   display: flex;
-  background-color: #F6FBFC;
+  background-color: #91c6e1;
   height: 100vh;
   padding: 16px;
   gap: 12px;
@@ -133,7 +133,7 @@
 
 .logout-button .nav-icon,
 .logout-button span {
-  color: #000000;
+  color: #006AFF;
   font-weight: 500;
 }
 
@@ -145,11 +145,11 @@
 .sidebar-toggle {
   position: absolute;
   color: white;
-  right: -12px;
-  top: 95px;
+  right: -6px;
+  top: 120px;
   background: #006AFF;
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   border-radius: 6px;
   display: flex;
   align-items: center;

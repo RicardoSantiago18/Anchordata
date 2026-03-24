@@ -12,7 +12,7 @@
 /* Header com Título e Botão de Adicionar */
 .cadmaq-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 15px;
 }
@@ -37,13 +37,15 @@
 
 /* Listagem Cinza Interna */
 .cadmaq-list-container {
-  background: #e5e5e5;
+  background: #fff;
   border-radius: 18px;
   padding: 20px;
   flex: 1;
   justify-content: center;
   overflow-y: auto;
   overflow-x: hidden;
+  background: #fff; 
+  padding: 20px;
 }
 
 .machine-grid-item {
@@ -51,44 +53,56 @@
 }
 /* Estilização dos Cards de Máquina */
 .machine-card {
+  max-height: 400px;
   width: 185%;
   border-radius: 18px !important;
-  border: 1px solid #d2d2d2;
+  border: none;
   height: 300px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  /*transition: transform 0.2s, box-shadow 0.2s;*/
   background: white;
+  height: 350px;
+
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.050) !important;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 
+              0 4px 8px rgba(0, 0, 0, 0.08);
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .machine-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* Área fixa da imagem */
 .machine-image-placeholder {
-  width: calc(100% - 20px);
-  height: 140px;
-  margin: 10px;
-  border-radius: 14px;
-  border: 1px dashed #ccc;
+  width: 100%;           
+  height: 180px;         
+  margin: 0;            
+  border-radius: 18px 18px 0 0; 
+  border: none;          
   background-color: #f5f5f5;
   position: relative;
-  overflow: hidden;
+  overflow: hidden;      
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-/* Imagem padronizada */
+
 .machine-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover;     
   display: block;
 }
 
@@ -103,42 +117,132 @@
 
 /* Conteúdo textual */
 .machine-card-content {
-  padding: 0 15px 10px 15px !important;
+  padding: 15px 15px 10px 15px !important;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .machine-name {
   font-weight: 600 !important;
-  font-size: 1rem !important;
+  font-size: 0.95rem !important;
   color: #333;
   margin-bottom: 4px !important;
+  margin-top: 10px !important;
+
+ 
+  min-height: 2.4em;        
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      
+  -webkit-box-orient: vertical;
+  overflow: hidden;         
+  line-height: 1.2em;       
 }
 
 .machine-serie {
   font-size: 0.75rem !important;
   color: #666;
+  
+  margin-top: 5px;
 }
 
 /* Rodapé do Card */
 .machine-card-actions {
-  background: #bdbdbd;
-  padding: 10px 15px !important;
-  flex-shrink: 0;
+  background: white;
+  padding: 0 20px 20px 20px !important;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
 }
 
 .enter-btn {
-  background-color: #e0e0e0 !important;
-  color: #000 !important;
+  background-color: #006aff !important;
+  color: #fff !important;
   border-radius: 999px !important;
   text-transform: none !important;
   font-weight: bold !important;
   font-size: 0.85rem !important;
   box-shadow: none !important;
+
+  
+  width: 160px !important;       
+  max-width: 100% !important;    
+
+  text-transform: none !important;
+  font-weight: bold !important;
+  font-size: 0.85rem !important;
+  
+  margin: 0 auto !important;
+
 }
 
-.enter-btn:hover {
-  background-color: #d6d6d6 !important;
+
+
+.cadmaq-search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.filter-group {
+  position: absolute;    
+  left: 0;               
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-ordenar {
+  border: 1px solid #ccc;
+  border-radius: 1px;
+  padding: 4px 8px;
+  background: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.search-wrapper {
+  width: 100%;           
+  display: flex;
+  justify-content: center; 
+}
+
+.search-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px; 
+}
+
+.input-busca {
+  width: 100%;
+  padding: 6px 45px; 
+  border-radius: 10px; 
+  border: 1px solid #333;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+/* Ícone de Lupa à Esquerda */
+.search-icon-inside {
+  position: absolute;
+  left: 15px;
+  font-size: 1.2rem !important;
+  color: #333;
+}
+
+/* Ícone de Upload/Seta à Direita */
+.search-upload-icon {
+  position: absolute;
+  right: 15px;
+  background: #000;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  font-size: 1.2rem !important;
+  cursor: pointer;
 }
