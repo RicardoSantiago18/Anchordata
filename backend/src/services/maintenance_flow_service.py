@@ -248,6 +248,19 @@ class MaintenanceFlowService:
             extra_data=timeline_extra
         )
 
+        # Se for corretiva, cria também um evento de falha para incrementar o contador
+        if maintenance_type_lower == "corretiva":
+            TimelineEventService.create_event(
+                event_type="falha",
+                title=event_data.get("title", "Falha identificada"),
+                description="Falha identificada durante manutenção corretiva",
+                users_id=chat.user_id,
+                conversation_history=history,
+                machine_id=machine_id,
+                chat_id=chat_id,
+                extra_data={"report_url": pdf_url}
+            )
+
         # 10. Retorno
         return {
             "report_markdown": report_markdown,

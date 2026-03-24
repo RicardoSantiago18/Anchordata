@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Divider, Typography, Avatar, Tooltip, IconButton } from '@mui/material'; 
-import { KeyboardArrowLeft, KeyboardArrowRight, Add as AddIcon, PeopleOutlined } from '@mui/icons-material'; 
+import { Box, Divider, Typography, Avatar, Tooltip } from '@mui/material';
+import { KeyboardArrowLeft, KeyboardArrowRight, Add as AddIcon, PeopleOutlined } from '@mui/icons-material';
 import './Layout.css';
 
-// CORREÇÃO DOS CAMINHOS E IMPORTS
+// IMPORTS DOS ÍCONES
 import iconHome from '../assets/icons/icon-home.png';
-import iconMaquinas from '../assets/icons/icon-maquinas.png'; 
+import iconMaquinas from '../assets/icons/icon-maquinas.png';
 import iconUsuarios from '../assets/icons/icon-usuarios.png';
-import iconSair from '../assets/icons/icon-sair.png'; 
+import iconSair from '../assets/icons/icon-sair.png';
+
+// IMPORT DA LOGO DO PROJETO
+import logoProjeto from '../assets/Ativo 2@3x 1.png';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -22,7 +25,13 @@ const Layout = () => {
       {/* SIDEBAR */}
       <aside className={`sidebar-container ${isCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-logo-wrapper">
-          <Box className="sidebar-logo">{isCollapsed ? 'L' : 'Logo'}</Box>
+          <Box className="sidebar-logo">
+            <img
+              src={logoProjeto}
+              alt="Logo do projeto"
+              className="sidebar-logo-img"
+            />
+          </Box>
         </div>
 
         <Divider className="sidebar-divider" />
@@ -80,7 +89,7 @@ const Layout = () => {
             {location.pathname === '/usuarios' ? (
               <button
                 className="btn-add-machine-top"
-                onClick={() => window.dispatchEvent(new Event('abrir-modal-usuario'))} 
+                onClick={() => window.dispatchEvent(new Event('abrir-modal-usuario'))}
               >
                 <AddIcon fontSize="small" />
                 <span>Novo Usuário</span>
