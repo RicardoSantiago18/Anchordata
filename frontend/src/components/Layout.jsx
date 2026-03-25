@@ -90,7 +90,7 @@ const Layout = () => {
             {location.pathname === '/usuarios' ? (
               <button
                 className="btn-add-machine-top"
-                onClick={() => window.dispatchEvent(new Event('abrir-modal-usuario'))}
+                onClick={() => window.dispatchEvent(new Event('open-user-modal'))}
               >
                 <AddIcon fontSize="small" />
                 <span>Novo Usuário</span>
