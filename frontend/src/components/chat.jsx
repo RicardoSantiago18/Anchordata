@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useNavigate, useLocation, useParams } from "react-router-dom";
@@ -13,6 +13,34 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+// Componente que exibe texto progressivamente (typewriter)
+const StreamingText = ({ text, onComplete, speed = 15 }) => {
+  const [displayedLength, setDisplayedLength] = useState(0);
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    if (isDone) return;
+    if (displayedLength >= text.length) {
+      setIsDone(true);
+      onComplete?.();
+      return;
+    }
+    const timer = setTimeout(() => {
+      // Avança mais rápido em espaços e quebras de linha
+      const nextChar = text[displayedLength];
+      const increment = (nextChar === ' ' || nextChar === '\n') ? 3 : 1;
+      setDisplayedLength(prev => Math.min(prev + increment, text.length));
+    }, speed);
+    return () => clearTimeout(timer);
+  }, [displayedLength, text, speed, isDone, onComplete]);
+
+  const visibleText = text.slice(0, displayedLength);
+
+  return (
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>{visibleText || ''}</ReactMarkdown>
+  );
+};
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -40,14 +68,24 @@ const Chat = () => {
   const [pdfFilename, setPdfFilename] = useState(null);
   const [chatMode, setChatMode] = useState(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [isWaitingForAI, setIsWaitingForAI] = useState(false);
+  const [streamingIndex, setStreamingIndex] = useState(null);
   const messagesEndRef = useRef(null);
 
   const isTyping = input.length > 0;
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-  useEffect(scrollToBottom, [messages]);
+  }, []);
+  useEffect(scrollToBottom, [messages, scrollToBottom]);
+
+  // Scroll contínuo durante streaming
+  useEffect(() => {
+    if (streamingIndex !== null) {
+      const interval = setInterval(scrollToBottom, 200);
+      return () => clearInterval(interval);
+    }
+  }, [streamingIndex, scrollToBottom]);
 
   useEffect(() => {
     let mounted = true;
@@ -83,15 +121,25 @@ const Chat = () => {
     }
   };
 
+  const handleStreamingComplete = useCallback(() => {
+    setStreamingIndex(null);
+  }, []);
+
   const sendMessage = async () => {
-    if (!chatId || isCreatingChat || !input.trim()) return;
+    if (!chatId || isCreatingChat || isWaitingForAI || !input.trim()) return;
     const userMessage = input;
     setHasSentMessage(true);
     setInput("");
+    setIsWaitingForAI(true);
     setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
     try {
       const data = await sendChatMessage(chatId, userMessage, false, maquinaSelecionada?.id, maintenanceTypeFromState);
-      setMessages((prev) => [...prev, { sender: "bot", text: data.assistant_message }]);
+      setIsWaitingForAI(false);
+      setMessages((prev) => {
+        const newMessages = [...prev, { sender: "bot", text: data.assistant_message, isStreaming: true }];
+        setStreamingIndex(newMessages.length - 1);
+        return newMessages;
+      });
 
       // Capturar modo da resposta (para transição para "report")
       if (data.mode) {
@@ -104,6 +152,7 @@ const Chat = () => {
         setPdfFilename(data.pdf_filename);
       }
     } catch (error) {
+      setIsWaitingForAI(false);
       setMessages((prev) => [...prev, { sender: "bot", text: "Erro ao responder. Tente novamente." }]);
     }
   };
@@ -198,9 +247,25 @@ const Chat = () => {
           <div className={`messages-area ${hasSentMessage ? "active" : ""}`}>
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.sender}`}>
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text || ''}</ReactMarkdown>
+                {msg.isStreaming && index === streamingIndex ? (
+                  <StreamingText
+                    text={msg.text || ''}
+                    onComplete={handleStreamingComplete}
+                  />
+                ) : (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text || ''}</ReactMarkdown>
+                )}
               </div>
             ))}
+            {isWaitingForAI && (
+              <div className="message bot thinking-indicator">
+                <div className="thinking-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
@@ -238,7 +303,7 @@ const Chat = () => {
                 onKeyDown={handleKeyDown}
                 disabled={isCreatingChat}
               />
-              <button className="btn-send" onClick={sendMessage} disabled={!chatId || isCreatingChat || !input.trim()}>
+              <button className="btn-send" onClick={sendMessage} disabled={!chatId || isCreatingChat || isWaitingForAI || !input.trim()}>
                 <ArrowUpwardIcon />
               </button>
             </div>
