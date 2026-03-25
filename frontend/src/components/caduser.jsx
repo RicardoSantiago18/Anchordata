@@ -171,15 +171,19 @@ export default function CadUser() {
 
   return (
     <Box className="caduser-content-container">
-      {/* Header e Título */}
-      <Box className="caduser-page-header">
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <PersonOutlineIcon sx={{ color: '#006AFF' }} />
-          <Typography variant="h5" fontWeight="700" sx={{ color: '#006AFF' }}>Usuários</Typography>
-        </Box>
-      </Box>
-
       <Paper elevation={0} className="caduser-main-paper">
+        
+        {/* Header e Título */}
+        <Box className="caduser-page-header-internal" sx={{ mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <PersonOutlineIcon sx={{ color: '#006AFF' }} />
+            <Typography variant="h5" fontWeight="700" sx={{ color: '#006AFF' }}>
+              Usuários
+            </Typography>
+          </Box>
+          <Divider sx={{ mt: 2 }} />
+        </Box>
+
         {/* Controles: Busca, Ordenação e View Mode */}
         <Box className="caduser-controls">
           <Box className="caduser-controls-left">
@@ -205,9 +209,7 @@ export default function CadUser() {
           />
         </Box>
 
-        <Divider sx={{ my: 2 }} />
-
-        {/* Área da Lista (Layout Cinza que você gosta) */}
+        {/* Área da Lista */}
         <Box className="caduser-list-wrapper">
           {loading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress color="inherit" /></Box>
@@ -259,7 +261,7 @@ export default function CadUser() {
         </Box>
       </Paper>
 
-      {/* Modal Criar/Editar (Completo) */}
+      {/* Modais de Criar/Editar, Excluir e Feedback */}
       <Dialog open={modalOpen} onClose={() => !saving && setModalOpen(false)} fullWidth maxWidth="xs">
         <DialogTitle>{editingUser ? "Editar Usuário" : "Novo Usuário"}</DialogTitle>
         <DialogContent sx={{ pt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -300,7 +302,6 @@ export default function CadUser() {
         </DialogActions>
       </Dialog>
 
-      {/* Dialog de Exclusão */}
       <Dialog open={!!deleteTarget} onClose={() => !deleting && setDeleteTarget(null)}>
         <DialogTitle>Excluir Usuário?</DialogTitle>
         <DialogContent>Tem certeza que deseja remover {deleteTarget?.nome}? Esta ação não pode ser desfeita.</DialogContent>

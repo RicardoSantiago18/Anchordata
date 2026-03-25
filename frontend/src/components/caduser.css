@@ -17,10 +17,26 @@
     border-radius: 8px !important;
 }
 
+.caduser-content-container {
+    padding: 1px;
+    /* Faz o container ocupar quase a tela toda (descontando o header do sistema se houver) */
+    height: calc(100vh - 40px); 
+    display: flex;
+    flex-direction: column;
+    
+}
+
 .caduser-main-paper {
-    padding: 20px;
-    border-radius: 14px !important;
+    padding: 25px !important;
+    border-radius: 24px !important;
     background: #ffffff;
+    
+    /* FAZ O CARD CRESCER */
+    flex: 1;            /* Ocupa todo o espaço vertical disponível no container */
+    display: flex;      /* Permite que o conteúdo interno também se alinhe */
+    flex-direction: column;
+    min-height: 824px;  /* Altura mínima para o card nunca ficar "esmagado" */
+    margin-bottom: 20px;
 }
 
 .caduser-controls {
@@ -130,4 +146,27 @@
     padding: 2px 10px;
     border-radius: 4px;
     font-size: 0.75rem;
+}
+
+/* Centraliza o conjunto de ícone + título */
+.caduser-page-header-internal {
+    display: flex;
+    flex-direction: column; /* Faz o Divider ficar embaixo do título centralizado */
+    align-items: center;    /* Alinha o conteúdo horizontalmente no centro */
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Garante que o ícone e o texto fiquem na mesma linha antes de centralizar o bloco */
+.caduser-page-header-internal .MuiBox-root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaço entre o ícone e a palavra Usuários */
+}
+
+/* Ajusta o Divider para ocupar a largura total mesmo com o header centralizado */
+.caduser-page-header-internal .MuiDivider-root {
+    width: 100%;
+    margin-top: 15px;
 }
