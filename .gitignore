@@ -55,8 +55,8 @@ instance/
 backend/.env
 
 # Bases de Dados (SQLite)
-# *.db
-# *.sqlite3
+*.db
+*.sqlite3
 
 backend/data/vectorstore/*/
 backend/**/__pycache__/

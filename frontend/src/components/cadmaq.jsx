@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -26,6 +26,7 @@ export default function CadMaq() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [ordenarPor, setOrdenarPor] = useState("nome-az");
 
   useEffect(() => {
     const fetchMachines = async () => {
@@ -50,6 +51,24 @@ export default function CadMaq() {
     navigate(`/visualizarmaquina/${id}`);
   };
 
+  const maquinasFiltradasEOrdenadas = useMemo(() => {
+    let lista = machines.filter((m) =>
+      m.nome_maquina.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (ordenarPor === "nome-az") {
+      lista = [...lista].sort((a, b) =>
+        a.nome_maquina.localeCompare(b.nome_maquina, "pt-BR", { sensitivity: "base" })
+      );
+    } else if (ordenarPor === "nome-za") {
+      lista = [...lista].sort((a, b) =>
+        b.nome_maquina.localeCompare(a.nome_maquina, "pt-BR", { sensitivity: "base" })
+      );
+    }
+
+    return lista;
+  }, [machines, searchTerm, ordenarPor]);
+
   return (
     <Box className="cadmaq-panel">
       <Box className="cadmaq-header">
@@ -60,22 +79,33 @@ export default function CadMaq() {
 
       <Divider sx={{ mb: 3 }} />
       <Box className="cadmaq-search-container">
+        <div className="filter-group">
+          <label htmlFor="ordenar">Ordenar</label>
+          <select
+            id="ordenar"
+            className="select-ordenar"
+            value={ordenarPor}
+            onChange={(e) => setOrdenarPor(e.target.value)}
+          >
+            <option value="nome-az">Nome (A-Z)</option>
+            <option value="nome-za">Nome (Z-A)</option>
+          </select>
+        </div>
 
         <div className="search-wrapper">
           <div className="search-input-box">
             <SearchIcon className="search-icon-inside" />
-            <input 
-              type="text" 
-              placeholder="Buscar" 
+            <input
+              type="text"
+              placeholder="Buscar"
               className="input-busca"
-              onChange={(e) => setSearchTerm(e.target.value)} 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <ArrowUpwardIcon className="search-upload-icon" />
           </div>
         </div>
       </Box>
-
-
 
       <Box className="cadmaq-list-container">
         {loading ? (
@@ -92,11 +122,7 @@ export default function CadMaq() {
           </Box>
         ) : (
           <Grid container spacing={22.5}>
-            {machines
-              .filter((m) =>
-                m.nome_maquina.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            .map((m) => (
+            {maquinasFiltradasEOrdenadas.map((m) => (
               <Grid item xs={2} sm={2} md={2} lg={2} key={m.id} className="machine-grid-item">
                 <Card elevation={0} className="machine-card">
                   <Box className="machine-image-placeholder">
@@ -139,7 +165,6 @@ export default function CadMaq() {
                       fullWidth
                       variant="contained"
                       onClick={() => enterMachine(m.id)}
-                      
                       className="enter-btn"
                     >
                       Entrar
