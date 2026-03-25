@@ -210,7 +210,7 @@ const AdicionarMaquina = () => {
             <div className="manual-upload-wrapper">
               <div className="upload-box-large" onClick={() => document.getElementById('manual-upload').click()} style={{ cursor: 'pointer' }}>
                 <AddPhotoAlternateIcon sx={{ fontSize: 50, color: '#666' }} />
-                <Typography variant="body1">{manual ? manual.name : "Arraste arquivo aqui ou clique"}</Typography>
+                <Typography variant="body1">{manual ? manual.name : "Clique"}</Typography>
                 <input
                   type="file"
                   id="manual-upload"
@@ -234,7 +234,7 @@ const AdicionarMaquina = () => {
             <Typography variant="h6" className="form-section-title">Concluído</Typography>
 
             <div className="success-content">
-              <CheckCircleIcon sx={{ fontSize: 100, color: '#666', mb: 2 }} />
+              <CheckCircleIcon sx={{ fontSize: 100, color: '#216A13', mb: 2 }} />
               <Typography variant="h5" className="success-msg">
                 Máquina Adicionada com Sucesso!
               </Typography>
