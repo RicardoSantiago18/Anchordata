@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Box, Divider, Typography, Avatar, Tooltip } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight, Add as AddIcon, PeopleOutlined } from '@mui/icons-material';
@@ -18,6 +19,7 @@ const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { user } = useAuth();
 
   const isActive = (path) => (location.pathname === path ? 'active' : '');
 
@@ -82,7 +84,7 @@ const Layout = () => {
               <PeopleOutlined fontSize="small" sx={{ color: '#666' }} />
             </Avatar>
             <Typography variant="body2" className="user-text">
-              nome sobrenome
+              {user?.name || 'Usuário'}
             </Typography>
           </div>
 
