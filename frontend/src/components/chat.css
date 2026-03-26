@@ -208,7 +208,7 @@
 }
 
 .faq-item {
-  background: #f8f8f8;
+  background: #D7E4F7;
   border: 1px solid #eee;
   padding: 12px;
   border-radius: 10px;
@@ -218,7 +218,7 @@
 }
 
 .faq-item:hover {
-  background: #f0f0f0;
+  background: #56bbee;
 }
 
 /* Custom Scrollbar */
