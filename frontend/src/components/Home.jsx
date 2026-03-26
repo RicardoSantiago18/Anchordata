@@ -168,9 +168,9 @@ const Home = () => {
               <Line 
                 type="monotone" 
                 dataKey="valor" 
-                stroke="#000" 
+                stroke="#006AFF" 
                 strokeWidth={3} 
-                dot={{ r: 4, fill: '#fff', stroke: '#000', strokeWidth: 2 }} 
+                dot={{ r: 4, fill: '#fff', stroke: '#006AFF', strokeWidth: 2 }} 
               />
             </LineChart>
           </ResponsiveContainer>
@@ -185,8 +185,8 @@ const Home = () => {
               <XAxis dataKey="name" axisLine={false} tickLine={false} />
               <YAxis axisLine={false} tickLine={false} />
               <Tooltip />
-              <Bar dataKey="prod" fill="#000" radius={[5, 5, 0, 0]} />
-              <Bar dataKey="para" fill="#999" radius={[5, 5, 0, 0]} />
+              <Bar dataKey="prod" fill="#006AFF" radius={[5, 5, 0, 0]} />
+              <Bar dataKey="para" fill="#88a9d8" radius={[5, 5, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
