@@ -19,7 +19,6 @@
 
 .caduser-content-container {
     padding: 1px;
-    /* Faz o container ocupar quase a tela toda (descontando o header do sistema se houver) */
     height: calc(100vh - 40px); 
     display: flex;
     flex-direction: column;
@@ -30,19 +29,73 @@
     padding: 25px !important;
     border-radius: 24px !important;
     background: #ffffff;
-    
-    /* FAZ O CARD CRESCER */
-    flex: 1;            /* Ocupa todo o espaço vertical disponível no container */
-    display: flex;      /* Permite que o conteúdo interno também se alinhe */
+    flex: 1;            
+    display: flex;      
     flex-direction: column;
-    min-height: 824px;  /* Altura mínima para o card nunca ficar "esmagado" */
+    min-height: 824px;  
     margin-bottom: 20px;
 }
 
+/* 1. container pai */
 .caduser-controls {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center; 
+    position: relative;
+    padding: 10px 0;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+/* 2. esquerda */
+.caduser-controls-left {
+    position: absolute;
+    left: 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    z-index: 2; /
+}
+
+/* 3. barra de pesquisa */
+.caduser-controls .MuiTextField-root {
+    width: 100%;
+    max-width: 400px; 
+    margin: 0 auto;
+}
+
+/* TAMANHO HORIZONTAL */
+.caduser-controls .MuiTextField-root {
+    width: 100%;
+    max-width: 500px; 
+    margin: 0 auto;
+}
+
+.caduser-controls .MuiOutlinedInput-root {
+    border-radius: 10px !important; 
+}
+
+/* TAMANHO VERTICAL */
+.caduser-controls .MuiOutlinedInput-root input {
+    padding: 6px 5px !important; 
+    font-size: 0.9rem;
+}
+
+/* gravidade e suavidade da linha da borda do input */
+.caduser-controls .MuiOutlinedInput-notchedOutline {
+    border-color: #333333 !important; 
+    border-width: 1.5px !important;   
+}
+
+
+.caduser-controls .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #000000 !important;
+    border-width: 2px !important;
+}
+
+/* ícones dentro do input */
+.caduser-controls .MuiInputAdornment-root svg {
+    color: #333333;
 }
 
 .caduser-controls-left {
@@ -68,7 +121,7 @@
 
 /* estilo da tabela customizada dentro do painel cinza */
 .caduser-list-wrapper {
-    background: #e3e3e3;
+    /*background: #91C6E1; /*BACKGROUND PARA TELA DE USUARIOSSS*/
     border-radius: 12px;
     padding: 15px;
     margin-top: 10px;
@@ -82,7 +135,7 @@
     font-weight: 700;
     font-size: 0.85rem;
     color: #555;
-    background: #d7d7d7;
+    
     border-radius: 8px;
     margin-bottom: 10px;
 }
@@ -91,7 +144,7 @@
     display: grid;
     grid-template-columns: 2fr 2fr 1.5fr 1fr 1fr;
     padding: 10px 12px;
-    background: #efefef;
+    
     margin-bottom: 8px;
     border-radius: 8px;
     align-items: center;
@@ -148,25 +201,57 @@
     font-size: 0.75rem;
 }
 
-/* Centraliza o conjunto de ícone + título */
+
 .caduser-page-header-internal {
     display: flex;
-    flex-direction: column; /* Faz o Divider ficar embaixo do título centralizado */
-    align-items: center;    /* Alinha o conteúdo horizontalmente no centro */
+    flex-direction: column; 
+    align-items: center;    
     margin-bottom: 20px;
     width: 100%;
 }
 
-/* Garante que o ícone e o texto fiquem na mesma linha antes de centralizar o bloco */
+
 .caduser-page-header-internal .MuiBox-root {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Espaço entre o ícone e a palavra Usuários */
+    gap: 10px; 
 }
 
-/* Ajusta o Divider para ocupar a largura total mesmo com o header centralizado */
+
 .caduser-page-header-internal .MuiDivider-root {
     width: 100%;
     margin-top: 15px;
+}
+
+/* O círculo preto em volta da seta */
+.search-enter-icon {
+    background-color: #000000 !important; 
+    color: #ffffff !important;            
+    width: 20px;                          
+    height: 20px;                         
+    border-radius: 50%;                    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 4px;                    
+}
+
+
+.search-enter-icon:hover {
+    background-color: #333333 !important;
+    transform: scale(1.1);                
+}
+
+
+.search-enter-icon svg {
+    color: #ffffff !important;
+    font-size: 1rem !important;           
+}
+
+
+.caduser-controls .MuiInputAdornment-positionEnd {
+    margin-left: 0 !important;            
 }
