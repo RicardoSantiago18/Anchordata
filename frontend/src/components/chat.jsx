@@ -8,7 +8,7 @@ import "./chat.css";
 import { sendChatMessage, createChat } from "../services/chat.service";
 
 // MUI Icons
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import group47 from "../assets/Group 47.png";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -234,7 +234,7 @@ const Chat = () => {
           {!hasSentMessage && (
             <div className="welcome-section">
               <div className="welcome-icon">
-                <PersonOutlineIcon fontSize="large" />
+                <img src={group47} alt="Ícone" className="welcome-group-icon" />
               </div>
               <p className="welcome-text">
             
