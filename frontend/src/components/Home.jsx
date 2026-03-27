@@ -10,10 +10,14 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
+import { useNavigate } from "react-router-dom";
+
 import { UserService } from '../services/user.service';
 import './Home.css';
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const [dadosErros, setDadosErros] = useState([]);
   const [dadosProducao, setDadosProducao] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
@@ -89,11 +93,13 @@ const Home = () => {
           console.error("Erro ao buscar status das máquinas", err);
           setStatusGeral({ critico: 0, atencao: 0, saudavel: 0 });
         }
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
@@ -125,9 +131,13 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 2. CARD DE USUÁRIOS (Meio Esquerda - Design da Imagem) */}
+        {/* 2. CARD DE USUÁRIOS */}
         <div className="grid-item users-section">
-          <ArrowOutwardIcon className="icon-top-right" />
+          <ArrowOutwardIcon
+            className="icon-top-right"
+            onClick={() => navigate("/usuarios")}
+            style={{ cursor: "pointer" }}
+          />
           <ChevronRightIcon className="arrow-next" />
           
           <Typography className="card-title">Usuários</Typography>
@@ -144,10 +154,11 @@ const Home = () => {
                 </div>
               ))
             ) : (
-              // Placeholder caso não venha do backend
               [1, 2, 3, 4].map((i) => (
                 <div key={i} className="user-item">
-                  <div className="user-avatar-box"><PersonOutlineIcon /></div>
+                  <div className="user-avatar-box">
+                    <PersonOutlineIcon />
+                  </div>
                   <Typography className="user-name">Usuário</Typography>
                   <Typography className="user-role">Técnico</Typography>
                 </div>
@@ -156,29 +167,33 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 3. IDENTIFICAÇÃO DE ERROS (Direita - Ocupa Row 1 e 2) */}
+        {/* 3. IDENTIFICAÇÃO DE ERROS */}
         <div className="grid-item chart-section">
-          <Typography variant="h6" align="center" gutterBottom>Identificação de Erros</Typography>
+          <Typography variant="h6" align="center" gutterBottom>
+            Identificação de Erros
+          </Typography>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dadosErros}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ccc" />
               <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Line 
-                type="monotone" 
-                dataKey="valor" 
-                stroke="#006AFF" 
-                strokeWidth={3} 
-                dot={{ r: 4, fill: '#fff', stroke: '#006AFF', strokeWidth: 2 }} 
+              <Line
+                type="monotone"
+                dataKey="valor"
+                stroke="#006AFF"
+                strokeWidth={3}
+                dot={{ r: 4, fill: '#fff', stroke: '#006AFF', strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* 4. PRODUÇÃO X PARADAS (Base Esquerda) */}
+        {/* 4. PRODUÇÃO X PARADAS */}
         <div className="grid-item production-section">
-          <Typography variant="h6" align="center" gutterBottom>Produção x Paradas</Typography>
+          <Typography variant="h6" align="center" gutterBottom>
+            Produção x Paradas
+          </Typography>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dadosProducao}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ccc" />
@@ -191,27 +206,35 @@ const Home = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* 5. PROJETOS RECENTES (Base Direita) */}
+        {/* 5. PROJETOS RECENTES */}
         <div className="grid-item projects-section">
-          <Typography variant="h6" align="center" gutterBottom>Projetos Recentes</Typography>
+          <Typography variant="h6" align="center" gutterBottom>
+            Projetos Recentes
+          </Typography>
           <div className="projects-list">
             {maquinasRecentes.length === 0 ? (
-              <Typography variant="body2" color="textSecondary" align="center">Sem interações</Typography>
+              <Typography variant="body2" color="textSecondary" align="center">
+                Sem interações
+              </Typography>
             ) : (
               maquinasRecentes.map((maq) => (
                 <div key={maq.id} className="project-row">
                   <div className="project-img-placeholder">
                     {maq.imagem && (
-                      <img 
-                        src={`${import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api'}/machines/files/${maq.imagem}`} 
-                        alt="" 
+                      <img
+                        src={`${import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api'}/machines/files/${maq.imagem}`}
+                        alt=""
                         style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover' }}
                       />
                     )}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <Typography variant="body2" fontWeight="bold">{maq.nome_maquina}</Typography>
-                    <Typography variant="caption" color="textSecondary">N° Série: {maq.num_serie}</Typography>
+                    <Typography variant="body2" fontWeight="bold">
+                      {maq.nome_maquina}
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      N° Série: {maq.num_serie}
+                    </Typography>
                   </div>
                   <Chip label={maq.status} size="small" className="status-chip" />
                 </div>
