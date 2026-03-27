@@ -29,7 +29,7 @@ import { AuthContext } from '../context/AuthContext';
 const VisualizarMaquina = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isManager } = useContext(AuthContext);
+  const { isManager, isEngineer } = useContext(AuthContext);
 
   const [machine, setMachine] = useState(null);
   const [timeline, setTimeline] = useState([]);
@@ -220,21 +220,25 @@ const VisualizarMaquina = () => {
         </Typography>
 
         <div className="header-right-actions">
-          <IconButton
-            className="action-btn edit-btn"
-            onClick={openEdit}
-            title="Editar máquina"
-          >
-            <EditOutlined fontSize="small" />
-          </IconButton>
+          {!isEngineer && (
+            <>
+              <IconButton
+                className="action-btn edit-btn"
+                onClick={openEdit}
+                title="Editar máquina"
+              >
+                <EditOutlined fontSize="small" />
+              </IconButton>
 
-          <IconButton
-            className="action-btn delete-btn"
-            onClick={() => setDeleteOpen(true)}
-            title="Remover máquina"
-          >
-            <DeleteOutline fontSize="small" />
-          </IconButton>
+              <IconButton
+                className="action-btn delete-btn"
+                onClick={() => setDeleteOpen(true)}
+                title="Remover máquina"
+              >
+                <DeleteOutline fontSize="small" />
+              </IconButton>
+            </>
+          )}
 
           <IconButton className="action-btn ai-glow">
             <AutoAwesome fontSize="small" />
