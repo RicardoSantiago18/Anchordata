@@ -1,6 +1,6 @@
 .profile-container {
     min-height: calc(100vh - 80px);
-    background: linear-gradient(135deg, #0066fe 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     padding: 2rem;
     display: flex;
     justify-content: center;
