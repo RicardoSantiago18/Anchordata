@@ -1,4 +1,4 @@
-# ⚓ Anchordata Sistema de Gerenciamento e Auxiliar de Manutenção
+# ⚓ Anchordata - Sistema de Gerenciamento e Auxiliar de Manutenção
 
 **Sistema inteligente de gestão e manutenção preventiva e corretiva de máquinas industriais com assistente de IA (RAG).**
 
@@ -458,5 +458,5 @@ Este projeto é de uso privado / acadêmico.
 ---
 
 <p align="center">
-  Desenvolvido com ❤️ pela equipe <strong>Anchordata</strong>
+  Desenvolvido pela equipe <strong>Anchordata</strong>
 </p>
