@@ -17,6 +17,7 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 import { UserService } from "../services/user.service";
+import { useAuth } from "../hooks/useAuth";
 import "./caduser.css";
 
 const ROLE_LABELS = {
@@ -28,6 +29,8 @@ const ROLE_LABELS = {
 const EMPTY_FORM = { name: "", email: "", password: "", role: "engenheiro" };
 
 export default function CadUser() {
+  const { user: currentUser } = useAuth();
+  const isManager = currentUser?.role === 'gerente';
   // --- Estados de Interface ---
   const [viewMode, setViewMode] = useState("lista");
   const [search, setSearch] = useState("");
@@ -233,10 +236,14 @@ export default function CadUser() {
                     </div>
                     <span className="email-cell">{u.email}</span>
                     <span>{u.funcao}</span>
-                    <Switch checked={u.ativo} onChange={() => handleToggleStatus(u)} size="small" />
+                    <Switch checked={u.ativo} onChange={() => handleToggleStatus(u)} size="small" disabled={isManager && u.role === 'admin'} />
                     <div className="actions-cell">
-                      <IconButton size="small" onClick={() => openEdit(u)}><EditOutlinedIcon fontSize="small" /></IconButton>
-                      <IconButton size="small" color="error" onClick={() => setDeleteTarget(u)}><DeleteOutlineOutlinedIcon fontSize="small" /></IconButton>
+                      {!(isManager && u.role === 'admin') && (
+                        <>
+                          <IconButton size="small" onClick={() => openEdit(u)}><EditOutlinedIcon fontSize="small" /></IconButton>
+                          <IconButton size="small" color="error" onClick={() => setDeleteTarget(u)}><DeleteOutlineOutlinedIcon fontSize="small" /></IconButton>
+                        </>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -250,7 +257,9 @@ export default function CadUser() {
                        <Typography variant="body2">{u.email}</Typography>
                        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                          <span className="role-tag">{u.funcao}</span>
-                         <IconButton size="small" onClick={() => openEdit(u)}><EditOutlinedIcon fontSize="small"/></IconButton>
+                         {!(isManager && u.role === 'admin') && (
+                           <IconButton size="small" onClick={() => openEdit(u)}><EditOutlinedIcon fontSize="small"/></IconButton>
+                         )}
                        </Box>
                     </Paper>
                   </Grid>
@@ -288,7 +297,7 @@ export default function CadUser() {
           <FormControl fullWidth>
             <InputLabel>Cargo</InputLabel>
             <Select label="Cargo" value={form.role} onChange={(e) => setForm({...form, role: e.target.value})}>
-              <MenuItem value="admin">Administrador</MenuItem>
+              {!isManager && <MenuItem value="admin">Administrador</MenuItem>}
               <MenuItem value="engenheiro">Engenheiro</MenuItem>
               <MenuItem value="gerente">Gerente</MenuItem>
             </Select>

@@ -8,7 +8,7 @@ from src.controllers.user_controller import (
     change_password,
     get_current_user
 )
-from src.services.auth_service import admin_required, token_required
+from src.services.auth_service import admin_required, token_required, role_required
 
 user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 
@@ -16,9 +16,10 @@ user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 user_bp.route("/me", methods=["GET"])(token_required(get_current_user))
 user_bp.route("/change-password", methods=["POST"])(token_required(change_password))
 
-# Rotas de admin
-user_bp.route("", methods=["GET"])(admin_required(list_users))
-user_bp.route("", methods=["POST"])(admin_required(create_user))
-user_bp.route("/<int:user_id>", methods=["GET"])(admin_required(get_user))
-user_bp.route("/<int:user_id>", methods=["PUT"])(admin_required(update_user))
-user_bp.route("/<int:user_id>", methods=["DELETE"])(admin_required(delete_user))
+# Rotas de gerenciamento de usuários (admin e gerente)
+manage_users = role_required('admin', 'gerente')
+user_bp.route("", methods=["GET"])(manage_users(list_users))
+user_bp.route("", methods=["POST"])(manage_users(create_user))
+user_bp.route("/<int:user_id>", methods=["GET"])(manage_users(get_user))
+user_bp.route("/<int:user_id>", methods=["PUT"])(manage_users(update_user))
+user_bp.route("/<int:user_id>", methods=["DELETE"])(manage_users(delete_user))

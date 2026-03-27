@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -24,10 +24,12 @@ import {
   DeleteOutline
 } from '@mui/icons-material';
 import './VisualizarMaquina.css';
+import { AuthContext } from '../context/AuthContext';
 
 const VisualizarMaquina = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isManager } = useContext(AuthContext);
 
   const [machine, setMachine] = useState(null);
   const [timeline, setTimeline] = useState([]);
@@ -314,50 +316,52 @@ const VisualizarMaquina = () => {
             )}
           </div>
 
-          {/* BOTÕES DE MANUTENÇÃO */}
-          <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
-            <Button
-              variant="contained"
-              className="chatbot-btn corretiva-btn"
-              startIcon={<AutoAwesome />}
-              onClick={() =>
-                navigate(`/chat/${id}`, {
-                  state: {
-                    maquina: machine,
-                    maintenanceType: "corretiva"
-                  }
-                })
-              }
-              sx={{
-                flex: 1,
-                backgroundColor: "#E63946",
-                "&:hover": { backgroundColor: "#D62828" }
-              }}
-            >
-              Corretiva
-            </Button>
+          {/* BOTÕES DE MANUTENÇÃO — ocultos para gerentes */}
+          {!isManager && (
+            <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+              <Button
+                variant="contained"
+                className="chatbot-btn corretiva-btn"
+                startIcon={<AutoAwesome />}
+                onClick={() =>
+                  navigate(`/chat/${id}`, {
+                    state: {
+                      maquina: machine,
+                      maintenanceType: "corretiva"
+                    }
+                  })
+                }
+                sx={{
+                  flex: 1,
+                  backgroundColor: "#E63946",
+                  "&:hover": { backgroundColor: "#D62828" }
+                }}
+              >
+                Corretiva
+              </Button>
 
-            <Button
-              variant="contained"
-              className="chatbot-btn preventiva-btn"
-              startIcon={<AutoAwesome />}
-              onClick={() =>
-                navigate(`/chat/${id}`, {
-                  state: {
-                    maquina: machine,
-                    maintenanceType: "preventiva"
-                  }
-                })
-              }
-              sx={{
-                flex: 1,
-                backgroundColor: "#2A9D8F",
-                "&:hover": { backgroundColor: "#21867A" }
-              }}
-            >
-              Preventiva
-            </Button>
-          </div>
+              <Button
+                variant="contained"
+                className="chatbot-btn preventiva-btn"
+                startIcon={<AutoAwesome />}
+                onClick={() =>
+                  navigate(`/chat/${id}`, {
+                    state: {
+                      maquina: machine,
+                      maintenanceType: "preventiva"
+                    }
+                  })
+                }
+                sx={{
+                  flex: 1,
+                  backgroundColor: "#2A9D8F",
+                  "&:hover": { backgroundColor: "#21867A" }
+                }}
+              >
+                Preventiva
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* COLUNA DIREITA */}

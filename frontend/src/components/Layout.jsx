@@ -54,13 +54,15 @@ const Layout = () => {
             active={location.pathname.includes('maquina') ? 'active' : ''}
             onClick={() => navigate('/maquinas')}
           />
-          <NavItem
-            isCollapsed={isCollapsed}
-            icon={<img src={iconUsuarios} className="nav-icon-png" alt="Usuários" />}
-            label="Usuários"
-            active={isActive('/usuarios')}
-            onClick={() => navigate('/usuarios')}
-          />
+          {(user?.role === 'admin' || user?.role === 'gerente') && (
+            <NavItem
+              isCollapsed={isCollapsed}
+              icon={<img src={iconUsuarios} className="nav-icon-png" alt="Usuários" />}
+              label="Usuários"
+              active={isActive('/usuarios')}
+              onClick={() => navigate('/usuarios')}
+            />
+          )}
         </nav>
 
         <div className="sidebar-footer">
