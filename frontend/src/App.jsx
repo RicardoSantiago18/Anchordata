@@ -40,7 +40,11 @@ export default function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/chat/:id" element={<Chat />} />
           <Route path="/perfil" element={<UserProfile />} />
-          <Route path="/usuarios" element={<CadUser />} />
+          <Route path="/usuarios" element={
+            <ProtectedRoute requiredRoles={['admin', 'gerente']}>
+              <CadUser />
+            </ProtectedRoute>
+          } />
 
         </Route>
 
@@ -60,7 +64,7 @@ export default function App() {
         <Route
           path="/usuarios"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={['admin', 'gerente']}>
               <>
                 <CadUser />
               </>

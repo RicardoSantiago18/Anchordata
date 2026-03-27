@@ -13,7 +13,7 @@
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* 2. GRID DASHBOARD */
+/* 2. grid do dash */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr; 
@@ -23,18 +23,21 @@
   min-height: 0;
 }
 
-/* 3. CARDS GERAIS */
+/* 3. cards gerais */
 .grid-item {
-  background: #e0e0e0; 
+  background: #ffffff; 
   border-radius: 20px;
   padding: 20px;
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  border: 1px solid rgba(0, 0, 0, 0.04); 
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 4. COLUNA ESQUERDA - STATUS */
+/* 4. coluna da esquerda - status */
 .status-row {
   grid-column: 1;
   grid-row: 1;
@@ -43,19 +46,23 @@
 }
 
 .status-card {
-  background: #e0e0e0;
+  background: #ffffff;
   border-radius: 15px;
   padding: 15px;
   display: flex;
   align-items: center;
   gap: 12px;
   flex: 1;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05); 
+  
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .status-number { font-size: 2.2rem; font-weight: bold; color: #000; }
 .status-label { font-size: 0.85rem; line-height: 1.2; color: #333; }
 
-/* 5. CARD DE USUÁRIOS  */
+/* 5. card de usuários  */
 .users-section {
   grid-column: 1;
   grid-row: 2;
@@ -119,7 +126,7 @@
 }
 
 .user-avatar-box {
-  background: white;
+  background: #88a9d8;
   width: 50px;
   height: 50px;
   border-radius: 14px;
@@ -144,13 +151,13 @@
   text-align: center;
 }
 
-/* 6. COLUNA DIREITA - GRÁFICO */
+/* 6. coluna da direito - gráfico */
 .chart-section {
   grid-column: 2;
   grid-row: 1 / span 2; 
 }
 
-/* 7. LINHA INFERIOR */
+/* 7. linha inferior */
 .production-section {
   grid-column: 1;
   grid-row: 3;
@@ -161,7 +168,7 @@
   grid-row: 3;
 }
 
-/* 8. LISTA DE PROJETOS */
+/* 8. lista de projetos */
 .projects-list {
   display: flex;
   flex-direction: column;

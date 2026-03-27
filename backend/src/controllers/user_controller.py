@@ -80,7 +80,7 @@ def get_user(user_id):
 
 def update_user(user_id):
     """
-    Atualiza informações de um usuário (apenas admin pode atualizar role)
+    Atualiza informações de um usuário
     Recebe: { "name": "...", "role": "..." }
     """
     try:
@@ -90,11 +90,18 @@ def update_user(user_id):
         if not user:
             return jsonify({"error": "Usuário não encontrado"}), 404
         
+        # Hierarquia: gerente não pode editar admin
+        if request.user_role == UserRole.GERENTE.value and user.role == UserRole.ADMIN.value:
+            return jsonify({"error": "Gerentes não podem modificar administradores"}), 403
+        
         # Validar role se for alterada
         if 'role' in data:
             valid_roles = [UserRole.ADMIN.value, UserRole.ENGENHEIRO.value, UserRole.GERENTE.value]
             if data['role'] not in valid_roles:
                 return jsonify({"error": f"Role inválida. Roles válidas: {', '.join(valid_roles)}"}), 400
+            # Gerente não pode promover ninguém a admin
+            if request.user_role == UserRole.GERENTE.value and data['role'] == UserRole.ADMIN.value:
+                return jsonify({"error": "Gerentes não podem atribuir o cargo de administrador"}), 403
             user.role = data['role']
         
         if 'name' in data:
@@ -118,13 +125,17 @@ def update_user(user_id):
 
 def delete_user(user_id):
     """
-    Deleta um usuário (apenas admin)
+    Deleta um usuário
     """
     try:
         user = User.query.get(user_id)
         
         if not user:
             return jsonify({"error": "Usuário não encontrado"}), 404
+        
+        # Hierarquia: gerente não pode excluir admin
+        if request.user_role == UserRole.GERENTE.value and user.role == UserRole.ADMIN.value:
+            return jsonify({"error": "Gerentes não podem excluir administradores"}), 403
         
         # Evitar auto-deleção
         if user.id == request.user_id:
