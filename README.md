@@ -1,8 +1,8 @@
 # ⚓ Anchordata - Sistema de Gerenciamento e Auxiliar de Manutenção
 
-**Sistema inteligente de gestão e manutenção preventiva e corretiva de máquinas industriais com assistente de IA (RAG).**
+**Sistema inteligente de gestão e manutenção preventiva e corretiva de máquinas industriais com assistente de IA (RAG) rodando localmente via LM Studio.**
 
-Anchordata é uma aplicação full-stack que combina cadastro e monitoramento de máquinas industriais com um assistente de chat baseado em **Retrieval-Augmented Generation (RAG)**, permitindo consultas contextuais sobre manuais técnicos de cada equipamento.
+Anchordata é uma aplicação full-stack que combina cadastro e monitoramento de máquinas industriais com um assistente de chat baseado em **Retrieval-Augmented Generation (RAG)**, permitindo consultas contextuais sobre manuais técnicos de cada equipamento. A IA roda **100% local** através do [LM Studio](https://lmstudio.ai/), sem necessidade de API keys externas ou envio de dados para a nuvem.
 
 ---
 
@@ -26,12 +26,12 @@ Anchordata é uma aplicação full-stack que combina cadastro e monitoramento de
 ## 🏗 Visão Geral da Arquitetura
 
 ```
-┌────────────────────┐         ┌─────────────────────────┐
-│                    │  HTTP   │                         │
-│   Frontend React   │◄───────►│    Backend Flask API     │
-│   (Vite + MUI)     │  :5173  │       :5000              │
-│                    │         │                         │
-└────────────────────┘         ├─────────┬───────────────┤
+┌────────────────────┐         ┌─────────────────────────┐        ┌──────────────────┐
+│                    │  HTTP   │                         │  HTTP  │                  │
+│   Frontend React   │◄───────►│    Backend Flask API     │◄──────►│   LM Studio      │
+│   (Vite + MUI)     │  :5173  │       :5000              │  :1234 │   (LLM Local)    │
+│                    │         │                         │        │                  │
+└────────────────────┘         ├─────────┬───────────────┤        └──────────────────┘
                                │ SQLAlchemy│  LangChain   │
                                │  (ORM)   │  RAG Chain   │
                                ├─────────┤───────────────┤
@@ -58,7 +58,8 @@ A aplicação segue o padrão **MVC** (Models, Controllers, Routes) no backend, 
 | **LangChain** | Framework para chains de IA (RAG) |
 | **FAISS** | Busca vetorial para documentos técnicos |
 | **HuggingFace Embeddings** | Modelo de embeddings `all-MiniLM-L6-v2` |
-| **OpenAI** | LLM para geração de respostas (via LangChain) |
+| **LM Studio** | Servidor local de LLM com API compatível com OpenAI |
+| **LangChain-OpenAI** | Integração com a API OpenAI-compatible do LM Studio |
 | **WeasyPrint** | Geração de relatórios em PDF |
 | **Pytest** | Framework de testes |
 
@@ -89,6 +90,7 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 | **Node.js** | 18+ | `node --version` |
 | **npm** | 9+ | `npm --version` |
 | **Git** | 2.x | `git --version` |
+| **LM Studio** | 0.3+ | Interface gráfica |
 | **PostgreSQL** *(opcional)* | 14+ | `psql --version` |
 
 > [!TIP]
@@ -124,7 +126,27 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Configurar Variáveis de Ambiente do Backend
+### 3. Configurar o LM Studio (IA Local)
+
+O assistente de IA do Anchordata roda **localmente** usando o [LM Studio](https://lmstudio.ai/), que fornece uma API compatível com o padrão OpenAI na porta `1234`.
+
+1. **Baixe e instale** o [LM Studio](https://lmstudio.ai/) (disponível para Windows, macOS e Linux)
+2. **Baixe um modelo** dentro do LM Studio (recomendados para uso geral):
+   - `Qwen 2.5` (7B ou 14B) — bom equilíbrio entre qualidade e velocidade
+   - `Llama 3` (8B) — ótima performance em português
+   - `Mistral` (7B) — leve e rápido
+3. **Inicie o servidor local**:
+   - Na aba **"Local Server"** do LM Studio, carregue o modelo desejado
+   - Clique em **"Start Server"** — o servidor inicia em `http://localhost:1234`
+   - Certifique-se de que o servidor está rodando antes de iniciar o backend
+
+> [!IMPORTANT]
+> O LM Studio **deve estar rodando** com um modelo carregado antes de iniciar o backend. Sem ele, o assistente de IA não conseguirá gerar respostas.
+
+> [!TIP]
+> A configuração da conexão com o LM Studio está em `backend/src/llm.py`. Por padrão, conecta em `http://localhost:1234/v1` com `api_key="lm-studio"`. Não é necessário alterar nenhuma variável de ambiente para a IA.
+
+### 4. Configurar Variáveis de Ambiente do Backend
 
 ```bash
 # Copiar o arquivo de exemplo
@@ -147,15 +169,12 @@ FLASK_DEBUG=True
 
 # CORS — origens permitidas
 ALLOWED_HOSTS=http://localhost:5173,http://localhost:3000
-
-# API Keys (necessário para o assistente de IA)
-OPENAI_API_KEY=sua-chave-openai-aqui
 ```
 
-> [!IMPORTANT]
-> A variável `OPENAI_API_KEY` é **obrigatória** para o funcionamento do chat com IA. Sem ela, o assistente RAG não conseguirá gerar respostas.
+> [!NOTE]
+> Diferente de soluções que usam APIs na nuvem, o Anchordata **não requer** chave de API da OpenAI. Toda a inferência de IA é feita localmente pelo LM Studio.
 
-### 4. Inicializar o Banco de Dados
+### 5. Inicializar o Banco de Dados
 
 ```bash
 # Ainda dentro de backend/, com o venv ativado
@@ -167,7 +186,7 @@ Este script irá:
 - ✅ Criar um usuário **administrador** padrão
 - ✅ Criar usuários de exemplo (engenheiro e gerente)
 
-### 5. Configurar o Frontend
+### 6. Configurar o Frontend
 
 ```bash
 # Voltar para a raiz e entrar no frontend
@@ -181,9 +200,16 @@ npm install
 
 ## 🚀 Como Rodar
 
-Você precisa rodar **dois servidores** simultaneamente (em terminais separados):
+Você precisa rodar **três componentes** simultaneamente:
 
-### Terminal 1 — Backend (API Flask)
+### 1. LM Studio (Servidor de IA Local)
+
+1. Abra o **LM Studio**
+2. Carregue o modelo desejado
+3. Na aba **Local Server**, clique em **Start Server**
+4. Aguarde até que o servidor esteja ativo em `http://localhost:1234`
+
+### 2. Backend (API Flask) — Terminal 1
 
 ```bash
 cd backend
@@ -195,7 +221,7 @@ python run.py
 
 O backend estará disponível em: **http://localhost:5000**
 
-### Terminal 2 — Frontend (React + Vite)
+### 3. Frontend (React + Vite) — Terminal 2
 
 ```bash
 cd frontend
@@ -205,7 +231,7 @@ npm run dev
 O frontend estará disponível em: **http://localhost:5173**
 
 > [!NOTE]
-> O frontend se comunica com o backend via API REST na porta `5000`. O CORS já está configurado para aceitar requisições de `localhost:5173`.
+> O frontend se comunica com o backend via API REST na porta `5000`. O CORS já está configurado para aceitar requisições de `localhost:5173`. O LM Studio deve estar rodando na porta `1234` para que o chat com IA funcione.
 
 ---
 
@@ -391,7 +417,8 @@ Anchordata/
 
 - 🔐 **Autenticação JWT** com roles (Admin, Engenheiro, Gerente)
 - 🏭 **Cadastro de máquinas** com upload de imagem e manual técnico (PDF)
-- 🤖 **Chat com IA (RAG)** — perguntas contextuais baseadas nos manuais técnicos das máquinas
+- 🤖 **Chat com IA (RAG) local** — perguntas contextuais baseadas nos manuais técnicos, rodando via LM Studio sem depender de APIs externas
+- 🧠 **IA 100% local** — privacidade total dos dados, sem envio para nuvem
 - 📊 **Dashboard** com visão geral das máquinas e métricas
 - 🔧 **Gestão de manutenções** com timeline de eventos
 - 📄 **Geração de relatórios em PDF** via IA
@@ -431,10 +458,10 @@ Todas as variáveis são configuradas no arquivo `backend/.env`:
 | `FLASK_ENV` | Não | Ambiente Flask | `development` |
 | `FLASK_DEBUG` | Não | Modo debug | `True` |
 | `ALLOWED_HOSTS` | Não | Origens CORS permitidas | `http://localhost:5173` |
-| `OPENAI_API_KEY` | Sim* | Chave API da OpenAI | `sk-...` |
-| `LANGCHAIN_API_KEY` | Não | Chave API da LangChain | — |
+| `LANGCHAIN_API_KEY` | Não | Chave API da LangChain (tracing) | — |
 
-> \* Obrigatória para o funcionamento do assistente de IA
+> [!NOTE]
+> A IA roda localmente via **LM Studio** e **não requer** chave de API da OpenAI. A configuração de conexão está hardcoded em `backend/src/llm.py` (base_url: `http://localhost:1234/v1`, api_key: `lm-studio`).
 
 ---
 
@@ -445,9 +472,10 @@ Este projeto foi desenvolvido com base em boas práticas e materiais de estudo, 
 - **Miguel Grinberg** – [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
 - **LangChain** – [Documentação oficial](https://python.langchain.com/docs/)
 - **FAISS (Facebook AI)** – [GitHub](https://github.com/facebookresearch/faiss)
+- **LM Studio** – [Site oficial](https://lmstudio.ai/)
 - **Material UI** – [Documentação](https://mui.com/)
 
-As decisões de arquitetura (separação em models, controllers e routes, uso de SQLAlchemy moderno e herança polimórfica) foram influenciadas pelo Flask Mega-Tutorial.
+As decisões de arquitetura (separação em models, controllers e routes, uso de SQLAlchemy moderno e herança polimórfica) foram influenciadas pelo Flask Mega-Tutorial. A escolha do LM Studio como servidor local de LLM permite executar modelos de linguagem sem depender de APIs externas, garantindo privacidade e controle total dos dados.
 
 ---
 
